@@ -1,0 +1,194 @@
+{
+  "experiment": "B",
+  "stage": "model_selection",
+  "environment": "Kaggle CPU",
+  "training_run_id": "train-b-20261107T091849244628Z",
+  "started_utc": "2026-11-07T09:18:49.334881+00:00",
+  "finished_utc": "2026-11-07T10:21:07.521724+00:00",
+  "upstream_commit": "835bd5e1710531407c0b5ca09da3d7c3de8d1bbc",
+  "split_manifest_sha256": "6440ae2948353ea42d5adb70a0e7a686d592496da94a8d24828707a0c6eef955",
+  "partitions": {
+    "train": {
+      "rows": 470281,
+      "malicious": 211132,
+      "normal": 259149,
+      "jsonl_sha256": "a56fbd9a6d1fb7278a0723e2aff2bbbf997f2b8a2ff0299fbe6cf1f6aff7c8b9"
+    },
+    "model_selection": {
+      "rows": 75946,
+      "malicious": 36318,
+      "normal": 39628,
+      "jsonl_sha256": "5eedad164c7e93793411378697f73b897fb64c5ebb2b835736cd82e917e11eef"
+    }
+  },
+  "seed": 42,
+  "batch_size": 128,
+  "scaler_and_vocabulary_fit_partition": "train",
+  "selection_partition": "model_selection",
+  "tie_tolerance": 1e-06,
+  "t1": {
+    "positive_class": "malicious",
+    "candidates": [
+      {
+        "C": 0.1,
+        "max_iter": 2000,
+        "ap": 0.9785563337569496,
+        "iterations": 58,
+        "warnings": []
+      },
+      {
+        "C": 1.0,
+        "max_iter": 2000,
+        "ap": 0.9786868020922601,
+        "iterations": 61,
+        "warnings": []
+      },
+      {
+        "C": 10.0,
+        "max_iter": 2000,
+        "ap": 0.978709315816146,
+        "iterations": 68,
+        "warnings": []
+      }
+    ],
+    "selected_C": 10.0,
+    "selected_ap": 0.978709315816146
+  },
+  "t2": {
+    "epoch_numbering": "1-based",
+    "selected_epoch": 5,
+    "selected_bce": 0.11824765801429749,
+    "epochs": [
+      {
+        "epoch": 1,
+        "train_bce": 0.19630801677703857,
+        "model_selection_bce": 0.12324691563844681
+      },
+      {
+        "epoch": 2,
+        "train_bce": 0.08281915634870529,
+        "model_selection_bce": 0.12062793225049973
+      },
+      {
+        "epoch": 3,
+        "train_bce": 0.06721004098653793,
+        "model_selection_bce": 0.1220809817314148
+      },
+      {
+        "epoch": 4,
+        "train_bce": 0.059182681143283844,
+        "model_selection_bce": 0.1244274452328682
+      },
+      {
+        "epoch": 5,
+        "train_bce": 0.05377547815442085,
+        "model_selection_bce": 0.11824765801429749
+      },
+      {
+        "epoch": 6,
+        "train_bce": 0.048901017755270004,
+        "model_selection_bce": 0.13162124156951904
+      },
+      {
+        "epoch": 7,
+        "train_bce": 0.04523906484246254,
+        "model_selection_bce": 0.13499349355697632
+      },
+      {
+        "epoch": 8,
+        "train_bce": 0.04226246103644371,
+        "model_selection_bce": 0.14656387269496918
+      },
+      {
+        "epoch": 9,
+        "train_bce": 0.04016490653157234,
+        "model_selection_bce": 0.12657956779003143
+      },
+      {
+        "epoch": 10,
+        "train_bce": 0.03813670575618744,
+        "model_selection_bce": 0.15943007171154022
+      },
+      {
+        "epoch": 11,
+        "train_bce": 0.03627043589949608,
+        "model_selection_bce": 0.13473226130008698
+      },
+      {
+        "epoch": 12,
+        "train_bce": 0.03474137932062149,
+        "model_selection_bce": 0.1450750082731247
+      },
+      {
+        "epoch": 13,
+        "train_bce": 0.03295213356614113,
+        "model_selection_bce": 0.1451372504234314
+      },
+      {
+        "epoch": 14,
+        "train_bce": 0.032412927597761154,
+        "model_selection_bce": 0.13781771063804626
+      },
+      {
+        "epoch": 15,
+        "train_bce": 0.030400773510336876,
+        "model_selection_bce": 0.1373284012079239
+      },
+      {
+        "epoch": 16,
+        "train_bce": 0.029558150097727776,
+        "model_selection_bce": 0.15149658918380737
+      },
+      {
+        "epoch": 17,
+        "train_bce": 0.028822660446166992,
+        "model_selection_bce": 0.1490650475025177
+      },
+      {
+        "epoch": 18,
+        "train_bce": 0.027757342904806137,
+        "model_selection_bce": 0.15210817754268646
+      },
+      {
+        "epoch": 19,
+        "train_bce": 0.02712547965347767,
+        "model_selection_bce": 0.16437247395515442
+      },
+      {
+        "epoch": 20,
+        "train_bce": 0.026432588696479797,
+        "model_selection_bce": 0.13874301314353943
+      }
+    ]
+  },
+  "archive_sha256": "f451187fa51606b07efe4615e50a5454f61f62a23ef6898970e2de1240a99b75",
+  "model_manifest_sha256": "e8f14bf01575bd667e9b7b97c5c49c275132b7bab3ed7fb3160cfb5353fc1f6c",
+  "training_script_sha256": "130d7049d03af0a2fd7ef91d11874e4aad46e7dda2bdc82f1f79dc54eca9745f",
+  "artifact_sha256": {
+    "t1.joblib": "6f2338b2468b41a06b9e5ce331f9bcff709d8dada7501d2f756c1d830fb286f4",
+    "t2.h5": "1a666917ea3a16d5bb3e2fbedb3bb3eb4df71b63c3404ee04cad88946d50df0f",
+    "b-vocab.json": "bc06d358af874e26ed3481c354708bbfed8f8ee2759e093c58181bd7d4c918ef",
+    "t1-candidates.json": "6f80c8afbcc6a26210b78c9692b2f69e748a61f9fb232d0379e69ab35bdc51c7",
+    "b-epochs.csv": "b8a4018c227c133fb6a59dc9e55cadf97895cf133503bd6f068aa8ced9c2ae76"
+  },
+  "feature_order": [
+    "use_of_ip",
+    "abnormal_url",
+    "count.",
+    "count-www",
+    "count@",
+    "count_dir",
+    "count_embed_domian",
+    "count-https",
+    "count-http",
+    "count%",
+    "count?",
+    "count-",
+    "count=",
+    "url_length",
+    "hostname_length",
+    "count-digits",
+    "count-letters",
+    "fd_length"
+  ]
+}
