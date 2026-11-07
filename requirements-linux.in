@@ -1,0 +1,6 @@
+# Candidate direct dependencies, not a resolved environment lock.
+tensorflow==2.12.0
+numpy==1.23.5
+pandas==1.5.3
+scikit-learn==1.2.2
+tldextract==5.4.0

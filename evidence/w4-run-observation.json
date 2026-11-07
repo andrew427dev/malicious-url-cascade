@@ -1,0 +1,34 @@
+{
+ "source": "Kaggle Experiment A version 1 logs",
+ "restore": {
+  "status": "passed",
+  "archive_sha256": "3bb94eb6837c8764582ebf12ee392f8a06c248271d4fbf517437e79aba387890",
+  "weights_sha256": "aefe831822e58322b0d1d8857a47d0836ec18088058d1af744acddbf912dc269",
+  "vocabulary_sha256": "cf4912da9880642e99bd1cee625df21c92cf803638fe8cab4d31c37eebe33c62",
+  "tensorflow": "2.12.0",
+  "probe_rows": 3,
+  "max_abs_diff": 0.0,
+  "decisions_equal": true
+ },
+ "w1_w3_archives_sha256": {
+  "hufs-w1-w3-checkpoint.zip": "4841dbf97f6ff084cc0b198a9b359f6a0c6d36d95332b07865b7c7e5d7c6109b",
+  "hufs-w1-w3-evidence.zip": "26cae4d1a5e12ef36d306b5ca2a5ac6e7d7c7a56ae9264d4c922af3661f3605a",
+  "hufs-w3-restore.zip": "3bb94eb6837c8764582ebf12ee392f8a06c248271d4fbf517437e79aba387890"
+ },
+ "initial_split_rows": {
+  "train": 627434,
+  "validation": 156859
+ },
+ "note": "Values transcribed from cloud logs. Row counts precede original text-based deduplication.",
+ "A_first_epoch": {
+  "epoch": 1,
+  "seconds": 224.24211421100006,
+  "loss": 0.17409634590148926,
+  "accuracy": 0.9368129372596741,
+  "val_loss": 0.0765836164355278,
+  "val_accuracy": 0.9735950231552124
+ },
+ "observed_next": "Epoch 2/20",
+ "estimated_hours_20_epochs_1p5_margin": 1.8686842850916674,
+ "kaggle_script_version_id": 366487556
+}

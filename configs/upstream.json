@@ -1,0 +1,35 @@
+{
+  "repository": "https://github.com/munna0912/URL_CLASSIFIER",
+  "commit": "835bd5e1710531407c0b5ca09da3d7c3de8d1bbc",
+  "files": {
+    "dataset/df_final.csv": {
+      "sha256": "303effaa48986335fb6f7af07b00b2fda193fca22d990d0a78a273d542e3bd08",
+      "size": 46151551,
+      "git_blob": "a5fceb32a46bdb34ed2a46532826eb181944cdb8",
+      "recovery_url": "https://raw.githubusercontent.com/munna0912/URL_CLASSIFIER/7d8ab9a879684163fda36823ebd5071f7a776420/dataset/df_final.csv"
+    },
+    "dataset/all_top_domains_merged.csv": {
+      "sha256": "da1cf85b221f618d396b135554d41df2581fb4af98bcd2c41cd7de08dfa9b501",
+      "size": 52205,
+      "git_blob": "1d68693d4be05179cdc171981d39df3c07ad2ee2",
+      "recovery_url": "https://raw.githubusercontent.com/munna0912/URL_CLASSIFIER/7d8ab9a879684163fda36823ebd5071f7a776420/dataset/all_top_domains_merged.csv"
+    },
+    "dataset/df_another_validation.csv": {
+      "sha256": "676d758897212240d71da36783f1190866c18d688f516b53202802b364503b80",
+      "size": 27631657,
+      "git_blob": "fa362989a5a0d44b3842b0c27f4372809e197011",
+      "recovery_url": "https://raw.githubusercontent.com/munna0912/URL_CLASSIFIER/7d8ab9a879684163fda36823ebd5071f7a776420/dataset/df_another_validation.csv"
+    },
+    "Trained_Model/Model/Model.keras": {
+      "sha256": "ab22cc9a9259d4ee4771bec520b8ae9aa3b92ee7b0c579c161c37ddb9b410c09",
+      "size": 2005528,
+      "git_blob": "b24f5b63dcdc326ea06803f09830954216ac6720",
+      "recovery_url": "https://huggingface.co/spaces/Munna0912/URL_CLASSIFIER/resolve/3923ac06c45fc0753220efc885dab35c8e4dd62a/Trained_Model/Model.keras"
+    }
+  },
+  "source_sha256": {
+    "Utils/DataProcessing.py": "319cb84a6a27727ce4435990ae440628dc2f639c4727643c0e5f22a7daa1659d",
+    "Utils/FeatureCreation.py": "730b9f1ec4dbbaeb89828d6d64ecdd7695e45aff177e3820be07c180a6e92af2",
+    "Utils/Model.py": "b4c28c9c36706c4d6745a29f5f669e32c8dfbc3ee33a51e5400a8c3f025200db"
+  }
+}

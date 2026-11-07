@@ -1,0 +1,101 @@
+{
+  "status": "frozen",
+  "experiment": "B",
+  "runtime": "kaggle",
+  "source_commit": "835bd5e1710531407c0b5ca09da3d7c3de8d1bbc",
+  "versions": {
+    "numpy": "1.23.5",
+    "pandas": "1.5.3",
+    "scikit-learn": "1.2.2",
+    "tldextract": "5.4.0"
+  },
+  "assets": {
+    "dataset/df_final.csv": {
+      "path": "/kaggle/working/hufs-compsec-url-cascade/data/upstream/dataset/df_final.csv",
+      "size": 46151551,
+      "sha256": "303effaa48986335fb6f7af07b00b2fda193fca22d990d0a78a273d542e3bd08",
+      "status": "verified"
+    },
+    "dataset/all_top_domains_merged.csv": {
+      "path": "/kaggle/working/hufs-compsec-url-cascade/data/upstream/dataset/all_top_domains_merged.csv",
+      "size": 52205,
+      "sha256": "da1cf85b221f618d396b135554d41df2581fb4af98bcd2c41cd7de08dfa9b501",
+      "status": "verified"
+    }
+  },
+  "psl_sha256": "b69315c085d53972724b8f2df111ffc329b0c84fe0a47d62c8c91655cc774a38",
+  "splitter": {
+    "n_splits": 10,
+    "shuffle": true,
+    "random_state": 42
+  },
+  "sorting": [
+    "url_key",
+    "input_id"
+  ],
+  "fold_map": {
+    "train": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "model_selection": [
+      6
+    ],
+    "gate_selection": [
+      7
+    ],
+    "test": [
+      8,
+      9
+    ]
+  },
+  "summary": {
+    "train": {
+      "rows": 470281,
+      "groups": 146577,
+      "malicious": 211132,
+      "normal": 259149,
+      "largest_group_fraction": 0.028555268020608954
+    },
+    "model_selection": {
+      "rows": 75946,
+      "groups": 24373,
+      "malicious": 36318,
+      "normal": 39628,
+      "largest_group_fraction": 0.02662418033866168
+    },
+    "gate_selection": {
+      "rows": 86371,
+      "groups": 24313,
+      "malicious": 37440,
+      "normal": 48931,
+      "largest_group_fraction": 0.1001261997661252
+    },
+    "test": {
+      "rows": 147325,
+      "groups": 48776,
+      "malicious": 67699,
+      "normal": 79626,
+      "largest_group_fraction": 0.03234345834040387
+    }
+  },
+  "excluded": 4370,
+  "files": {
+    "gate_selection.jsonl": "3f8e46bd241c2e849d4f75686c5a311dc3e3ef412efdc71de67cdedda9b97853",
+    "internal-excluded.jsonl": "03e3d11a8bb425a059a48d056363290c30d6d78edfd710ca2fd21ec9b3301786",
+    "internal-overlap.json": "c06b063a1b6027490a9e8811b6e8970702d3a61f28496e6a261015680d630353",
+    "internal.jsonl": "2563da54fcfe3f1025392b2ccdcc727b7b260d244d142c658c107aad3c09d4dd",
+    "model_selection.jsonl": "5eedad164c7e93793411378697f73b897fb64c5ebb2b835736cd82e917e11eef",
+    "public_suffix_list.dat": "b69315c085d53972724b8f2df111ffc329b0c84fe0a47d62c8c91655cc774a38",
+    "test.jsonl": "fe6450c881708d7b7d13465f64424701af5dc79a5305511a2bf3727de9e0e37b",
+    "train.jsonl": "a56fbd9a6d1fb7278a0723e2aff2bbbf997f2b8a2ff0299fbe6cf1f6aff7c8b9"
+  },
+  "remaining_audit": [
+    "Representation collisions",
+    "External overlap audit before policy-frozen evaluation"
+  ]
+}

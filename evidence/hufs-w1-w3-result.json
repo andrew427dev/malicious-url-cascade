@@ -1,0 +1,406 @@
+{
+  "source_commit": "835bd5e1710531407c0b5ca09da3d7c3de8d1bbc",
+  "recovered_assets": {
+    "dataset/df_final.csv": {
+      "size": 46151551,
+      "sha256": "303effaa48986335fb6f7af07b00b2fda193fca22d990d0a78a273d542e3bd08",
+      "source": "https://raw.githubusercontent.com/munna0912/URL_CLASSIFIER/7d8ab9a879684163fda36823ebd5071f7a776420/dataset/df_final.csv",
+      "expected_commit": "835bd5e1710531407c0b5ca09da3d7c3de8d1bbc"
+    },
+    "dataset/all_top_domains_merged.csv": {
+      "size": 52205,
+      "sha256": "da1cf85b221f618d396b135554d41df2581fb4af98bcd2c41cd7de08dfa9b501",
+      "source": "https://raw.githubusercontent.com/munna0912/URL_CLASSIFIER/7d8ab9a879684163fda36823ebd5071f7a776420/dataset/all_top_domains_merged.csv",
+      "expected_commit": "835bd5e1710531407c0b5ca09da3d7c3de8d1bbc"
+    },
+    "dataset/df_another_validation.csv": {
+      "size": 27631657,
+      "sha256": "676d758897212240d71da36783f1190866c18d688f516b53202802b364503b80",
+      "source": "https://raw.githubusercontent.com/munna0912/URL_CLASSIFIER/7d8ab9a879684163fda36823ebd5071f7a776420/dataset/df_another_validation.csv",
+      "expected_commit": "835bd5e1710531407c0b5ca09da3d7c3de8d1bbc"
+    },
+    "Trained_Model/Model/Model.keras": {
+      "size": 2005528,
+      "sha256": "ab22cc9a9259d4ee4771bec520b8ae9aa3b92ee7b0c579c161c37ddb9b410c09",
+      "source": "https://huggingface.co/spaces/Munna0912/URL_CLASSIFIER/resolve/3923ac06c45fc0753220efc885dab35c8e4dd62a/Trained_Model/Model.keras",
+      "expected_commit": "835bd5e1710531407c0b5ca09da3d7c3de8d1bbc"
+    }
+  },
+  "environment": {
+    "runtime": "kaggle",
+    "time_utc": "2026-11-07T04:37:08Z",
+    "python": "3.10.19 (main, Feb  3 2026, 22:54:15) [Clang 21.1.4 ]",
+    "executable": "/kaggle/working/hufs-compsec-url-cascade/env/bin/python",
+    "platform": "Linux-6.18.55+-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "cpu_count": 4,
+    "memory": "MemTotal:       32869288 kB\nMemFree:        12191664 kB\nMemAvailable:   30719208 kB\nBuffers:          826232 kB\nCached:         17475892 kB\nSwapCached:            0 kB\nActive:          2075908 kB\nInactive:       17446644 kB\nActive(anon):       1012 kB\nInactive(anon):  1221172 kB\nActive(file):    2074896 kB\nInactive(file): 16225472 kB\nUnevictable:           0 kB\nMlocked:               0 kB\nSwapTotal:             0 kB\nSwapFree:              0 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:               236 kB\nWriteback:             0 kB\nAnonPages:       1220540 kB\nMapped:           413728 kB\nShmem:              1784 kB\nKReclaimable:     693272 kB\nSlab:             808224 kB\nSReclaimable:     693272 kB\nSUnreclaim:       114952 kB\nKernelStack:        6464 kB\nPageTables:        10148 kB\nSecPageTables:         0 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    16434644 kB\nCommitted_AS:    4334600 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:       62328 kB\nVmallocChunk:          0 kB\nPercpu:             2128 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:         0 kB\nFilePmdMapped:         0 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      170780 kB\nDirectMap2M:    19748864 kB\nDirectMap1G:    15728640 kB\n",
+    "workspace_free_bytes": 15217340416,
+    "versions": {
+      "tensorflow": "2.12.0",
+      "numpy": "1.23.5",
+      "pandas": "1.5.3",
+      "scikit-learn": "1.2.2",
+      "tldextract": "5.4.0"
+    },
+    "expected_versions": {
+      "tensorflow": "2.12.0",
+      "numpy": "1.23.5",
+      "pandas": "1.5.3",
+      "scikit-learn": "1.2.2",
+      "tldextract": "5.4.0"
+    },
+    "gpu": {
+      "argv": [
+        "nvidia-smi",
+        "--query-gpu=name,memory.total,driver_version",
+        "--format=csv"
+      ],
+      "returncode": 0,
+      "stdout": "name, memory.total [MiB], driver_version\nTesla T4, 15360 MiB, 580.178.04\nTesla T4, 15360 MiB, 580.178.04\n",
+      "stderr": ""
+    },
+    "nvcc": {
+      "argv": [
+        "nvcc",
+        "--version"
+      ],
+      "returncode": 0,
+      "stdout": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Wed_Aug_20_01:58:59_PM_PDT_2025\nCuda compilation tools, release 13.0, V13.0.88\nBuild cuda_13.0.r13.0/compiler.36424714_0\n",
+      "stderr": ""
+    },
+    "account_quota": "Not detectable here; inspect account UI separately.",
+    "status": "ml_gpu_checks_passed",
+    "pip_check": {
+      "argv": [
+        "/kaggle/working/hufs-compsec-url-cascade/env/bin/python",
+        "-m",
+        "pip",
+        "check"
+      ],
+      "returncode": 0,
+      "stdout": "No broken requirements found.\n",
+      "stderr": ""
+    },
+    "tensorflow_build": {
+      "cpu_compiler": "/dt9/usr/bin/gcc",
+      "cuda_compute_capabilities": [
+        "sm_35",
+        "sm_50",
+        "sm_60",
+        "sm_70",
+        "sm_75",
+        "compute_80"
+      ],
+      "cuda_version": "11.8",
+      "cudnn_version": "8",
+      "is_cuda_build": true,
+      "is_rocm_build": false,
+      "is_tensorrt_build": true
+    },
+    "visible_gpus": [
+      "PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')",
+      "PhysicalDevice(name='/physical_device:GPU:1', device_type='GPU')"
+    ],
+    "gpu_matmul": {
+      "device": "/job:localhost/replica:0/task:0/device:GPU:0",
+      "sum": 64.0
+    },
+    "synthetic_model": {
+      "parameters": 162481,
+      "output_shape": [
+        3,
+        1
+      ],
+      "output_device": "/job:localhost/replica:0/task:0/device:GPU:0",
+      "training_performed": false
+    },
+    "gpu_model_speed": "Not established; matmul and final output placement do not prove all GRU operations or speed."
+  },
+  "public_reference": {
+    "reference_only": true,
+    "parameters": 162481,
+    "vocabulary_size": 10000,
+    "synthetic_output_finite": true
+  },
+  "split_manifest_sha256": "6440ae2948353ea42d5adb70a0e7a686d592496da94a8d24828707a0c6eef955",
+  "folds": {
+    "train": {
+      "rows": 470281,
+      "groups": 146577,
+      "malicious": 211132,
+      "normal": 259149,
+      "largest_group_fraction": 0.028555268020608954
+    },
+    "model_selection": {
+      "rows": 75946,
+      "groups": 24373,
+      "malicious": 36318,
+      "normal": 39628,
+      "largest_group_fraction": 0.02662418033866168
+    },
+    "gate_selection": {
+      "rows": 86371,
+      "groups": 24313,
+      "malicious": 37440,
+      "normal": 48931,
+      "largest_group_fraction": 0.1001261997661252
+    },
+    "test": {
+      "rows": 147325,
+      "groups": 48776,
+      "malicious": 67699,
+      "normal": 79626,
+      "largest_group_fraction": 0.03234345834040387
+    }
+  },
+  "excluded_internal": 4370,
+  "psl_sha256": "b69315c085d53972724b8f2df111ffc329b0c84fe0a47d62c8c91655cc774a38",
+  "audit": {
+    "source_commit": "835bd5e1710531407c0b5ca09da3d7c3de8d1bbc",
+    "split_manifest_sha256": "6440ae2948353ea42d5adb70a0e7a686d592496da94a8d24828707a0c6eef955",
+    "raw_by_file_and_original_label": {
+      "dataset/df_final.csv": {
+        "1": 428077,
+        "0": 353255
+      },
+      "dataset/all_top_domains_merged.csv": {
+        "1": 2961
+      },
+      "dataset/df_another_validation.csv": {
+        "1": 392896,
+        "0": 114299
+      }
+    },
+    "internal": {
+      "retained_by_original_label": {
+        "1": 427334,
+        "0": 352589
+      },
+      "cleaned_text": {
+        "collision_keys": 9335,
+        "rows_in_collisions": 20021
+      },
+      "trigram_prefix_and_numeric_before_vocabulary": {
+        "collision_keys": 7917,
+        "rows_in_collisions": 33947
+      },
+      "pairwise_intersections": {
+        "train/model_selection": 0,
+        "train/gate_selection": 0,
+        "train/test": 0,
+        "model_selection/gate_selection": 0,
+        "model_selection/test": 0,
+        "gate_selection/test": 0
+      },
+      "exclusions": [
+        {
+          "reason": "conflicting_label",
+          "original_label": "0",
+          "rows": 2
+        },
+        {
+          "reason": "conflicting_label",
+          "original_label": "1",
+          "rows": 2
+        },
+        {
+          "reason": "encoding with 'idna' codec failed (UnicodeError: Invalid character '\\x87')",
+          "original_label": "0",
+          "rows": 1
+        },
+        {
+          "reason": "encoding with 'idna' codec failed (UnicodeError: Invalid character '\\x94')",
+          "original_label": "0",
+          "rows": 1
+        },
+        {
+          "reason": "encoding with 'idna' codec failed (UnicodeError: Invalid character '\\x98')",
+          "original_label": "0",
+          "rows": 1
+        },
+        {
+          "reason": "encoding with 'idna' codec failed (UnicodeError: label empty or too long)",
+          "original_label": "0",
+          "rows": 5
+        },
+        {
+          "reason": "invalid_host",
+          "original_label": "0",
+          "rows": 379
+        },
+        {
+          "reason": "invalid_host",
+          "original_label": "1",
+          "rows": 3462
+        },
+        {
+          "reason": "invalid_ip",
+          "original_label": "0",
+          "rows": 1
+        },
+        {
+          "reason": "invalid_ip",
+          "original_label": "1",
+          "rows": 1
+        },
+        {
+          "reason": "missing_host",
+          "original_label": "1",
+          "rows": 12
+        },
+        {
+          "reason": "no_registered_domain",
+          "original_label": "0",
+          "rows": 96
+        },
+        {
+          "reason": "no_registered_domain",
+          "original_label": "1",
+          "rows": 84
+        },
+        {
+          "reason": "unsupported_scheme",
+          "original_label": "0",
+          "rows": 2
+        },
+        {
+          "reason": "whitespace_or_control",
+          "original_label": "0",
+          "rows": 178
+        },
+        {
+          "reason": "whitespace_or_control",
+          "original_label": "1",
+          "rows": 143
+        }
+      ]
+    },
+    "external_source": {
+      "path": "/kaggle/working/hufs-compsec-url-cascade/data/upstream/dataset/df_another_validation.csv",
+      "size": 27631657,
+      "sha256": "676d758897212240d71da36783f1190866c18d688f516b53202802b364503b80",
+      "status": "verified"
+    },
+    "external_before_internal_overlap": {
+      "rows": 501632,
+      "classes": {
+        "1": 392414,
+        "0": 109218
+      },
+      "groups": 157315
+    },
+    "external_kept": {
+      "rows": 58858,
+      "classes": {
+        "0": 58858
+      },
+      "groups": 29903
+    },
+    "external_excluded": {
+      "invalid_host": 3857,
+      "missing_host": 793,
+      "no_registered_domain": 144,
+      "whitespace_or_control": 738,
+      "zone_or_escaped_host": 2,
+      "unsupported_scheme": 13,
+      "encoding with 'idna' codec failed (UnicodeError: label empty or too long)": 4,
+      "encoding with 'idna' codec failed (UnicodeError: label too long)": 1,
+      "invalid_ip": 4,
+      "Invalid IPv6 URL": 1,
+      "encoding with 'idna' codec failed (UnicodeError: Invalid character '\\x98')": 1,
+      "encoding with 'idna' codec failed (UnicodeError: Invalid character '\\x94')": 1,
+      "encoding with 'idna' codec failed (UnicodeError: Invalid character '\\x87')": 1,
+      "duplicate_same_label": 3,
+      "internal_url_overlap": 436693,
+      "internal_domain_overlap": 6081
+    },
+    "final_vectorized_input_check": "After selection of the B training vocabulary; OOV may introduce additional collisions.",
+    "files": {
+      "external-excluded.jsonl": "1fdd681e404d51ece3d8626f0db44d772b908d771b805813c2b2889d0affe739",
+      "external.jsonl": "6bcb5a84b843675eef70e23e867c6101ee1a669dfb1d885a2b499c9a25e07e90"
+    }
+  },
+  "development": {
+    "smoke_gpu": {
+      "n": 2000,
+      "epochs": 1,
+      "batch_size": 128,
+      "epoch_seconds": [
+        8.913584074000028
+      ],
+      "peak_rss_kib": 2014088,
+      "tensorflow_gpu_memory_bytes": {
+        "0": {
+          "current": 4680192,
+          "peak": 11971072
+        },
+        "1": {
+          "current": 0,
+          "peak": 0
+        }
+      },
+      "reload_decisions_equal": true,
+      "max_abs_reload_diff": 0.0,
+      "weights_sha256": "aefe831822e58322b0d1d8857a47d0836ec18088058d1af744acddbf912dc269",
+      "vocab_sha256": "cf4912da9880642e99bd1cee625df21c92cf803638fe8cab4d31c37eebe33c62",
+      "selected_ids_sha256": "ab85f958aab3678a22a31ebe5fefd3a37b4451fcb3209ee1a218c330fae62981"
+    },
+    "pilot_gpu": {
+      "n": 50000,
+      "epochs": 2,
+      "batch_size": 128,
+      "epoch_seconds": [
+        104.06083766899997,
+        74.15140181099991
+      ],
+      "peak_rss_kib": 2498348,
+      "tensorflow_gpu_memory_bytes": {
+        "0": {
+          "current": 34478336,
+          "peak": 50350336
+        },
+        "1": {
+          "current": 0,
+          "peak": 0
+        }
+      },
+      "reload_decisions_equal": true,
+      "max_abs_reload_diff": 0.0,
+      "weights_sha256": "1f1e8e663f55588accfd2e420dea48ac61a5e4c9ef001c2ad9215501a9f8e363",
+      "vocab_sha256": "07789520ccfa3f53e6d259b3368fe8c9736c0885cd5068660af2d00106dd0386",
+      "selected_ids_sha256": "856b26aa6a11b3c186d731b6fd0d700607d1445fd8d89b3437725231651b2c5e"
+    },
+    "pilot_cpu": {
+      "n": 50000,
+      "epochs": 2,
+      "batch_size": 128,
+      "epoch_seconds": [
+        20.152826511000058,
+        17.351195319
+      ],
+      "peak_rss_kib": 1717072,
+      "tensorflow_gpu_memory_bytes": {},
+      "reload_decisions_equal": true,
+      "max_abs_reload_diff": 0.0,
+      "weights_sha256": "d3fff9568c64474342b50878bd069ce4b7a0800e58de759798e488db2a35b4b8",
+      "vocab_sha256": "07789520ccfa3f53e6d259b3368fe8c9736c0885cd5068660af2d00106dd0386",
+      "selected_ids_sha256": "856b26aa6a11b3c186d731b6fd0d700607d1445fd8d89b3437725231651b2c5e"
+    }
+  },
+  "run_ids": {
+    "smoke_gpu": "smoke_gpu-20261107T044600779501Z",
+    "pilot_gpu": "pilot_gpu-20261107T044631506735Z",
+    "pilot_cpu": "pilot_cpu-20261107T044957947557Z"
+  },
+  "estimates": {
+    "pilot_cpu": {
+      "B_20epoch_hours_with_1p5_margin": 1.3709691969574813,
+      "A_20epoch_hours_with_1p5_margin_upper_row_estimate": 1.829104802259711
+    },
+    "pilot_gpu": {
+      "B_20epoch_hours_with_1p5_margin": 5.929214560885943,
+      "A_20epoch_hours_with_1p5_margin_upper_row_estimate": 7.9105751252564644
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+ "experiment": "A",
+ "kaggle_version": 1,
+ "kaggle_script_version_id": 366487556,
+ "upstream_commit": "835bd5e1710531407c0b5ca09da3d7c3de8d1bbc",
+ "submitted_file_sha256": "4a967b17657a9ea900c7853a6f4e8487c9a85d23f39ffe0107f9f65af8b400e3",
+ "kaggle_log_code_sha256": "fd2fb8bb45209c65d02acfde6e285b6ce25babb3df0777cd30e816f74bb9a83c",
+ "bundled_files": 26,
+ "observation": "Historical Kaggle submission. The submitted notebook and embedded code digests identify the archived run. The notebook in this repository is a newer reproduction runner."
+}
