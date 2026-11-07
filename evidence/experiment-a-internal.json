@@ -1,0 +1,59 @@
+{
+  "experiment": "A",
+  "epoch": 20,
+  "internal_confusion_normal_malicious": [
+    [
+      84937,
+      1003
+    ],
+    [
+      1499,
+      68895
+    ]
+  ],
+  "validation_rows": 156334,
+  "accuracy": 0.9839958038558471,
+  "malicious_recall": 0.9787055714975709,
+  "external_evaluation": "deferred until B models and gate frozen",
+  "model_sha256": "5f0120a7c54978ac36cb617a89c833732d772196a0c8fa8b3df7bc48f5c9e807",
+  "split": "stratified_random_80_20",
+  "seed": 42,
+  "batch_size": 128,
+  "source_before_preprocess": {
+    "train": 627434,
+    "validation": 156859
+  },
+  "kaggle_script_version_id": 366487556,
+  "train_run": "train-a-20261107T050714132992Z",
+  "device": "CPU",
+  "python": "3.10.19",
+  "tensorflow": "2.12.0",
+  "notebook_runtime_seconds": 4921.4,
+  "final_epoch_log": {
+    "epoch": 20,
+    "seconds": 219.762139122,
+    "loss": 0.02987661398947239,
+    "accuracy": 0.9898369908332825,
+    "val_loss": 0.05769247189164162,
+    "val_accuracy": 0.983995795249939
+  },
+  "upstream_epoch20": {
+    "val_accuracy": 0.9834,
+    "val_loss": 0.0565,
+    "source": "Model_Training.ipynb, first model.fit, epoch 20/20",
+    "notebook_sha256": "3cb31cba0b55419326ce8f49817959621a8feb5c419e98f0d2d2b91acafcb945"
+  },
+  "verified_archive_sha256": "bfcab02a621e757965929cf0c6fd925b853d53c5edbc0a10b8847d26771ce4ca",
+  "verified_members": {
+    "command-00.log": "be250e5a1165d275afd6909b642c192ac1066f7672013117855953e316707532",
+    "command-01.log": "8def0db981ac26944785bf2918f3ee7869ea13635fc84acca89d214a11fe5133",
+    "environment.json": "be250e5a1165d275afd6909b642c192ac1066f7672013117855953e316707532",
+    "experiment-a/epochs.csv": "39f597e93c97aa0efbf5bf117736cfbb655bb13efe4d291f040b57fbdd49b16f",
+    "experiment-a/latest.h5": "5f0120a7c54978ac36cb617a89c833732d772196a0c8fa8b3df7bc48f5c9e807",
+    "experiment-a/progress.jsonl": "eb56252265f87df1ffbb71a2275e009fd9a5842a4a8a43427bc825badd6e7573",
+    "experiment-a/report.json": "c50dbb0139fa3b25d328d7bf05b49627cb0f894e0e8a97d384acec8d6fe5fc12",
+    "experiment-a/settings.json": "2b43cbe5faac0d8684d1fb57fd0a5d764f79ee1edbec7f3b4316c3e0fc474da0",
+    "experiment-a/source-ids.json": "4b0bc3db37c963c159a859813a52aa7c55076d22d08962853abf3718baac7435",
+    "experiment-a/vocab.json": "41b33cef6e949af8cfc77336c0d77fe2d48a8d4e570b595bb77631a4d42b35c1"
+  }
+}
