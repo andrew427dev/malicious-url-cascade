@@ -39,24 +39,22 @@ def main():
         cells.append(dict(cell_type='markdown',metadata={},source=s.splitlines(True)))
     def code(s):
         cells.append(dict(cell_type='code',metadata={},execution_count=None,outputs=[],source=s.splitlines(True)))
-    md('''# 악성 URL 캐스케이드 · 데이터 준비와 파일럿\n
-Kaggle 또는 Colab에서 새 세션을 열고 필요한 단계를 선택합니다.
-이 파일은 실제 실행 결과를 포함하지 않습니다. 기본 단계는 **diagnose**로, 설치·다운로드·학습을 하지 않습니다.
-실행 순서는 setup → fetch → prepare-b → audit-b입니다.
+    md('''# Malicious URL cascade: data preparation and pilot runs\n
+Open a fresh Kaggle or Colab session and choose a stage. The default stage, **diagnose**, checks the environment. The preparation stages run in this order: setup, fetch, prepare-b, then audit-b.
 
-- Python 3.10 / TF 2.12 고정 환경을 별도 subprocess로 사용합니다. Notebook 커널의 패키지를 교체하지 않습니다.
-- setup: 전용 venv. Python 3.10이 없으면 공식 PyPI의 uv 0.9.30 및 Astral 관리 Python 3.10.19를 작업 폴더에 설치합니다.
-- fetch: 고정 GitHub CSV 3개를 받고 SHA-256·크기를 검사합니다. 공개 모델은 선택적 참고 파일이며 실패해도 필수 CSV 확보를 막지 않습니다. 데이터 안 URL은 방문하지 않습니다.
-- prepare-b: B 분할을 생성합니다. audit-b에서 고정 파일·도메인 교집합·문자열 충돌과 외부 겹침을 검사합니다.
-- smoke/pilot: 명시한 동결 B 분할의 학습 행만 사용합니다. 최종 A/B 학습 실행기가 아닙니다.
-- GPU 필요 여부·계정 할당량·Notebook 버전 출력 보존은 별도 확인해야 합니다.
+- The runner installs Python 3.10 and TensorFlow 2.12 in a separate environment for child processes.
+- setup creates the virtual environment. If Python 3.10 is unavailable, it obtains uv 0.9.30 from PyPI and Astral's managed Python 3.10.19.
+- fetch retrieves the three pinned CSVs and verifies their sizes and SHA-256 digests. Reference weights are optional. Dataset URLs are processed offline.
+- prepare-b creates the B split. audit-b checks file integrity, domain overlap, representation collisions and overlap with the external source.
+- smoke and pilot sample only frozen B training rows. Use the separate A and B notebooks for full training.
+- Check the selected accelerator, remaining account quota and saved notebook outputs in Kaggle.
 ''')
-    code('''# 단계별 설정: 한 번에 한 단계만 실행하며 매번 새 RUN_ID를 사용합니다.
+    code('''# Select one stage per run. Each execution creates a fresh RUN_ID.
 STAGE = "diagnose"  # diagnose / setup / fetch / prepare-b / audit-b / smoke / pilot / train-a / train-b
-REQUIRE_GPU = False  # GPU를 선택한 setup/smoke/pilot 검증 때만 True
-CPU_ONLY = False  # 장치 비교 또는 CPU 본 학습에서 True
-INCLUDE_REFERENCE_MODEL = False  # fetch에서 공개 모델 참고용 확보를 시도할 때만 True
-SPLIT_DIR = None  # audit-b/smoke/pilot에서 실제 동결 split 디렉터리 절대경로 지정
+REQUIRE_GPU = False  # Enable for GPU setup, smoke or pilot checks.
+CPU_ONLY = False  # Enable for CPU training or the CPU side of a device comparison.
+INCLUDE_REFERENCE_MODEL = False  # Enable to fetch the optional upstream reference weights.
+SPLIT_DIR = None  # Set the absolute frozen split path for audit-b, smoke or pilot.
 BATCH_SIZE = 128
 ''')
     code('''import base64, hashlib, io, json, os, sys, subprocess, zipfile
@@ -73,7 +71,7 @@ WORK.mkdir(exist_ok=True)
 RUN_ID = STAGE + '-' + datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
 print({'runtime':RUNTIME,'work':str(WORK),'stage':STAGE,'run_id':RUN_ID})
 ''')
-    code('''# 코드만 포함한 고정 묶음. 전체 묶음과 개별 파일의 무결성을 검사합니다.
+    code('''# Verify the pinned code bundle and every file inside it.
 PAYLOAD_SHA256 = '''+repr(digest)+'''
 PAYLOAD = '''+repr(payload)+'''
 EXPECTED_FILES = '''+repr(hashes)+'''
@@ -113,15 +111,15 @@ subprocess.run(argv,check=True)
 status = json.loads(status_file.read_text())
 print(json.dumps(status,indent=2))
 assert status['status'] == 'passed', 'stage not complete'
-print('단계 출력 위치:',status_file.parent)
-print('완료 결과는 Notebook 버전 출력과 별도 보관본에 저장한 뒤 새 세션에서 확인해야 합니다.')
+print('Stage output directory:',status_file.parent)
+print('Save the completed outputs with the notebook version, keep a backup and verify restoration in a fresh session.')
 ''')
-    md('''## 이후 단계의 완료 기준
+    md('''## Completion checks
 
-setup의 CPU 검사 통과는 GPU 학습 성공을 뜻하지 않습니다. fetch의 파일 검증 통과는 데이터 감사·분할 동결을 뜻하지 않습니다.
-prepare-b 결과의 `remaining_audit`를 검토하고, 동결 파일 해시를 확인한 뒤 B train에서만 smoke/pilot를 수행합니다.
-원본 GRU 설정, A/B 가중치·어휘 분리, T2 정상 점수 0.5 경계와 `p_mal < tau` 규칙을 유지합니다.
-중단 체크포인트의 정확한 확률적 학습 재개는 아직 구현되지 않았으므로 개발 실행은 다시 시작하거나 차이를 명시합니다.
+Verify GPU operation in a GPU session when required. Review the data audit after source retrieval.
+Review `remaining_audit` in the prepare-b result, confirm the split hashes, then run smoke and pilot on B training rows only.
+Keep A and B weights and vocabularies separate. Preserve the upstream GRU configuration, the T2 benign-score boundary at 0.5 and the early-exit rule `p_mal < tau`.
+If training stops, restart the development run or document the changed conditions. The runner does not restore the exact stochastic training state.
 ''')
     notebook=dict(nbformat=4,nbformat_minor=5,cells=cells,metadata={
         'kernelspec':{'display_name':'Python 3','language':'python','name':'python3'},

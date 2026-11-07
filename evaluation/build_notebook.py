@@ -52,7 +52,7 @@ def build(
     )
     cells = source["cells"][:4]
     cells[0]["source"] = [
-        {"gate": "# 실험 B 게이트 선택", "final": "# 동결 정책의 최종 평가"}[stage]
+        {"gate": "# Experiment B: select the gate on validation data", "final": "# Final evaluation of the frozen policy"}[stage]
     ]
     cells[1]["source"] = [f"STAGE = {stage!r}"]
     payload = io.BytesIO()

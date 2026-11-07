@@ -1,7 +1,7 @@
-## 무엇을 변경했나요?
+## What changed?
 
-영향을 받는 실험(A, B 또는 공통)과 변경 이유를 적어 주세요.
+Identify the affected experiment (A, B or both) and explain why the change is needed.
 
-## 어떻게 검증했나요?
+## How was it verified?
 
-실행한 명령과 결과를 적어 주세요. 실험 결과가 달라지면 데이터 분할 해시, 실행 환경, 비교할 지표를 함께 기록해 주세요. 예시가 필요할 때는 예약된 예시 도메인을 사용해 주세요.
+List the commands you ran and their results. If an experiment result changes, include the data split hash, execution environment and metrics used for comparison. Use reserved example domains in examples.
