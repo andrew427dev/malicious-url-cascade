@@ -62,7 +62,14 @@ python3.10 evaluation/build_notebook.py --stage gate \
   --archive-sha256 "$B_ZIP_SHA256" --output /tmp/HUFS_URL_Gate.ipynb
 ```
 
-첫 파일을 Kaggle에 가져오면 환경과 분할을 재구성하고, 게이트선택 집합에서 후보를 비교해 `hufs-b-gate-policy.zip`을 저장합니다. 완료된 실행의 ZIP을 내려받아 로그의 SHA-256과 대조한 뒤 최종 평가 노트북을 생성합니다.
+첫 파일을 Kaggle에 가져오면 환경과 분할을 재구성하고, 게이트선택 집합에서 후보를 비교해 `hufs-b-gate-policy.zip`을 저장합니다. 완료된 실행의 ZIP을 내려받고, **같은 버전**의 로그에서 `Verified gate archive`와 `Frozen B policy` 뒤의 SHA-256을 각각 복사합니다. 다음 명령은 ZIP·정책·증거 파일의 해시를 검사하고, 8개 후보의 혼동행렬에서 추가 미탐 K와 K/M을 검산합니다. 또한 후보별 T2 호출률과 허용 후보의 5회 반복 지연을 확인한 뒤, 저장된 임계값이 선택 규칙과 일치하는지 검사합니다. 게이트 집합의 악성 37,440건에서는 K가 374 이하여야 1%p 조건을 충족합니다.
+
+```bash
+python3.10 -m tools.verify_gate_archive "$GATE_ZIP" \
+  --archive-sha256 "$GATE_ZIP_SHA256" --policy-sha256 "$POLICY_SHA256"
+```
+
+검증을 통과한 게이트 ZIP의 버전과 SHA-256으로 최종 평가 노트북을 생성합니다.
 
 ```bash
 python3.10 evaluation/build_notebook.py --stage final \
