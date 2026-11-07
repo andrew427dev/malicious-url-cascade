@@ -1,0 +1,30 @@
+{
+  "experiment": "B",
+  "partition": "gate_selection",
+  "source": "Successful saved CPU notebook v1 log",
+  "verification": {
+    "notebook_status": "successful",
+    "archive_crc_checked_in_notebook": true,
+    "independent_archive_check": "pending",
+    "all_candidate_and_timing_records": "pending"
+  },
+  "selected_at_utc": "2026-11-07T15:36:22.019943+00:00",
+  "gate_rows": 86371,
+  "malicious_rows": 37440,
+  "threshold": 0.1,
+  "additional_false_negatives_vs_t2": 291,
+  "malicious_recall_drop_percentage_points": 0.7772435897435898,
+  "maximum_additional_false_negatives": 374,
+  "t2_calls": 53103,
+  "t2_call_rate": 0.6148244202336433,
+  "median_of_mean_batch1_latency_seconds": {
+    "t2_only": 0.3899228644879986,
+    "cascade": 0.2414686742639942
+  },
+  "sha256": {
+    "gate_archive": "bb5413c96494edb1620c3d0c98134629966a4a9227aa1e66a150babb77ddc834",
+    "policy": "0d7190c64623daf15271449ea79c33428e16250013594936e477bb074ebac343",
+    "gate_candidates": "532d4ffdb8a2cdd36d93eb236e312b5f98f7efc57e7f01554adc6031abb7f67c",
+    "gate_latencies": "82d451d58b2e5cabacee306f2c720c065dc5440f3597e1133f7f539768b210b7"
+  }
+}
