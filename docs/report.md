@@ -71,7 +71,18 @@ For each of eight thresholds (0, 0.001, 0.005, 0.01, 0.02, 0.05, 0.10 and 0.20),
 
 Eligible candidates share a deterministic 1,000-row timing sample. After warm-up, the runner processes one URL at a time, including feature extraction, routing, the model call when required and restoration of the output. It changes path order between the five repetitions. For each candidate it takes the median of the five mean request latencies and selects the smallest threshold within 5% of the fastest eligible candidate. It then reruns selective inference on the whole gate cohort and records the policy and evidence digests. [Timing harness](../urlcascade/benchmark.py) · [Independent archive verifier](../tools/verify_gate_archive.py)
 
-The completed CPU run froze τ = 0.10. It forwarded 53,103 of 86,371 requests to T2, and its 291 additional misses reduced malicious recall by 0.7772 percentage points. The maximum allowed on this cohort was 374 misses. Median-of-mean single-request latency fell from 389.92 ms with T2 alone to 241.47 ms with the cascade, a 38.07% reduction. The saved log supplies these aggregate results and the policy digest. The independent verifier still needs the archive to reproduce the eight candidate counts and individual timing repetitions. [Gate-selection evidence](../evidence/experiment-b-gate.json)
+The completed CPU run froze τ = 0.10. It forwarded 53,103 of 86,371 requests to T2, and its 291 additional misses reduced malicious recall by 0.7772 percentage points. The maximum allowed on this cohort was 374 misses. Median-of-mean single-request latency fell from 389.92 ms with T2 alone to 241.47 ms with the cascade, a 38.07% reduction. Independent verification reproduced all eight additional-miss counts, checked the five timing runs for each of the seven eligible thresholds, and matched the frozen policy and archive digests to the saved log. The 0.20 gate missed 610 additional malicious URLs and exceeded the 1 percentage point limit. [Gate-selection evidence](../evidence/experiment-b-gate.json)
+
+| Threshold | Additional misses | Recall loss (pp) | T2 call rate | Median run mean (ms/URL) |
+| ---: | ---: | ---: | ---: | ---: |
+| 0 | 0 | 0.0000 | 100.00% | 388.10 |
+| 0.001 | 3 | 0.0080 | 97.68% | 384.49 |
+| 0.005 | 6 | 0.0160 | 94.14% | 368.65 |
+| 0.01 | 9 | 0.0240 | 91.20% | 351.47 |
+| 0.02 | 31 | 0.0828 | 87.11% | 335.03 |
+| 0.05 | 111 | 0.2965 | 70.26% | 281.36 |
+| 0.10 | 291 | 0.7772 | 61.48% | 241.47 |
+| 0.20 | 610 | 1.6293 | 51.69% | Ineligible |
 
 ## 7. Held-out evaluation and limits of interpretation
 

@@ -1,12 +1,15 @@
 {
   "experiment": "B",
   "partition": "gate_selection",
-  "source": "Successful saved CPU notebook v1 log",
+  "source": "Saved CPU notebook v1 log and independently verified gate archive",
   "verification": {
     "notebook_status": "successful",
     "archive_crc_checked_in_notebook": true,
-    "independent_archive_check": "pending",
-    "all_candidate_and_timing_records": "pending"
+    "independent_archive_check": "passed",
+    "all_candidate_and_timing_records": "passed",
+    "verifier_commit": "94184d87c9bb691a3eecf54f830adc7ff3cf0a0c",
+    "timing_sample_size": 1000,
+    "repetitions_per_eligible_candidate": 5
   },
   "selected_at_utc": "2026-11-07T15:36:22.019943+00:00",
   "gate_rows": 86371,
@@ -26,5 +29,136 @@
     "policy": "0d7190c64623daf15271449ea79c33428e16250013594936e477bb074ebac343",
     "gate_candidates": "532d4ffdb8a2cdd36d93eb236e312b5f98f7efc57e7f01554adc6031abb7f67c",
     "gate_latencies": "82d451d58b2e5cabacee306f2c720c065dc5440f3597e1133f7f539768b210b7"
-  }
+  },
+  "candidates": [
+    {
+      "tau": 0,
+      "additional_fn": 0,
+      "malicious": 37440,
+      "recall_drop": 0.0,
+      "t2_calls": 86371,
+      "call_rate": 1.0,
+      "allowed": true,
+      "mean_latencies": [
+        0.38650191978399767,
+        0.3957145136420058,
+        0.3856505318159834,
+        0.3974505068750332,
+        0.3881015985019767
+      ]
+    },
+    {
+      "tau": 0.001,
+      "additional_fn": 3,
+      "malicious": 37440,
+      "recall_drop": 8.012820512820513e-05,
+      "t2_calls": 84371,
+      "call_rate": 0.9768440796100543,
+      "allowed": true,
+      "mean_latencies": [
+        0.39051042397500624,
+        0.3804694554210273,
+        0.38984804648197224,
+        0.38206705431101,
+        0.3844900713699935
+      ]
+    },
+    {
+      "tau": 0.005,
+      "additional_fn": 6,
+      "malicious": 37440,
+      "recall_drop": 0.00016025641025641026,
+      "t2_calls": 81306,
+      "call_rate": 0.9413576316124626,
+      "allowed": true,
+      "mean_latencies": [
+        0.36559365586900233,
+        0.3710022107419909,
+        0.3686506374080109,
+        0.37279028291199395,
+        0.3658472890990506
+      ]
+    },
+    {
+      "tau": 0.01,
+      "additional_fn": 9,
+      "malicious": 37440,
+      "recall_drop": 0.0002403846153846154,
+      "t2_calls": 78772,
+      "call_rate": 0.9120190804784013,
+      "allowed": true,
+      "mean_latencies": [
+        0.34918536870800154,
+        0.36478954090902244,
+        0.3479737264019768,
+        0.35548774370100183,
+        0.351470361914975
+      ]
+    },
+    {
+      "tau": 0.02,
+      "additional_fn": 31,
+      "malicious": 37440,
+      "recall_drop": 0.000827991452991453,
+      "t2_calls": 75236,
+      "call_rate": 0.8710794132289773,
+      "allowed": true,
+      "mean_latencies": [
+        0.343312355896001,
+        0.33502512294601,
+        0.34673993501199313,
+        0.334476572970023,
+        0.3338900471520028
+      ]
+    },
+    {
+      "tau": 0.05,
+      "additional_fn": 111,
+      "malicious": 37440,
+      "recall_drop": 0.0029647435897435896,
+      "t2_calls": 60686,
+      "call_rate": 0.7026200923921223,
+      "allowed": true,
+      "mean_latencies": [
+        0.2795215809020051,
+        0.28041827708400435,
+        0.2813634497040257,
+        0.28538566574904506,
+        0.2820807586839819
+      ]
+    },
+    {
+      "tau": 0.1,
+      "additional_fn": 291,
+      "malicious": 37440,
+      "recall_drop": 0.007772435897435898,
+      "t2_calls": 53103,
+      "call_rate": 0.6148244202336433,
+      "allowed": true,
+      "mean_latencies": [
+        0.24537326467999082,
+        0.2414686742639942,
+        0.24017674970899133,
+        0.24603818689397122,
+        0.23687345063002066
+      ]
+    },
+    {
+      "tau": 0.2,
+      "additional_fn": 610,
+      "malicious": 37440,
+      "recall_drop": 0.016292735042735044,
+      "t2_calls": 44644,
+      "call_rate": 0.5168864549443679,
+      "allowed": false,
+      "mean_latencies": []
+    }
+  ],
+  "t2_only_mean_latencies_seconds": [
+    0.3900228399639909,
+    0.3899228644879986,
+    0.3837423150330287,
+    0.3896290692959792,
+    0.3917002740980242
+  ]
 }
