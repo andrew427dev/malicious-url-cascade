@@ -4,7 +4,7 @@ Hankuk University of Foreign Studies · Computer Security · Technical report
 
 ## Abstract
 
-A character-level recurrent classifier spends computation on every URL, including benign strings that a simpler model might identify reliably. We reproduced an existing character 3-gram gated recurrent unit (GRU) classifier and designed a second experiment in which logistic regression can return an early benign decision. In the reproduction, the GRU detected 68,895 of 70,394 malicious validation URLs. Its accuracy at epoch 20 was 98.40%, compared with 98.34% in the upstream notebook. For the cascade experiment, we partitioned 779,923 URLs by domain group and used a separate model-selection cohort to freeze the logistic model and the GRU. On the gate-selection cohort the frozen threshold of 0.10 reduced GRU calls by 38.52% and introduced 291 additional misses among 37,440 malicious examples. On the frozen internal and external cohorts, the cascade lowered single-request latency by 39.76% and 53.83%. Recall loss exceeded the one-percentage-point limit on both cohorts, reaching 1.4889 and 1.4017 percentage points, respectively. On the all-malicious external cohort, the GRU detected 10.29% and the cascade detected 8.88%.
+A character-level recurrent classifier spends computation on every URL, including benign strings that a simpler model might identify reliably. We reproduced an existing character 3-gram gated recurrent unit (GRU) classifier and designed a second experiment in which logistic regression can return an early benign decision. In the reproduction, the GRU detected 68,895 of 70,394 malicious validation URLs. Its accuracy at epoch 20 was 98.40%, compared with 98.34% in the upstream notebook. For the cascade experiment, we partitioned 779,923 URLs by domain group and used a separate model-selection cohort to freeze the logistic model and the GRU. On the gate-selection cohort the frozen threshold of 0.10 reduced GRU calls by 38.52% and introduced 291 additional misses among 37,440 malicious examples. On the frozen internal and external cohorts, the cascade lowered single-request latency by 39.76% and 53.83%. Recall loss exceeded the one-percentage-point limit on both cohorts, reaching 1.4889 and 1.4017 percentage points, respectively. On the all-malicious external cohort, the GRU detected 10.29% and the cascade detected 8.88%. Among malicious URLs without an explicit scheme, the gate returned 1,923 of 13,488 internal inputs as benign (14.26%). Standalone T2 would have detected 822 of those inputs, giving an additional-miss rate of 6.09% in that subgroup. The external additional-miss rates were 1.39% without an explicit scheme and 7.41% with one (6 of 81).
 
 ## 1. Research questions and security setting
 
@@ -92,6 +92,8 @@ A paired bootstrap resamples domain groups 2,000 times so that related URLs stay
 
 The fixed gate met both cost targets and exceeded the one-percentage-point recall-loss limit on both cohorts. The internal 95% interval for recall loss crosses 1 pp. The external interval lies entirely above the bound.
 
+The gap between the gate-selection cohort (0.7772 pp) and the held-out cohorts (1.4889 and 1.4017 pp) is the central finding of the evaluation. The width of the internal interval, 0.6149 to 2.9864 pp, shows that the recall cost of a fixed threshold varies substantially with which domain groups a cohort contains. A threshold chosen from a single cohort's point estimate therefore carries a transfer risk that the selection rule did not account for, and the eligibility margin on the gate cohort (291 misses against a ceiling of 374) was too small to absorb it.
+
 ### Internal test
 
 All four paths scored 147,325 URLs from 48,776 domains, including 67,699 malicious and 79,626 benign examples. The malicious class is positive.
@@ -104,6 +106,8 @@ All four paths scored 147,325 URLs from 48,776 domains, including 67,699 malicio
 | Cascade | 76,584 | 3,042 | 4,446 | 63,253 | 93.43% | 3.82% | 94.81% |
 
 The cascade incurred 1,008 additional misses out of 67,699 malicious URLs (1.4889 pp). The maximum allowed was 676. It forwarded 88,584 of 147,325 inputs (60.13%). The 95% paired domain-bootstrap interval for recall loss was 0.6149 to 2.9864 percentage points across 2,000 valid replicates.
+
+Early exits also removed false positives. The cascade's benign false-positive rate was 3.82% against 5.04% for T2 alone, and precision rose from 0.9412 to 0.9541, because 58,741 inputs that T1 scored as benign never reached the GRU and could not be flagged by it. This benefit is a side effect of the same routing that produced the additional misses and does not offset them under the primary criterion.
 
 ### Independent external evaluation
 
@@ -119,6 +123,8 @@ All four paths scored 58,858 URLs from 29,903 domains, including 58,858 maliciou
 The cascade incurred 825 additional misses out of 58,858 malicious URLs (1.4017 pp). The maximum allowed was 588. It forwarded 26,130 of 58,858 inputs (44.39%). The 95% paired domain-bootstrap interval for recall loss was 1.2671 to 1.5387 percentage points across 2,000 valid replicates.
 
 The independent external cohort contains only malicious URLs. Its false-positive rate and balanced accuracy are undefined.
+
+All 32,728 external early exits were malicious inputs returned as benign. Standalone T2 would have detected 825 of them. The measured 53.83% latency reduction and 55.61% call reduction describe this all-malicious sample. Estimating savings on benign traffic requires a cohort that includes benign inputs.
 
 ### Measured inference cost
 
@@ -140,12 +146,23 @@ The batch-1 statistic is the median of five run means over 1,000 fixed inputs pe
 | Test | Missed (1.4889 pp) | Met (39.87%) | Met (39.76%) |
 | External | Missed (1.4017 pp) | Met (55.61%) | Met (53.83%) |
 
+Batch-128 throughput rose from 289.9 to 293.8 URLs/s internally and from 288.7 to 295.9 externally. Batch-1 p95 latency fell from 439.7 to 426.6 ms internally and from 433.2 to 412.4 ms externally. Both changes were smaller in relative terms than the mean single-request latency reductions. We timed the full inference path. The measurements do not isolate framework overhead from model computation.
+
 ### Error groups and representation collisions
+
+A malicious early exit is any malicious input the gate returns as benign. An additional miss is a malicious early exit that standalone T2 correctly detected. Both percentages below use all malicious inputs in the same subgroup as their denominator. The evaluator marks a scheme as present when the raw string starts with a scheme name followed by `://`.
+
+| Cohort | Explicit scheme | Malicious inputs | Malicious early exits | Additional misses vs. T2 |
+| --- | --- | ---: | ---: | ---: |
+| Internal | Absent | 13,488 | 1,923 (14.26%) | 822 (6.09%) |
+| Internal | Present | 54,211 | 315 (0.58%) | 186 (0.34%) |
+| External | Absent | 58,777 | 32,719 (55.67%) | 819 (1.39%) |
+| External | Present | 81 | 9 (11.11%) | 6 (7.41%) |
+
+The remaining prespecified groups use the same additional-miss definition.
 
 | Group | Internal additional misses / malicious | Independent external additional misses / malicious |
 | --- | ---: | ---: |
-| has\_scheme=False | 822 / 13,488 | 819 / 58,777 |
-| has\_scheme=True | 186 / 54,211 | 6 / 81 |
 | ip\_host=False | 1,004 / 50,113 | 817 / 55,216 |
 | ip\_host=True | 4 / 17,586 | 8 / 3,642 |
 | length\_Q1 | 273 / 16,017 | 255 / 23,949 |
@@ -156,6 +173,10 @@ The batch-1 statistic is the median of five run means over 1,000 fixed inputs pe
 | source=df\_another\_validation.csv | No rows | 825 / 58,858 |
 | source=df\_final.csv | 1,008 / 67,699 | No rows |
 
+Internally, the additional-miss rate was higher without an explicit scheme (6.09% versus 0.34%). The external rates went in the opposite direction (1.39% versus 7.41%). Although 819 of the 825 external additional misses had no explicit scheme, that subgroup contained 58,777 of the 58,858 malicious inputs. Only 81 external inputs had an explicit scheme, so six misses have a large effect on its rate.
+
+The extractor counts `http` and `https` anywhere in the raw string. We recomputed `hostname_length`, `abnormal_url`, `count-http` and `count-https` on all inputs without an explicit scheme, including benign rows. At least one of the four features was nonzero in 112 of 86,302 internal rows and 483 of 58,777 external rows. These counts describe the inputs. Establishing which features caused a routing decision would require a separate experiment. [Feature implementation](../urlcascade/features.py)
+
 The frozen GRU token and numeric representation produced 749,560 distinct inputs from 779,923 internal URLs. In total, 9,322 repeated input patterns covered 39,685 URLs. This counts collisions in the input representation. Establishing their effect on misclassification requires label-level analysis.
 
 ### A under original external preprocessing
@@ -165,5 +186,7 @@ With A's own final-epoch weights and vocabulary, the upstream pipeline retained 
 ### Interpretation
 
 The single split seed and the recorded CPU environment limit transfer to new splits and hardware. In particular, B's external cohort measures malicious sensitivity after overlap exclusion. It cannot establish the benign false-positive rate or the routing cost of a representative mixed production stream. The group intervals account for within-domain dependence but do not model future changes in domain ownership or traffic mix.
+
+The course report includes a de-identified additional miss from each cohort and the scores from its standalone and routed passes. A sweep of the other seven thresholds on held-out predictions remains a possible exploratory analysis. The reported policy was frozen before evaluation.
 
 [Aggregate evidence and digests](../evidence/experiment-b-final.json) · [Experiment tracker](https://github.com/andrew427dev/malicious-url-cascade/issues/1)
