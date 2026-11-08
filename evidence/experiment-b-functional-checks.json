@@ -1,0 +1,124 @@
+{
+  "experiment": "B",
+  "partition": "gate_selection",
+  "environment": "Independent local CPU replay with the frozen Kaggle v1 weights, preprocessing and threshold",
+  "scope": "Functional verification. Published timing results use the separate Kaggle CPU measurements.",
+  "checks": [
+    {
+      "number": 1,
+      "name": "Label direction and the T2 boundary",
+      "result": "passed",
+      "evidence": "Across 779,923 internal rows, malicious was one minus the original label. Controlled T2 benign scores immediately below, exactly at and immediately above 0.5 yielded malicious, benign and benign."
+    },
+    {
+      "number": 2,
+      "name": "Gate equality and zero threshold",
+      "result": "passed",
+      "evidence": "A real frozen T1 score used as the diagnostic threshold forwarded at equality. Controlled inputs also exercised equality at 0.10. At the diagnostic threshold zero, all 129 valid inputs reached T2 and matched standalone T2 decisions."
+    },
+    {
+      "number": 3,
+      "name": "Batch order and duplicates",
+      "result": "passed",
+      "evidence": "The 129 mixed inputs used two repeated reserved strings with distinct IDs. Sequential evaluation and blocks of 128 plus one preserved all IDs, labels and routes in order. Both forwarded 64 rows."
+    },
+    {
+      "number": 4,
+      "name": "All early, all forwarded and empty",
+      "result": "passed",
+      "evidence": "All 65 early inputs skipped the GRU. All 64 forward inputs reached it. The empty input sequence produced zero results and zero model calls."
+    },
+    {
+      "number": 5,
+      "name": "Invalid input handling",
+      "result": "passed",
+      "evidence": "Five invalid values produced invalid status, an empty decision and zero model calls."
+    },
+    {
+      "number": 6,
+      "name": "Feature order, type and scaling",
+      "result": "passed",
+      "evidence": "The feature manifest matched the pinned 18-feature order. Observers checked standardized values at the fitted logistic estimator and unscaled float32 values at the GRU numeric input. Upstream parity tests covered 192 constructed strings."
+    },
+    {
+      "number": 7,
+      "name": "Data separation and common rows",
+      "result": "passed",
+      "evidence": "Four reconstructed partition hashes matched. All six domain intersections were empty. Rebuilding the scaler mean and variance from 470,281 training rows and sorting their trigram frequencies reproduced the frozen scaler and all 10,000 vocabulary entries. Both policy paths processed the same ordered gate IDs."
+    },
+    {
+      "number": 8,
+      "name": "Restore parity",
+      "result": "passed",
+      "evidence": "Two independent loads of the same six model files and policy produced identical decisions, routes and output scores on 129 inputs."
+    },
+    {
+      "number": 9,
+      "name": "Recall, FPR and additional misses",
+      "result": "passed",
+      "evidence": "Standalone T2 had 35,309 true positives and 1,754 false positives. The cascade had 35,018 and 1,534. The 291 additional misses exactly matched the difference in false negatives and the observed recall change of 291 / 37,440."
+    },
+    {
+      "number": 10,
+      "name": "Actual selective GRU execution",
+      "result": "passed",
+      "evidence": "The standalone path processed 86,371 rows in 675 model invocations. The cascade forwarded 53,103 rows in 582 invocations. The 33,268 skipped rows had empty T2 scores. Actual GRU inputs matched the ordered route flags and forwarded decisions matched the standalone baseline."
+    }
+  ],
+  "observations": {
+    "policy_sha256": "0d7190c64623daf15271449ea79c33428e16250013594936e477bb074ebac343",
+    "model_manifest_sha256": "e8f14bf01575bd667e9b7b97c5c49c275132b7bab3ed7fb3160cfb5353fc1f6c",
+    "gate_archive_sha256": "bb5413c96494edb1620c3d0c98134629966a4a9227aa1e66a150babb77ddc834",
+    "gate_rows": 86371,
+    "gate_calls": 53103,
+    "skipped_rows": 33268,
+    "t2_batches": 675,
+    "cascade_gru_batches": 582,
+    "raw_call_log_lines": 1491,
+    "call_log_sha256": "e9e8488a5831e6264700a2ae0191cc6e5e939a3a6b2664f1c627630211b07c97",
+    "labels": 86371,
+    "delta_k": 291,
+    "malicious": 37440,
+    "cm_t2": {
+      "n": 86371,
+      "tp": 35309,
+      "tn": 47177,
+      "fp": 1754,
+      "fn": 2131,
+      "recall": 0.943082264957265,
+      "fpr": 0.03584639594531074,
+      "precision": 0.9526751747025335,
+      "f1": 0.9478544488141417,
+      "accuracy": 0.9550196246425304,
+      "balanced_accuracy": 0.9536179345059771
+    },
+    "cm_cascade": {
+      "n": 86371,
+      "tp": 35018,
+      "tn": 47397,
+      "fp": 1534,
+      "fn": 2422,
+      "recall": 0.9353098290598291,
+      "fpr": 0.03135026874578488,
+      "precision": 0.9580323922083607,
+      "f1": 0.9465347605146502,
+      "accuracy": 0.9541975894686874,
+      "balanced_accuracy": 0.951979780157022
+    },
+    "train_rows": 470281,
+    "vocabulary_entries": 10000,
+    "domain_pairs_zero": 6,
+    "mixed_rows": 129,
+    "mixed_t2": 64,
+    "reload_rows": 129,
+    "invalid_rows": 5,
+    "exact_score_cases": 3,
+    "gate_input_sha256": "3f8e46bd241c2e849d4f75686c5a311dc3e3ef412efdc71de67cdedda9b97853"
+  },
+  "partition_sha256": {
+    "train": "a56fbd9a6d1fb7278a0723e2aff2bbbf997f2b8a2ff0299fbe6cf1f6aff7c8b9",
+    "model_selection": "5eedad164c7e93793411378697f73b897fb64c5ebb2b835736cd82e917e11eef",
+    "gate_selection": "3f8e46bd241c2e849d4f75686c5a311dc3e3ef412efdc71de67cdedda9b97853",
+    "test": "fe6450c881708d7b7d13465f64424701af5dc79a5305511a2bf3727de9e0e37b"
+  }
+}
