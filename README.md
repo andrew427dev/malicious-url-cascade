@@ -2,7 +2,7 @@
 
 Can a lightweight classifier skip recurrent inference on likely benign URLs while keeping the loss in malicious recall within one percentage point? This three-person Computer Security project at Hankuk University of Foreign Studies measures both the extra malicious URLs missed and the time saved per request.
 
-Experiment A reproduces Munna Ram's character 3-gram GRU. Experiment B trains a separate GRU on domain-separated data and places a logistic regression gate in front of it. The project adds a domain-overlap audit, selective GRU execution and an end-to-end timing benchmark. [Upstream model](https://github.com/munna0912/URL_CLASSIFIER/tree/835bd5e1710531407c0b5ca09da3d7c3de8d1bbc) · [Technical report draft](docs/report.md) · [Reproduction guide](docs/reproduction.md)
+Experiment A reproduces Munna Ram's character 3-gram GRU. Experiment B trains a separate GRU on domain-separated data and places a logistic regression gate in front of it. The project adds a domain-overlap audit, selective GRU execution and an end-to-end timing benchmark. [Upstream model](https://github.com/munna0912/URL_CLASSIFIER/tree/835bd5e1710531407c0b5ca09da3d7c3de8d1bbc) · [Technical report](docs/report.md) · [Reproduction guide](docs/reproduction.md)
 
 ## How the cascade classifies one URL
 
@@ -30,7 +30,9 @@ A T1 score equal to the threshold forwards the URL to T2. T2 outputs a benign sc
 | Why train on CPU? | On the same 50,000-row pilot at batch size 128, the second epoch took **17.35 s on CPU** and **74.15 s on a Tesla T4**. These are training times. | [Pilot measurements](evidence/hufs-w1-w3-result.json) |
 | Did the smoke checkpoint survive restoration? | Three verification inputs produced identical decisions and a maximum absolute benign-score difference of zero after restoration. | [Restoration record](evidence/w4-run-observation.json) |
 
-The gate-selection run froze **τ = 0.10**. On 86,371 gate-selection URLs, the cascade missed **291 additional malicious URLs out of 37,440** (0.7772 percentage points of recall) and called the GRU **61.48%** of the time. Median-of-mean single-request latency fell from **389.92 ms to 241.47 ms**. Independent archive verification reproduced the threshold from eight candidates and five timing runs per eligible candidate. A separate replay verified all ten functional requirements against the frozen artifacts and instrumented model calls. The final CPU evaluation was submitted on November 8 and is running with the same policy. [Functional checks](evidence/experiment-b-functional-checks.json) [Gate-selection evidence](evidence/experiment-b-gate.json) · [Evaluation procedure](docs/reproduction.md#frozen-policy-evaluation)
+The gate-selection run froze **τ = 0.10**. On 86,371 gate-selection URLs, the cascade missed **291 additional malicious URLs out of 37,440** (0.7772 percentage points of recall) and called the GRU **61.48%** of the time. Median-of-mean single-request latency fell from **389.92 ms to 241.47 ms**. Independent archive verification reproduced the threshold from eight candidates and five timing runs per eligible candidate. A separate replay verified all ten functional requirements against the frozen artifacts and instrumented model calls. [Functional checks](evidence/experiment-b-functional-checks.json) · [Gate-selection evidence](evidence/experiment-b-gate.json) · [Evaluation procedure](docs/reproduction.md#frozen-policy-evaluation)
+
+The frozen gate reduced single-request latency by **39.76%** on the internal test and **53.83%** on the all-malicious external cohort. The primary recall constraint failed in both. The cascade missed **1,008** additional malicious URLs internally (**1.4889 percentage points**) and **825** externally (**1.4017 points**). External malicious recall fell from **10.29%** with T2 alone to **8.88%** with the cascade. [Final aggregate evidence and digests](evidence/experiment-b-final.json)
 
 ## Experimental design
 
