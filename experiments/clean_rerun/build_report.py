@@ -185,6 +185,7 @@ def build(draft=False):
             assert read(ROOT / kind / "complete.json")["status"] == "PASS"
         assert read(ROOT / "result-audit.json")["status"] == "PASS"
         assert read(ROOT / "learning-curves.json")["status"] == "PASS"
+        assert read(ROOT / "diagnostics.json")["status"] == "PASS"
     have = all((ROOT / k / "results.json").exists() for k in ("random", "domain"))
     random = read(ROOT / "random/results.json") if have else None
     domain = read(ROOT / "domain/results.json") if have else None
@@ -229,7 +230,7 @@ def build(draft=False):
 
     H("1 연구 문제와 기여")
     P(
-        "악성 URL 탐지는 사용자가 피싱·악성코드 배포 주소에 접근하기 전에 위험을 판별하는 보안 문제다. 본 실험은 URL 문자열만 사용하며 실제 사이트 방문, DNS 조회, 콘텐츠 다운로드를 수행하지 않는다. 안전하게 수집된 문자열의 어휘·구조 정보를 이용하지만, URL이 가리키는 사이트의 현재 상태까지 검증하는 시스템은 아니다."
+        "악성 URL 탐지는 사용자가 피싱·악성코드 배포 주소에 접근하기 전에 위험을 판별하는 보안 문제다. 본 실험은 URL 문자열만 사용하며 실제 사이트 방문, DNS 조회, 콘텐츠 다운로드를 수행하지 않는다. 공개 데이터의 문자열에서 어휘·구조 정보를 이용하지만, URL이 가리키는 사이트의 현재 상태까지 검증하는 시스템은 아니다."
     )
     P(
         "GRU는 문자 순서에서 패턴을 학습하지만 모든 URL에 반복 신경망을 실행하면 처리 비용이 발생한다. 반면 길이와 특수문자 수 등 18개 수치 특징만 사용하는 분류기는 상대적으로 단순하다. 충분히 정상으로 판단되는 입력을 경량 모델에서 종료하고 나머지만 GRU로 보내면 비용을 줄일 수 있으나, 조기 종료된 악성 URL은 2단계에서 복구할 기회를 잃는다."
@@ -322,6 +323,16 @@ def build(draft=False):
         ],
         [86, 186, 124],
         "표 2 정제 문제와 해결 방법",
+    )
+    raw_sources = read(ROOT / "data-audit.json")["raw_sources"]
+    T(
+        ["원파일", "전체", "정상", "악성"],
+        [
+            [name] + [f"{row[key]:,}" for key in ("rows", "benign", "malicious")]
+            for name, row in raw_sources.items()
+        ],
+        [189, 69, 69, 69],
+        "표 2-1 통합 전 원파일별 사용 개수; 원자료 type=1은 정상, type=0은 악성",
     )
     P(
         "정규화는 의미가 달라질 수 있는 경로의 대소문자, query 값, 명시적 포트를 임의로 바꾸지 않는다. HTTP와 HTTPS 또는 scheme이 없는 표기는 무조건 같은 URL로 합치지 않는다. 제어문자는 문자열에서 조용히 지우는 대신 해당 행을 제외해 원래 의도를 추정하지 않았다. 정규화 재적용 시 다시 변하는 불안정한 주소 1개도 마지막 검증에서 격리했다."
@@ -613,7 +624,7 @@ def build(draft=False):
         H("6.3 두 경량 모델의 학습 곡선", 2)
         curves = read(ROOT / "learning-curves.json")
         P(
-            "사용자의 추가 요청에 따라 학습 자료 수별 진단 곡선을 계산했다. 주 학습 502,454행에서 클래스별 고정 난수 순서로 10/25/50/75/100% 중첩 부분집합을 만들었다. LR C와 트리 leaf는 새 공통 검증 전체에서 선택한 설정으로 고정하고 트리는 60회를 사용했다. 각 지점마다 새 진단 모델을 적합했고 보정기는 적합하지 않았다. 이 곡선으로 최종 모델과 임계값을 다시 고르지 않았다."
+            "학습 자료 수에 따른 변화를 확인하기 위해 진단 곡선을 계산했다. 주 학습 502,454행에서 클래스별 고정 난수 순서로 10/25/50/75/100% 중첩 부분집합을 만들었다. LR C와 트리 leaf는 새 공통 검증 전체에서 선택한 설정으로 고정하고 트리는 60회를 사용했다. 각 지점마다 새 진단 모델을 적합했고 보정기는 적합하지 않았다. 이 곡선으로 최종 모델과 임계값을 다시 고르지 않았다."
         )
         T(
             ["학습분할 중 비율", "학습 전체", "정상", "악성"],
@@ -794,6 +805,38 @@ def build(draft=False):
             "이 비교는 이미 시험 결과를 본 뒤 시행한 설계 수정의 이력을 투명하게 보여주기 위한 것이다. 이전 시험 수치로 설정을 선택하지 않았어도 시험 노출 이력은 사라지지 않는다. 차이를 독립적인 맹검 확인이나 검증 크기의 단독 인과효과로 주장하지 않는다. 도메인 실험의 이전 전체 결과도 previous-results에 보존했다."
         )
 
+    if have and (ROOT / "diagnostics.json").exists():
+        H("6.8 대표 오류와 복구 사례", 2)
+        diagnostic = read(ROOT / "diagnostics.json")
+        case_names = {
+            "early_exit_miss": "재검사 후에도 조기 종료 미탐",
+            "recovered_malicious": "경계 재검사로 복구",
+            "new_false_positive": "경계 재검사의 추가 오탐",
+            "gru_false_negative": "GRU 자체 미탐",
+        }
+        case_rows = []
+        for case in diagnostic["error_cases"]["random"]["cases"]:
+            if "id" in case:
+                case_rows.append(
+                    [
+                        "LR" if case["family"] == "logistic" else "트리",
+                        case_names[case["category"]],
+                        case["id"][:12],
+                        str(case["population"]),
+                        f"{case['t1_malicious_probability']:.5f}",
+                        f"{case['gru_malicious_probability']:.5f}",
+                    ]
+                )
+        T(
+            ["모델", "사례 유형", "행 ID 앞부분", "동종 건수", "1단계 p", "GRU p"],
+            case_rows,
+            [38, 105, 77, 56, 60, 60],
+            "표 14 주 시험 집합의 사례별 점수와 해당 유형의 전체 건수",
+        )
+        P(
+            "각 유형에서 고정 행 ID가 가장 작은 사례 하나를 선택했다. 이는 무작위 표본이나 원인 분석이 아니라 실제 경로를 설명하는 예시다. 원문 URL은 표시하지 않고 전체 ID·길이·정답·전달 여부를 diagnostics.json에 보존했다. 1단계 p가 τ보다 작고 재검사에도 선택되지 않으면 GRU가 탐지 가능한 악성도 미탐한다. 경계 재검사는 일부를 복구하지만, GRU가 악성으로 오판하는 정상 URL을 추가 전달해 오탐을 늘릴 수 있다. GRU 자체의 미탐은 전달량을 늘려도 해결되지 않는다. 사례를 확인한 뒤 모델이나 정책을 다시 선택하지 않았다. 도메인 분할의 같은 진단도 별도 기록했다."
+        )
+
     H("7 한계와 향후 검증")
     P(
         "검증 15%를 세 설정 과정에 재사용했으므로 검증 점수와 보정 후 점수는 개발 자료에 대한 측정이다. 또한 동일 시험의 5/5/5 결과를 사전에 확인했기 때문에 최종 수치는 노출 이력이 있는 시험에 대한 추가 평가로 해석해야 한다. 엄격한 최종 확인에는 설정을 다시 조정하지 않은 상태에서 새로 확보한 독립 시험 자료가 필요하다."
@@ -866,6 +909,7 @@ def build(draft=False):
             ],
             ["각 분할 timing.json", "warm-up·5회 반복·단계별 시간·실제 호출 수"],
             ["result-audit.json", "혼동행렬 재계산·동일 예산·추가 미탐·해시 검증"],
+            ["diagnostics.json", "대표 오류·복구 사례와 평가 수정 전후의 불변성 검사"],
         ],
         [160, 236],
     )
@@ -877,6 +921,15 @@ def build(draft=False):
         P(
             f"실행 검증 결과: 데이터 감사 PASS, 합성 입력 분기 시험 48개 PASS, 주·도메인 결과 재계산 각각 {a['cohorts']['random']['policy_metric_records_checked']}개 기록 PASS, 시간 기록 합계 70회 PASS. 검증되지 않은 외부 정답 재라벨링은 NOT_RUN으로 구분한다."
         )
+        diagnostic = read(ROOT / "diagnostics.json")
+        if "evaluation_revision" in diagnostic:
+            revision = diagnostic["evaluation_revision"]["cohorts"]
+            P(
+                "평가기의 수치 경계와 무결성 검사도 검토했다. float32 정상 확률을 1에서 뺄 때 0.5 부근이 반올림될 수 있어, 먼저 float64로 승격한 후 악성 확률로 변환했다. 또한 모든 평가 시작에서 11개 학습 산출물의 봉인 해시를 검사하도록 했다. 두 분할의 학습 완료 기록을 검증한 뒤 동일 가중치로 평가만 다시 수행했으며, 수정 전 결과·완료 해시는 pre-evaluation-fix에 보존했다. 학습 원문과 수정 평가 원문은 각각 source-snapshot.json과 evaluation-source-snapshot.json으로 구별한다."
+            )
+            P(
+                f"평가 수정 전후 시험 GRU 판정이 달라진 행은 주 분할 {revision['random']['test_gru_decisions_changed']}개, 도메인 분할 {revision['domain']['test_gru_decisions_changed']}개였다. 가중치·학습 이력·시험 행·경량 모델 점수 불변과 원래 float32 계산의 재현을 검사했다. 이 검사는 실행 일관성 확인이며 추가적인 독립 시험을 뜻하지 않는다."
+            )
     P(
         "본 산출물은 보고서와 실험 증거다. 과제 PDF가 별도로 요구하는 10~15분 발표 자료, 실제 발표용 시연과 최종 e-class 제출은 이 보고서 생성의 완료 여부와 별도로 준비해야 한다."
     )

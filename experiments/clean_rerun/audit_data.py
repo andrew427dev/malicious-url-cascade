@@ -4,12 +4,26 @@ import hashlib
 import json
 import numpy as np
 import pandas as pd
-from prepare import ROOT, sha, write_json, normalize
+from prepare import ROOT, SOURCE, sha, write_json, normalize
 
 
 def main():
     p = ROOT / "data-final"
     m = json.loads((p / "manifest.json").read_text(encoding="utf-8"))
+    sources = {}
+    for name, digest in m["source_sha256"].items():
+        source = SOURCE / "data/dataset" / name
+        assert sha(source) == digest, "raw_source_changed:" + name
+        labels = pd.read_csv(source, usecols=["type"], dtype=str, keep_default_na=False).type
+        assert set(labels).issubset({"0", "1"})
+        sources[name] = {
+            "rows": len(labels),
+            "benign": int((labels == "1").sum()),
+            "malicious": int((labels == "0").sum()),
+            "sha256": digest,
+        }
+    for key in ("rows", "benign", "malicious"):
+        assert sum(row[key] for row in sources.values()) == m["stages"][0][key]
     for name, digest in m["files"].items():
         assert sha(p / name) == digest, name
     d = pd.read_csv(p / "clean.csv", keep_default_na=False)
@@ -62,6 +76,7 @@ def main():
         {
             "status": "PASS",
             "final": m["final"],
+            "raw_sources": sources,
             "checks": checks,
             "manifest_sha256": sha(p / "manifest.json"),
             "audit_sha256": sha(__file__),

@@ -4,7 +4,7 @@
 
 ## 확정된 평가 설계
 
-원저자에게 2026-11-11 문의했고 2026-11-16 확인 시 회신이 없었다. 교수님 안내에 따라 세 원파일을 통합·정제하고 학습/검증/시험 목표 비율을 **70/15/15**로 정했다. 최종 데이터는 **717,793행: 정상 376,309 / 악성 341,484**다. 원자료 `label`은 0=악성/1=정상, 평가용 `y_mal`은 1=악성/0=정상이다.
+원저자에게 2026-11-11 문의했고 2026-11-16 확인 시 회신이 없었다. 교수님 안내에 따라 세 원파일을 통합·정제하고 학습/검증/시험 목표 비율을 **70/15/15**로 정했다. 최종 데이터는 **717,793행: 정상 376,309 / 악성 341,484**다. 원자료 `type`은 0=악성/1=정상, 평가용 `y_mal`은 1=악성/0=정상이다.
 
 주 분할은 학습 **502,454**, 공통 검증 **107,669**, 시험 **107,670**행이다. 검증 전체의 같은 행을 모델 선택, sigmoid 확률 보정, 분기 임계값 선택에 사용한다. 각각 별도 15%를 만드는 방식이 아니다.
 
@@ -56,6 +56,7 @@ $code = 'experiments/clean_rerun'
 & $experimentPython "$code/experiment.py" domain
 & $experimentPython "$code/learning_curves.py"
 & $experimentPython "$code/audit_results.py"
+& $experimentPython "$code/diagnostics.py"
 ```
 
 정제는 `data-before-token-audit` → `data` → `data-final` 순서다. 원문 파싱·정규화, 상충 라벨 격리, 동일 입력 중복 제거, 학습 사전에 따른 실제 token 입력 중복 검사를 거친다. 수동 폴더 이름 변경은 필요 없다. 사전은 각 반복과 최종 단계에서 해당 학습 행으로만 적합한다. 최종 입력은 `data-final`이다.
@@ -64,7 +65,9 @@ $code = 'experiments/clean_rerun'
 
 실행 시작 시 여섯 실행 스크립트와 재사용 코드의 원문·SHA-256을 `source-snapshot.json`에 보존한다. 두 실험 사이에 코드가 바뀌면 중단한다. Git 줄바꿈 변환과 실제 실행 원문을 구별할 수 있다. 제공 결과의 `data-source-snapshot.json`은 공유 검증 실행 전에 동결한 데이터의 원래 정제 코드 증거다.
 
-`experiment.py --resume-evaluation`은 20회 학습 기록과 입력·가중치 해시를 검증한 경우에만 평가를 재개한다. Windows 한글 경로에서는 `h5py.File` 핸들로 가중치를 읽는다.
+학습 종료 시 `training-manifest.json`에 가중치·설정·학습 이력 등 11개 파일의 해시를 봉인한다. 일반 평가와 `experiment.py random --resume-evaluation` 또는 `experiment.py domain --resume-evaluation`은 모두 모델 적재 전에 봉인의 파일집합·해시와 20회 학습 기록을 검사한다. Windows 한글 경로에서는 `h5py.File` 핸들로 가중치를 읽는다.
+
+학습 원문은 `source-snapshot.json`, 평가 원문은 `evaluation-source-snapshot.json`으로 각각 보존한다. 제공 결과에는 float32 정상 확률을 악성 확률로 변환할 때 판정 경계를 보존하도록 float64로 먼저 승격한 평가 수정 이력이 포함된다. 수정 전 결과는 각 분할의 `pre-evaluation-fix/`에 보존하며, `evaluation-revision.json`은 기존 완료 해시를 검증한 후 동일 학습 산출물을 봉인한 일회성 이관 기록이다. 이 수정 때문에 모델을 재학습하거나 시험 결과로 설정 격자를 바꾸지 않았다.
 
 ## 데이터 사용과 학습 곡선
 
@@ -92,9 +95,12 @@ $code = 'experiments/clean_rerun'
 | `results.json`, `test-scores.npz` | 시험 지표·민감도·무작위 30개 seed 및 원점수 |
 | `learning-curves.json`, `learning-curve-indices.npz` | 부분집합·클래스 수·학습/검증 곡선 |
 | `result-audit.json` | 혼동행렬, 재검사 동일 예산, 실제 호출, 시간, 곡선의 별도 재계산 |
+| `diagnostics.json` | 고정 ID로 선택한 오류·복구 사례; 제공 결과의 평가 수정 전후 불변성 검사 |
 | `previous-results/` | 이전 5/5/5 결과와 설정 이력; 새 학습 입력이 아님 |
 
 `tests/test_clean_rerun_contract.py`는 검증 합집합의 학습·시험 겹침 거절과 실행 원문 변조 거절을 검사한다. `experiment.py self-test`는 작은 경계 사례를, `check_policies.py`는 분기·재검사 예산·복구 계산의 48개 합성 사례를 확인한다. 단위 검사와 실제 데이터·시험 지표 재계산은 구별한다.
+
+`diagnostics.py`는 결과 감사를 통과한 점수에서 조기 종료 미탐, 경계 재검사 복구·추가 오탐, GRU 자체 미탐을 추출한다. 각 유형의 가장 작은 고정 ID를 설명용 예시로 쓰며 원문 URL은 결과에 쓰지 않는다. 제공 결과의 평가 수정 이력이 있으면 원래 완료 해시, 동일 가중치·시험 행·경량 점수, float32→float64 계산 관계도 검사한다. 오류 사례로 설정을 재선택하지 않는다.
 
 ## 한국어 보고서와 제출 ZIP
 
