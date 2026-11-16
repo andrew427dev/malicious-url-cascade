@@ -51,6 +51,8 @@ from common import (
     snapshot_sources,
     verify_execution_source,
     validation_indices,
+    seal_training_artifacts,
+    verify_training_artifacts,
 )
 
 sys.path[:0] = [str(SOURCE), str(SOURCE / "upstream")]
@@ -60,6 +62,11 @@ from Utils.Model import create_model
 
 TAUS = [0, 0.001, 0.002, 0.005, 0.01, 0.02, 0.05, 0.1, 0.15, 0.2, 0.3, 0.5]
 RATES = [0, 0.01, 0.05, 0.1, 0.2]
+
+
+def malicious_scores(benign_scores):
+    """Preserve the float32 GRU boundary when converting its benign probability."""
+    return 1.0 - np.asarray(benign_scores, dtype=np.float64)
 
 
 def metrics(y, score, pred):
@@ -307,11 +314,12 @@ def train(kind):
             "history": history.history,
         },
     )
+    seal_training_artifacts(out)
     return
 
 
 def evaluate(kind):
-    """Evaluate completed, immutable training artifacts; supports path-error recovery."""
+    """Evaluate completed training only after unconditional artifact verification."""
     import h5py
 
     out = ROOT / kind
@@ -320,12 +328,9 @@ def evaluate(kind):
         raise RuntimeError("already_complete")
     settings = json.loads((out / "settings.json").read_text(encoding="utf-8"))
     source = Path(__file__)
-    if settings["experiment_sha256"] != sha(source):
-        verify_execution_source("experiment.py", settings["experiment_sha256"])
-        recovery = json.loads((out / "recovery-manifest.json").read_text(encoding="utf-8"))
-        for name, digest in recovery["files"].items():
-            if sha(out / name) != digest:
-                raise RuntimeError("training_artifact_changed:" + name)
+    verify_training_artifacts(out)
+    verify_execution_source("experiment.py", settings["experiment_sha256"])
+    snapshot_sources("evaluation-source-snapshot.json")
     manifest = json.loads((data / "manifest.json").read_text(encoding="utf-8"))
     if sha(data / "manifest.json") != settings["data_manifest_sha256"]:
         raise RuntimeError("changed_data_manifest")
@@ -358,12 +363,14 @@ def evaluate(kind):
             "code_sha256": sha(source),
             "training_code_sha256": settings["experiment_sha256"],
             "model_loader": "h5py file handle; compile=False; weights unchanged",
-            "resume_after_path_error": (out / "recovery-manifest.json").exists(),
+            "training_manifest_sha256": sha(out / "training-manifest.json"),
+            "probability_conversion": "float64 subtraction preserves the float32 GRU decision boundary",
         },
     )
 
     def score(idx):
-        return 1 - model.predict([encoded[idx], x[idx]], batch_size=2048, verbose=0).ravel()
+        benign = model.predict([encoded[idx], x[idx]], batch_size=2048, verbose=0).ravel()
+        return malicious_scores(benign)
 
     p2policy = score(po)
     frozen = {}

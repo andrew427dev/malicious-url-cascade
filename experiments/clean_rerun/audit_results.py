@@ -6,7 +6,7 @@ import math
 import numpy as np
 import pandas as pd
 from sklearn.metrics import average_precision_score, roc_auc_score
-from common import ROOT, sha, write_json, verify_execution_source
+from common import ROOT, sha, write_json, verify_execution_source, verify_training_artifacts
 
 
 def read(p):
@@ -77,6 +77,10 @@ def main():
         assert complete["status"] == "PASS"
         for name, digest in complete["files"].items():
             assert sha(p / name) == digest, name
+        verify_training_artifacts(p)
+        assert read(p / "evaluation-code.json")["training_manifest_sha256"] == sha(
+            p / "training-manifest.json"
+        )
         settings = read(p / "settings.json")
         assert settings["test_used_for_selection"] is False
         assert settings["protocol_sha256"] == sha(ROOT / "protocol.json")
@@ -226,6 +230,7 @@ def main():
             "same_budget": "PASS",
             "actual_selective_predictions": "PASS",
             "artifact_hashes": "PASS",
+            "training_seal": "PASS",
             "test_identity_and_labels": "PASS",
             "seed_and_timing_aggregates": "PASS",
             "shared_validation_rows": len(shared_validation),

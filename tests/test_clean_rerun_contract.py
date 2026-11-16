@@ -88,6 +88,58 @@ class ExecutionSourceTests(unittest.TestCase):
                     common.snapshot_sources()
                 self.assertEqual(before, (run / "source-snapshot.json").read_bytes())
 
+    def test_evaluation_snapshot_keeps_the_training_snapshot_intact(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            old = "# old training\r\n"
+            new = "# corrected evaluation\r\n"
+            for name, content in (
+                ("source-snapshot.json", old),
+                ("evaluation-source-snapshot.json", new),
+            ):
+                digest = hashlib.sha256(content.encode()).hexdigest()
+                (root / name).write_text(
+                    json.dumps({"experiment.py": {"sha256": digest, "utf8": content}}),
+                    encoding="utf-8",
+                )
+            before = (root / "source-snapshot.json").read_bytes()
+            with patch.multiple(common, ROOT=root, CODE_DIR=root / "missing"):
+                for content in (old, new):
+                    common.verify_execution_source(
+                        "experiment.py", hashlib.sha256(content.encode()).hexdigest()
+                    )
+            self.assertEqual(before, (root / "source-snapshot.json").read_bytes())
+
+
+class TrainingArtifactTests(unittest.TestCase):
+    def test_intact_seal_and_same_code_weight_tampering(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for name in common.TRAINING_ARTIFACTS:
+                (root / name).write_bytes(b"original artifact")
+            common.seal_training_artifacts(root)
+            common.verify_training_artifacts(root)
+            (root / "t2.h5").write_bytes(b"changed weights")
+            with self.assertRaisesRegex(
+                RuntimeError, "training_artifact_changed:t2.h5"
+            ):
+                common.verify_training_artifacts(root)
+            with self.assertRaisesRegex(
+                RuntimeError, "training_manifest_already_exists"
+            ):
+                common.seal_training_artifacts(root)
+
+    def test_missing_seal_and_omitted_artifact_are_rejected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with self.assertRaisesRegex(RuntimeError, "missing_training_manifest"):
+                common.verify_training_artifacts(root)
+            (root / "training-manifest.json").write_text(
+                json.dumps({"status": "PASS", "files": {}}), encoding="utf-8"
+            )
+            with self.assertRaisesRegex(RuntimeError, "invalid_training_manifest"):
+                common.verify_training_artifacts(root)
+
 
 @unittest.skipIf(
     np is None, "NumPy is optional in the repository's stdlib-only CI suite"

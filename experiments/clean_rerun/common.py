@@ -17,6 +17,19 @@ ROOT = Path(
     os.environ.get("URLCASCADE_RUN_DIR", REPOSITORY / "runs" / "clean-rerun-shared-validation")
 ).resolve()
 REFERENCE_FILES = ("urlcascade/adapters.py", "urlcascade/features.py", "upstream/Utils/Model.py")
+TRAINING_ARTIFACTS = (
+    "settings.json",
+    "t1-selection.json",
+    "gru-selection.json",
+    "vocabulary.json",
+    "logistic.joblib",
+    "boost.joblib",
+    "length.joblib",
+    "t2.h5",
+    "encoded-input-audit.json",
+    "progress.jsonl",
+    "epochs.csv",
+)
 
 
 def validation_indices(parts):
@@ -47,7 +60,35 @@ def write_json(path, value):
     )
 
 
-def snapshot_sources():
+def seal_training_artifacts(out):
+    """Seal completed training before any validation-policy or test evaluation."""
+    destination = out / "training-manifest.json"
+    if destination.exists():
+        raise RuntimeError("training_manifest_already_exists")
+    write_json(
+        destination,
+        {
+            "status": "PASS",
+            "seal_origin": "training_completed_before_evaluation",
+            "files": {name: sha(out / name) for name in TRAINING_ARTIFACTS},
+        },
+    )
+
+
+def verify_training_artifacts(out):
+    """Always check every trained model and selection input before loading it."""
+    path = out / "training-manifest.json"
+    if not path.exists():
+        raise RuntimeError("missing_training_manifest")
+    record = json.loads(path.read_text(encoding="utf-8"))
+    if record.get("status") != "PASS" or set(record.get("files", {})) != set(TRAINING_ARTIFACTS):
+        raise RuntimeError("invalid_training_manifest")
+    for name, digest in record["files"].items():
+        if sha(out / name) != digest:
+            raise RuntimeError("training_artifact_changed:" + name)
+
+
+def snapshot_sources(filename="source-snapshot.json"):
     """Keep original bytes inside JSON so Git line endings cannot change evidence."""
     sources = {}
     execution_files = (
@@ -63,7 +104,7 @@ def snapshot_sources():
     ]:
         raw = path.read_bytes()
         sources[name] = {"sha256": hashlib.sha256(raw).hexdigest(), "utf8": raw.decode("utf-8")}
-    destination = ROOT / "source-snapshot.json"
+    destination = ROOT / filename
     if destination.exists():
         if json.loads(destination.read_text(encoding="utf-8")) != sources:
             raise RuntimeError("execution_source_changed_between_cohorts")
@@ -76,8 +117,10 @@ def verify_execution_source(name, digest, *, reference=False):
     current = (SOURCE if reference else CODE_DIR) / name
     if current.exists() and sha(current) == digest:
         return
-    snapshot = ROOT / "source-snapshot.json"
-    if snapshot.exists():
+    for filename in ("source-snapshot.json", "evaluation-source-snapshot.json"):
+        snapshot = ROOT / filename
+        if not snapshot.exists():
+            continue
         records = json.loads(snapshot.read_text(encoding="utf-8"))
         keys = (
             ["reference/" + name]

@@ -26,6 +26,8 @@ def main():
         for name in ("README.md", "requirements-experiment.txt", "pyproject.toml", "protocol.json"):
             add(CODE_DIR / name, "experiments/clean_rerun/" + name)
         add(CODE_DIR / "README.md", "README.md")
+        for name in ("test_clean_rerun_contract.py", "test_clean_rerun_evaluation.py"):
+            add(REPOSITORY / "tests" / name, "tests/" + name)
         for name in (
             "scripts/fetch_assets.py",
             "scripts/verify_assets.py",
@@ -52,6 +54,7 @@ def main():
             "policy-synthetic-checks.json",
             "upstream-reproduction-source.json",
             "source-snapshot.json",
+            "evaluation-source-snapshot.json",
             "data-source-snapshot.json",
             "protocol.json",
             "learning-curves.json",
@@ -59,13 +62,16 @@ def main():
         ):
             add(ROOT / name, run_prefix + name)
         for kind in ("random", "domain"):
-            for path in sorted((ROOT / kind).iterdir()):
+            for path in sorted((ROOT / kind).rglob("*")):
                 if path.is_file():
-                    add(path, run_prefix + kind + "/" + path.name)
+                    add(path, run_prefix + kind + "/" + path.relative_to(ROOT / kind).as_posix())
             for path in sorted((ROOT / "previous-results" / kind).glob("*.json")):
                 add(path, run_prefix + "previous-results/" + kind + "/" + path.name)
         for stage in ("data-before-token-audit", "data", "data-final"):
             add(ROOT / stage / "manifest.json", run_prefix + stage + "/manifest.json")
+        revision = ROOT / "evaluation-revision.json"
+        if revision.exists():
+            add(revision, run_prefix + revision.name)
         for path in sorted(ROOT.glob("figure-*.svg")):
             add(path, "docs/clean-rerun/" + path.name)
         for suffix in (".pdf", ".md"):
