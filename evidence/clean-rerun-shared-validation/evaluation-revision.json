@@ -1,0 +1,59 @@
+{
+  "status": "PREPARED_FOR_CORRECTED_EVALUATION",
+  "prepared_at": "2026-11-16T15:53:10.588764+09:00",
+  "reason": "Preserve float32 GRU decisions through float64 score conversion and require trained-artifact verification on every evaluation.",
+  "model_training_repeated": false,
+  "test_used_for_parameter_selection": false,
+  "prior_test_results_seen": true,
+  "preparation_script_sha256": "41a7e0857940874384228e8ae0dfc8c06470b085592fcfc0f2e6cca084a51d2c",
+  "data_manifest_sha256": "7ed6a4bdde80b3a6a8066b0d5f8f69092c0f6fd4a69faf735a8908903bdd23b5",
+  "training_source_snapshot_sha256": "9697bd83de39d874bcfa861de91c979054052874ad334e6d87cebe593a0fbb27",
+  "cohorts": {
+    "random": {
+      "training_files": {
+        "settings.json": "faf40922ca4d1c4d1ebfc7d8f4bfe6f58ac4f1e5a126fa4f5cf0b0e2526f1ec8",
+        "t1-selection.json": "48b51b9acf9735a311e043d8ef1735113873a7276c73341385ce0b8b63c009ed",
+        "gru-selection.json": "c9f9e180788244109ddc372a92d449b909945505466d38322be4298bf9e2ce89",
+        "vocabulary.json": "759bf7d7ccfc631989305597be04c5ce85b35cf7ebb15ba9c9f58ad4c46ddbd4",
+        "logistic.joblib": "3042adccc08515669bb9328f89a1631268cf55df1e3d24a17c313b4654c6d039",
+        "boost.joblib": "40681d044784a3d8d38a5adb1ade7aa03469f263296c2534399da75d02206a0f",
+        "length.joblib": "adde0d1b777b5926f627c97309ebdf3395702f686fa6283304069c737de7e81e",
+        "t2.h5": "568dff2c62a6df6908055f5942f5e4aeb0a95592201e947ae2803ffc127ea95b",
+        "encoded-input-audit.json": "4ffc03684d79fd76bf50af55cb04c71cd0f7186a5b57a7b62b164d8a7a293dfc",
+        "progress.jsonl": "645b12fa8b141da0c73b064b57c67ae488a701303cc843d80ef49e7549de502c",
+        "epochs.csv": "4efc4877044df8634d99ae1751d1a8388fd850626deca5dc437a65b6e4d29a1f"
+      },
+      "archived_evaluation_files": {
+        "evaluation-code.json": "3fe9a75847893fc8787cbbcbd55f39ad34965cb9293546b9f97602551511af6a",
+        "policy-frozen.json": "b67951eedaee70cb033c41a6068e58eb803fc265f33ec75f7d119e57e978bc76",
+        "results.json": "ee6191711f5ccaf2441175f6803dacce1c2853d4a37231ff7e03852b6a78574b",
+        "test-scores.npz": "b6ff49780e33515593037b795c2a4e9b0669f587792449e8752ac18d522b75d7",
+        "timing.json": "91d83df9de6fd5d20899369bad2e420750242cbd7354875f643183f6c2810edd",
+        "complete.json": "ddaa6aab2dc6b9d04d3ef92b7d5f74c49bce50ff1952f0839ccb38deefd88c70"
+      }
+    },
+    "domain": {
+      "training_files": {
+        "settings.json": "a5df877444e1e0171a679254be44e30583448d61d484de8066e17041e29d629f",
+        "t1-selection.json": "e6ea3a63538ca31af4acb961655d0b45ddbaf0307a011d2cfa37d207bd619e25",
+        "gru-selection.json": "9027bdf0fa9927ebdccc5d629b378ffe98e77897ef0f2532c10e20a96ea45e8f",
+        "vocabulary.json": "f6a6b0d23eba194f6ac5cbf871d88b265e662b7fcb3c59b3d0d34922bd53228b",
+        "logistic.joblib": "120a27eff972ab7494f10a3fa4e4ea1cc717c334234e8cfc258d12c2c1b9a4ed",
+        "boost.joblib": "d633afbb359c933d96a16d7a353132dbca652f55e80b9cd150fe648e75706eac",
+        "length.joblib": "bad29f97ee815eb8d817498bb2f95cca42ea91e639fdafb802e79da6f54884e8",
+        "t2.h5": "e78d2c018dcd9230c3f549eff10260df23e92fbe58692f3c3a48c726373fa74a",
+        "encoded-input-audit.json": "4ffc03684d79fd76bf50af55cb04c71cd0f7186a5b57a7b62b164d8a7a293dfc",
+        "progress.jsonl": "6de2a64e1312e23e90baf1623a0663632fb5bdd871999f210ed555b158fe6393",
+        "epochs.csv": "e0fa32099ccc1db3941267813c760174645e5852f30ef175ba309ceb5a892f4e"
+      },
+      "archived_evaluation_files": {
+        "evaluation-code.json": "3fe9a75847893fc8787cbbcbd55f39ad34965cb9293546b9f97602551511af6a",
+        "policy-frozen.json": "ca80553c8656443e6f79742d09bbd511f7fd9fd49830927112ad62152ce630a9",
+        "results.json": "671abf90f98bea09813346509f06a2285f7201e42440bf25809fdfb488c1d7de",
+        "test-scores.npz": "f37f5418bc0db7d4a8ffb4c88d50cc72cfc888b4fb2af43ff81cf3040d06bd17",
+        "timing.json": "bd3ed2664eb253b4b415c08718b97f046e0ef339a0789112d217114f494d3c54",
+        "complete.json": "213d4744115bdb725e62d34b0bdda43cec91d4fe703e0eb78f414f4f2193b2b2"
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "kind": "domain",
+  "files": {
+    "boost.joblib": "d633afbb359c933d96a16d7a353132dbca652f55e80b9cd150fe648e75706eac",
+    "encoded-input-audit.json": "4ffc03684d79fd76bf50af55cb04c71cd0f7186a5b57a7b62b164d8a7a293dfc",
+    "epochs.csv": "e0fa32099ccc1db3941267813c760174645e5852f30ef175ba309ceb5a892f4e",
+    "evaluation-code.json": "3fe9a75847893fc8787cbbcbd55f39ad34965cb9293546b9f97602551511af6a",
+    "gru-selection.json": "9027bdf0fa9927ebdccc5d629b378ffe98e77897ef0f2532c10e20a96ea45e8f",
+    "length.joblib": "bad29f97ee815eb8d817498bb2f95cca42ea91e639fdafb802e79da6f54884e8",
+    "logistic.joblib": "120a27eff972ab7494f10a3fa4e4ea1cc717c334234e8cfc258d12c2c1b9a4ed",
+    "policy-frozen.json": "ca80553c8656443e6f79742d09bbd511f7fd9fd49830927112ad62152ce630a9",
+    "progress.jsonl": "6de2a64e1312e23e90baf1623a0663632fb5bdd871999f210ed555b158fe6393",
+    "results.json": "671abf90f98bea09813346509f06a2285f7201e42440bf25809fdfb488c1d7de",
+    "settings.json": "a5df877444e1e0171a679254be44e30583448d61d484de8066e17041e29d629f",
+    "t1-selection.json": "e6ea3a63538ca31af4acb961655d0b45ddbaf0307a011d2cfa37d207bd619e25",
+    "t2.h5": "e78d2c018dcd9230c3f549eff10260df23e92fbe58692f3c3a48c726373fa74a",
+    "test-scores.npz": "f37f5418bc0db7d4a8ffb4c88d50cc72cfc888b4fb2af43ff81cf3040d06bd17",
+    "timing.json": "bd3ed2664eb253b4b415c08718b97f046e0ef339a0789112d217114f494d3c54",
+    "vocabulary.json": "f6a6b0d23eba194f6ac5cbf871d88b265e662b7fcb3c59b3d0d34922bd53228b"
+  }
+}

@@ -1,0 +1,292 @@
+{
+  "source_sha256": {
+    "df_final.csv": "303effaa48986335fb6f7af07b00b2fda193fca22d990d0a78a273d542e3bd08",
+    "all_top_domains_merged.csv": "da1cf85b221f618d396b135554d41df2581fb4af98bcd2c41cd7de08dfa9b501",
+    "df_another_validation.csv": "676d758897212240d71da36783f1190866c18d688f516b53202802b364503b80"
+  },
+  "raw_conflicting_urls": 96007,
+  "normalized_conflicting_urls": 94993,
+  "representation_conflicts": 1,
+  "stages": [
+    {
+      "step": "raw",
+      "rows": 1291488,
+      "benign": 823934,
+      "malicious": 467554
+    },
+    {
+      "step": "invalid_and_control_removed",
+      "rows": 1290846,
+      "benign": 823841,
+      "malicious": 467005
+    },
+    {
+      "step": "raw_and_normalized_conflicts_removed",
+      "rows": 1098995,
+      "benign": 727921,
+      "malicious": 371074
+    },
+    {
+      "step": "normalized_duplicates_removed",
+      "rows": 747988,
+      "benign": 382938,
+      "malicious": 365050
+    },
+    {
+      "step": "model_representation_conflicts_removed",
+      "rows": 747986,
+      "benign": 382937,
+      "malicious": 365049
+    },
+    {
+      "step": "model_representation_duplicates_removed",
+      "rows": 722749,
+      "benign": 378469,
+      "malicious": 344280
+    }
+  ],
+  "exclusion_reasons": {
+    "control_or_format_character": 200,
+    "unsupported_scheme": 13,
+    "invalid_host": 427,
+    "parse_error": 2,
+    "conflicting_label": 191851,
+    "duplicate_normalized_url": 351007,
+    "unusable_model_input": 0,
+    "conflicting_model_representation": 2,
+    "duplicate_model_representation": 25237
+  },
+  "final": {
+    "rows": 722749,
+    "benign": 378469,
+    "malicious": 344280
+  },
+  "splits": {
+    "random": {
+      "train": {
+        "rows": 505924,
+        "benign": 264928,
+        "malicious": 240996,
+        "fraction": 0.699999584918139,
+        "domains": 185376
+      },
+      "model": {
+        "rows": 36137,
+        "benign": 18923,
+        "malicious": 17214,
+        "fraction": 0.04999937737720841,
+        "domains": 21437
+      },
+      "calibration": {
+        "rows": 36137,
+        "benign": 18923,
+        "malicious": 17214,
+        "fraction": 0.04999937737720841,
+        "domains": 21348
+      },
+      "policy": {
+        "rows": 36138,
+        "benign": 18924,
+        "malicious": 17214,
+        "fraction": 0.05000076098341195,
+        "domains": 21346
+      },
+      "test": {
+        "rows": 108413,
+        "benign": 56771,
+        "malicious": 51642,
+        "fraction": 0.1500008993440323,
+        "domains": 53765
+      }
+    },
+    "domain": {
+      "train": {
+        "rows": 514203,
+        "benign": 273687,
+        "malicious": 240516,
+        "fraction": 0.7114544606772198,
+        "domains": 169780
+      },
+      "model": {
+        "rows": 42285,
+        "benign": 24469,
+        "malicious": 17816,
+        "fraction": 0.058505788316552496,
+        "domains": 12127
+      },
+      "calibration": {
+        "rows": 31318,
+        "benign": 14607,
+        "malicious": 16711,
+        "fraction": 0.04333177908236469,
+        "domains": 12127
+      },
+      "policy": {
+        "rows": 35365,
+        "benign": 19452,
+        "malicious": 15913,
+        "fraction": 0.04893123338807802,
+        "domains": 12127
+      },
+      "test": {
+        "rows": 99578,
+        "benign": 46254,
+        "malicious": 53324,
+        "fraction": 0.1377767385357849,
+        "domains": 36382
+      }
+    }
+  },
+  "overlap_audit": {
+    "random": {
+      "train|model": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0
+      },
+      "train|calibration": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0
+      },
+      "train|policy": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0
+      },
+      "train|test": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0
+      },
+      "model|calibration": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0
+      },
+      "model|policy": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0
+      },
+      "model|test": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0
+      },
+      "calibration|policy": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0
+      },
+      "calibration|test": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0
+      },
+      "policy|test": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0
+      }
+    },
+    "domain": {
+      "train|model": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0,
+        "domain": 0
+      },
+      "train|calibration": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0,
+        "domain": 0
+      },
+      "train|policy": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0,
+        "domain": 0
+      },
+      "train|test": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0,
+        "domain": 0
+      },
+      "model|calibration": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0,
+        "domain": 0
+      },
+      "model|policy": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0,
+        "domain": 0
+      },
+      "model|test": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0,
+        "domain": 0
+      },
+      "calibration|policy": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0,
+        "domain": 0
+      },
+      "calibration|test": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0,
+        "domain": 0
+      },
+      "policy|test": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0,
+        "domain": 0
+      }
+    }
+  },
+  "feature_names": [
+    "use_of_ip",
+    "abnormal_url",
+    "count.",
+    "count-www",
+    "count@",
+    "count_dir",
+    "count_embed_domian",
+    "count-https",
+    "count-http",
+    "count%",
+    "count?",
+    "count-",
+    "count=",
+    "url_length",
+    "hostname_length",
+    "count-digits",
+    "count-letters",
+    "fd_length"
+  ],
+  "seed": 42,
+  "labels": {
+    "malicious": 1,
+    "benign": 0
+  },
+  "normalizer_tests": "PASS",
+  "domain_method": "GroupShuffleSplit, offline bundled PSL incl private suffixes; actual row proportions reported",
+  "label_limit": "Conflicts excluded without relabeling. Remaining source labels have not been independently adjudicated.",
+  "files": {
+    "clean.csv": "3e51e88e2ea3d9291d36573b53e2cdfc73aa9b65a430a1890860469637842a4a",
+    "domain_indices.npz": "68faa6ac5070ae63eb0e8201225864d5e704ca07df0cd97f3866f434c70ace6c",
+    "excluded.csv": "3239291b81e9f0f8b51fe4eb7b9ba446aa64a2a6ea9716d700245aec3c1963f5",
+    "features.npy": "c306bf7be27c82311658272465ecb99baac9f34c2dbdf7b8687952a4731fb36f",
+    "random_indices.npz": "98d1ee96b3c469a061c9ffe614dcc10d3a5f0a805324d353d5e5f3e18a792ab0"
+  },
+  "prepare_sha256": "f06df599a55fac3933d29210c90c437d03839cc65327c7ffaffe6ccd97313727"
+}

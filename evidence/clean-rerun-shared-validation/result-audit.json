@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "cohorts": {
+    "random": {
+      "policy_metric_records_checked": 283,
+      "timing_rounds_checked": 35,
+      "same_budget": "PASS",
+      "actual_selective_predictions": "PASS",
+      "artifact_hashes": "PASS",
+      "training_seal": "PASS",
+      "test_identity_and_labels": "PASS",
+      "seed_and_timing_aggregates": "PASS",
+      "shared_validation_rows": 107669,
+      "prior_test_exposure_recorded": "PASS",
+      "test_class_counts": {
+        "benign": 56447,
+        "malicious": 51223
+      }
+    },
+    "domain": {
+      "policy_metric_records_checked": 283,
+      "timing_rounds_checked": 35,
+      "same_budget": "PASS",
+      "actual_selective_predictions": "PASS",
+      "artifact_hashes": "PASS",
+      "training_seal": "PASS",
+      "test_identity_and_labels": "PASS",
+      "seed_and_timing_aggregates": "PASS",
+      "shared_validation_rows": 121402,
+      "prior_test_exposure_recorded": "PASS",
+      "test_class_counts": {
+        "benign": 51569,
+        "malicious": 49838
+      }
+    }
+  },
+  "learning_curves": {
+    "status": "PASS",
+    "fit_records": 10,
+    "train_only_subsets": "PASS",
+    "full_size_anchor": "PASS"
+  },
+  "auditor_sha256": "ba63a0df4e65c52df0fdd002382c16333ba3314865ccb94980eb43ab900b5392"
+}

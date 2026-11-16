@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="396" height="220" preserveAspectRatio="xMinYMin meet" viewBox="0 0 396 220" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="396" height="220"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-220)" style="clip-path: url(#clip)">
+		<g transform="">
+			<path d="M 49,42 L 370,42 Z" style="stroke: rgb(40%,45%,49%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 49,42 L 49,187 Z" style="stroke: rgb(40%,45%,49%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="23.625" y="39.0" style="font-family: Korean; font-size: 8px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,78) scale(1,-1)">97.31</text>
+			<text x="23.625" y="111.5" style="font-family: Korean; font-size: 8px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,223) scale(1,-1)">97.50</text>
+			<text x="23.625" y="184.0" style="font-family: Korean; font-size: 8px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,368) scale(1,-1)">97.68</text>
+			<text x="72.69285558976543" y="25" style="font-family: Korean; font-size: 8px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,50) scale(1,-1)">50천</text>
+			<text x="118.64030556777337" y="25" style="font-family: Korean; font-size: 8px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,50) scale(1,-1)">126천</text>
+			<text x="198.890625" y="25" style="font-family: Korean; font-size: 8px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,50) scale(1,-1)">251천</text>
+			<text x="279.14030556777334" y="25" style="font-family: Korean; font-size: 8px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,50) scale(1,-1)">377천</text>
+			<text x="359.390625" y="25" style="font-family: Korean; font-size: 8px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,50) scale(1,-1)">502천</text>
+			<path d="M 81.099106,175.329861 L 129.249681,134.04867 Z" style="stroke: rgb(40%,45%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 129.249681,134.04867 L 209.5,132.523855 Z" style="stroke: rgb(40%,45%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 209.5,132.523855 L 289.749681,123.576399 Z" style="stroke: rgb(40%,45%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 289.749681,123.576399 L 370,122.03516 Z" style="stroke: rgb(40%,45%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<circle cx="81.09910558976543" cy="175.32986050500102" r="2.3" style="stroke: rgb(40%,45%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(40%,45%,49%); fill-rule: evenodd;"/>
+			<circle cx="129.24968056777337" cy="134.04866998126124" r="2.3" style="stroke: rgb(40%,45%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(40%,45%,49%); fill-rule: evenodd;"/>
+			<circle cx="209.5" cy="132.52385530357373" r="2.3" style="stroke: rgb(40%,45%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(40%,45%,49%); fill-rule: evenodd;"/>
+			<circle cx="289.74968056777334" cy="123.57639860045934" r="2.3" style="stroke: rgb(40%,45%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(40%,45%,49%); fill-rule: evenodd;"/>
+			<circle cx="370.0" cy="122.03515964059807" r="2.3" style="stroke: rgb(40%,45%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(40%,45%,49%); fill-rule: evenodd;"/>
+			<text x="250" y="204" style="font-family: Korean; font-size: 8px;fill: rgb(40%,45%,49%); stroke:none;" transform="translate(0,408) scale(1,-1)">학습</text>
+			<path d="M 81.099106,53.670139 L 129.249681,65.884361 Z" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 129.249681,65.884361 L 209.5,87.460269 Z" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 209.5,87.460269 L 289.749681,82.604692 Z" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 289.749681,82.604692 L 370,81.965914 Z" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<circle cx="81.09910558976543" cy="53.67013949499898" r="2.3" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,20%,30%); fill-rule: evenodd;"/>
+			<circle cx="129.24968056777337" cy="65.88436090308414" r="2.3" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,20%,30%); fill-rule: evenodd;"/>
+			<circle cx="209.5" cy="87.46026910582387" r="2.3" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,20%,30%); fill-rule: evenodd;"/>
+			<circle cx="289.74968056777334" cy="82.60469172307833" r="2.3" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,20%,30%); fill-rule: evenodd;"/>
+			<circle cx="370.0" cy="81.96591390957221" r="2.3" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,20%,30%); fill-rule: evenodd;"/>
+			<text x="305" y="204" style="font-family: Korean; font-size: 8px;fill: rgb(9%,20%,30%); stroke:none;" transform="translate(0,408) scale(1,-1)">공통 검증</text>
+			<text x="0" y="204" style="font-family: Korean; font-size: 8px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,408) scale(1,-1)">악성 AP (%)</text>
+			<text x="151.9375" y="3" style="font-family: Korean; font-size: 8px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,6) scale(1,-1)">실제 학습 데이터 수 (행)</text>
+		</g>
+	</g>
+</svg>

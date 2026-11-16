@@ -1,0 +1,66 @@
+{
+  "candidates": {
+    "logistic": {
+      "entries": [
+        {
+          "setting": 0.1,
+          "model_validation_ap": 0.9416546761995048,
+          "warnings": []
+        },
+        {
+          "setting": 1.0,
+          "model_validation_ap": 0.941613100270706,
+          "warnings": []
+        },
+        {
+          "setting": 10.0,
+          "model_validation_ap": 0.9416029947704466,
+          "warnings": []
+        }
+      ],
+      "winner": 0.1
+    },
+    "boost": {
+      "entries": [
+        {
+          "setting": 7,
+          "model_validation_ap": 0.9628577961238455,
+          "warnings": []
+        },
+        {
+          "setting": 15,
+          "model_validation_ap": 0.9699222586786458,
+          "warnings": []
+        },
+        {
+          "setting": 31,
+          "model_validation_ap": 0.9741176338146259,
+          "warnings": []
+        }
+      ],
+      "winner": 31
+    }
+  },
+  "calibration": {
+    "logistic": {
+      "uncalibrated": {
+        "brier_on_policy_validation": 0.09300878190776457,
+        "logloss_on_policy_validation": 0.30427202303894196
+      },
+      "sigmoid": {
+        "brier_on_policy_validation": 0.09960325478268173,
+        "logloss_on_policy_validation": 0.33488438790723113
+      }
+    },
+    "boost": {
+      "uncalibrated": {
+        "brier_on_policy_validation": 0.06176081647165059,
+        "logloss_on_policy_validation": 0.2014584513350483
+      },
+      "sigmoid": {
+        "brier_on_policy_validation": 0.061212718028412993,
+        "logloss_on_policy_validation": 0.19705536951473882
+      }
+    }
+  }
+}

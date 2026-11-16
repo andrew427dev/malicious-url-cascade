@@ -893,7 +893,7 @@ def build(draft=False):
     story.append(PageBreak())
     H("부록 재현 자료와 검증 상태")
     P(
-        "새 실험 산출물은 outputs/reexperiment-20261116-shared-validation, 이전 5/5/5 산출물은 outputs/reexperiment-20261116에 보존한다. 코드 정본은 experiments/clean_rerun이며 실행 위치와 결과 저장 위치를 분리했다. 원본 데이터와 기존 작업 공간의 수정사항을 보존하고 전용 브랜치에서 작업했다. 실제 실행 소스 원문과 해시는 source-snapshot.json에, 정제 데이터의 이전 소스는 data-source-snapshot.json에 보존했다."
+        "실험 코드 정본은 experiments/clean_rerun이며 실행 방법과 산출물 경로는 README에 정리했다. 이전 5/5/5 결과와 원본 자료는 보존했다. 실제 학습 원문·해시는 source-snapshot.json, 정제 데이터 생성 당시 원문은 data-source-snapshot.json에서 확인한다."
     )
     T(
         ["산출물", "포함한 근거"],
@@ -914,7 +914,7 @@ def build(draft=False):
         [160, 236],
     )
     P(
-        "원자료부터 재생성하는 순서는 prepare.py → refine_inputs.py → finalize_data.py → audit_data.py → experiment.py random/domain → learning_curves.py → audit_results.py → build_report.py다. 이번 검증 설계 변경에서는 정제 데이터·분할·학습 사전의 해시를 확인해 그대로 재사용하고 모델을 새로 학습했다. 이전 가중치를 이어 학습하지 않았다. 전체 명령과 환경 변수는 코드 README에 명시했다."
+        "원자료부터 재생성하는 순서는 prepare.py → refine_inputs.py → finalize_data.py → audit_data.py → experiment.py random/domain → learning_curves.py → audit_results.py → diagnostics.py → build_report.py다. 이번 검증 설계 변경에서는 정제 데이터·분할·학습 사전의 해시를 확인해 그대로 재사용하고 모델을 새로 학습했다. 이전 가중치를 이어 학습하지 않았다. 전체 명령과 환경 변수는 코드 README에 명시했다."
     )
     if not draft:
         a = read(ROOT / "result-audit.json")
@@ -930,9 +930,6 @@ def build(draft=False):
             P(
                 f"평가 수정 전후 시험 GRU 판정이 달라진 행은 주 분할 {revision['random']['test_gru_decisions_changed']}개, 도메인 분할 {revision['domain']['test_gru_decisions_changed']}개였다. 가중치·학습 이력·시험 행·경량 모델 점수 불변과 원래 float32 계산의 재현을 검사했다. 이 검사는 실행 일관성 확인이며 추가적인 독립 시험을 뜻하지 않는다."
             )
-    P(
-        "본 산출물은 보고서와 실험 증거다. 과제 PDF가 별도로 요구하는 10~15분 발표 자료, 실제 발표용 시연과 최종 e-class 제출은 이 보고서 생성의 완료 여부와 별도로 준비해야 한다."
-    )
     name = "보고서 검토용 초안" if draft else "악성 URL 캐스케이드 정제 데이터 재실험 보고서"
     target = ROOT / (name + ".pdf")
     doc = SimpleDocTemplate(

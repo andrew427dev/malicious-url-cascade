@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="396" height="300" preserveAspectRatio="xMinYMin meet" viewBox="0 0 396 300" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="396" height="300"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-300)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="3" y="250" width="108" height="42" rx="4" ry="4" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,96%); fill-rule: evenodd;"/>
+			<text x="35.2185791015625" y="275.0" style="font-family: KoreanBold; font-size: 8.3px;fill: rgb(9%,20%,30%); stroke:none;" transform="translate(0,550) scale(1,-1)">정규화 URL</text>
+			<text x="22.068749999999994" y="261.0" style="font-family: Korean; font-size: 7.2px;fill: rgb(40%,45%,49%); stroke:none;" transform="translate(0,522) scale(1,-1)">오프라인 문자열 입력</text>
+			<rect x="144" y="250" width="108" height="42" rx="4" ry="4" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,96%); fill-rule: evenodd;"/>
+			<text x="169.521435546875" y="275.0" style="font-family: KoreanBold; font-size: 8.3px;fill: rgb(9%,20%,30%); stroke:none;" transform="translate(0,550) scale(1,-1)">18개 수치 특징</text>
+			<text x="173.86875" y="261.0" style="font-family: Korean; font-size: 7.2px;fill: rgb(40%,45%,49%); stroke:none;" transform="translate(0,522) scale(1,-1)">공통 특징 추출</text>
+			<rect x="285" y="250" width="108" height="42" rx="4" ry="4" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,96%); fill-rule: evenodd;"/>
+			<text x="308.7767333984375" y="275.0" style="font-family: KoreanBold; font-size: 8.3px;fill: rgb(9%,20%,30%); stroke:none;" transform="translate(0,550) scale(1,-1)">1단계 경량 모델</text>
+			<text x="297.4259765625" y="261.0" style="font-family: Korean; font-size: 7.2px;fill: rgb(40%,45%,49%); stroke:none;" transform="translate(0,522) scale(1,-1)">LR 또는 트리 + 확률 보정</text>
+			<path d="M 111,271 L 144,271 Z" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="144 271, 138 268, 138 274" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,20%,30%); fill-rule: evenodd;"/>
+			<path d="M 252,271 L 285,271 Z" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="285 271, 279 268, 279 274" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,20%,30%); fill-rule: evenodd;"/>
+			<rect x="285" y="180" width="108" height="42" rx="4" ry="4" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,96%); fill-rule: evenodd;"/>
+			<text x="315.1314208984375" y="205.0" style="font-family: KoreanBold; font-size: 8.3px;fill: rgb(9%,20%,30%); stroke:none;" transform="translate(0,410) scale(1,-1)">악성 점수 p₁</text>
+			<text x="297.4171875" y="191.0" style="font-family: Korean; font-size: 7.2px;fill: rgb(40%,45%,49%); stroke:none;" transform="translate(0,382) scale(1,-1)">검증에서 고정한 임계값 τ</text>
+			<path d="M 339,250 L 339,222 Z" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="339 222, 336 228, 342 228" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,20%,30%); fill-rule: evenodd;"/>
+			<rect x="144" y="180" width="108" height="42" rx="4" ry="4" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,96%); fill-rule: evenodd;"/>
+			<text x="170.18203125" y="205.0" style="font-family: KoreanBold; font-size: 8.3px;fill: rgb(9%,20%,30%); stroke:none;" transform="translate(0,410) scale(1,-1)">조기 종료 후보</text>
+			<text x="187.6130859375" y="191.0" style="font-family: Korean; font-size: 7.2px;fill: rgb(40%,45%,49%); stroke:none;" transform="translate(0,382) scale(1,-1)">p₁ &lt; τ</text>
+			<path d="M 285,201 L 252,201 Z" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="252 201, 258 198, 258 204" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,20%,30%); fill-rule: evenodd;"/>
+			<rect x="144" y="105" width="108" height="42" rx="4" ry="4" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,96%); fill-rule: evenodd;"/>
+			<text x="166.03203125" y="130.0" style="font-family: KoreanBold; font-size: 8.3px;fill: rgb(9%,20%,30%); stroke:none;" transform="translate(0,260) scale(1,-1)">재검사 후보 선택</text>
+			<text x="153.3375" y="116.0" style="font-family: Korean; font-size: 7.2px;fill: rgb(40%,45%,49%); stroke:none;" transform="translate(0,232) scale(1,-1)">같은 수의 무작위 또는 경계</text>
+			<path d="M 198,180 L 198,147 Z" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="198 147, 195 153, 201 153" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,20%,30%); fill-rule: evenodd;"/>
+			<rect x="3" y="105" width="108" height="42" rx="4" ry="4" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,96%); fill-rule: evenodd;"/>
+			<text x="30.641015625" y="130.0" style="font-family: KoreanBold; font-size: 8.3px;fill: rgb(9%,20%,30%); stroke:none;" transform="translate(0,260) scale(1,-1)">정상으로 종료</text>
+			<text x="30.885937499999997" y="116.0" style="font-family: Korean; font-size: 7.2px;fill: rgb(40%,45%,49%); stroke:none;" transform="translate(0,232) scale(1,-1)">2단계 호출 없음</text>
+			<path d="M 144,126 L 111,126 Z" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="111 126, 117 123, 117 129" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,20%,30%); fill-rule: evenodd;"/>
+			<text x="115.9" y="133" style="font-family: Korean; font-size: 7.4px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,266) scale(1,-1)">미선택</text>
+			<rect x="285" y="105" width="108" height="42" rx="4" ry="4" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,96%); fill-rule: evenodd;"/>
+			<text x="298.573974609375" y="130.0" style="font-family: KoreanBold; font-size: 8.3px;fill: rgb(9%,20%,30%); stroke:none;" transform="translate(0,260) scale(1,-1)">2단계 GRU 결합 모델</text>
+			<text x="308.4158203125" y="116.0" style="font-family: Korean; font-size: 7.2px;fill: rgb(40%,45%,49%); stroke:none;" transform="translate(0,232) scale(1,-1)">선택된 URL만 실행</text>
+			<path d="M 339,180 L 339,147 Z" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="339 147, 336 153, 342 153" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,20%,30%); fill-rule: evenodd;"/>
+			<text x="355.32275390625" y="161" style="font-family: Korean; font-size: 7.4px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,322) scale(1,-1)">p₁ ≥ τ</text>
+			<path d="M 252,126 L 285,126 Z" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="285 126, 279 123, 279 129" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,20%,30%); fill-rule: evenodd;"/>
+			<text x="260.6" y="133" style="font-family: Korean; font-size: 7.4px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,266) scale(1,-1)">선택</text>
+			<rect x="285" y="30" width="108" height="42" rx="4" ry="4" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,96%); fill-rule: evenodd;"/>
+			<text x="311.18203125" y="55.0" style="font-family: KoreanBold; font-size: 8.3px;fill: rgb(9%,20%,30%); stroke:none;" transform="translate(0,110) scale(1,-1)">정상 또는 악성</text>
+			<text x="297.86015625" y="41.0" style="font-family: Korean; font-size: 7.2px;fill: rgb(40%,45%,49%); stroke:none;" transform="translate(0,82) scale(1,-1)">정상 점수 ≥ 0.5이면 정상</text>
+			<path d="M 339,105 L 339,72 Z" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="339 72, 336 78, 342 78" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,20%,30%); fill-rule: evenodd;"/>
+			<text x="3" y="68" style="font-family: Korean; font-size: 8px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,136) scale(1,-1)">기본 정책: 재검사 비율 0%</text>
+			<text x="3" y="49" style="font-family: Korean; font-size: 8px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,98) scale(1,-1)">주 비교: 조기 종료 후보의 5% 재검사</text>
+			<text x="3" y="30" style="font-family: Korean; font-size: 8px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,60) scale(1,-1)">LR과 트리는 서로 다른 비교 구성에서 사용</text>
+		</g>
+	</g>
+</svg>

@@ -11,11 +11,21 @@ def read(path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def saved_scores(folder):
+    """Only load this run's hash-checked arrays, whose saved IDs have object dtype."""
+    complete = read(folder / "complete.json")
+    assert complete["status"] == "PASS"
+    path = folder / "test-scores.npz"
+    assert sha(path) == complete["files"][path.name]
+    return np.load(path, allow_pickle=True)
+
+
 def representative_cases(corpus, kind):
     """Choose the smallest stable ID per failure class, never tune from errors."""
     out = ROOT / kind
-    scores = np.load(out / "test-scores.npz")
+    scores = saved_scores(out)
     frozen = read(out / "policy-frozen.json")["families"]
+    metrics = read(out / "results.json")
     lookup = corpus.set_index("id")
     y, ids, p2 = scores["y"], scores["id"], scores["p2"]
     prediction = p2 > 0.5
@@ -30,8 +40,16 @@ def representative_cases(corpus, kind):
             "new_false_positive": (y == 0) & prediction & boundary & ~basic,
             "gru_false_negative": (y == 1) & ~prediction,
         }
+        boundary_metrics = metrics["policies"][family + "_boundary"]
+        expected = {
+            "early_exit_miss": boundary_metrics["additional_misses"],
+            "recovered_malicious": boundary_metrics["recovered_malicious"],
+            "new_false_positive": boundary_metrics["new_false_positives"],
+            "gru_false_negative": metrics["gru"]["fn"],
+        }
         for category, mask in groups.items():
             candidates = np.flatnonzero(mask)
+            assert len(candidates) == expected[category], (kind, family, category)
             case = {"family": family, "category": category, "population": len(candidates)}
             if len(candidates):
                 index = min(candidates, key=lambda i: str(ids[i]))
@@ -74,7 +92,7 @@ def revision_audit():
         seal = read(out / "training-manifest.json")
         assert seal["files"] == record["training_files"]
         assert seal["prior_complete_sha256"] == sha(archive / "complete.json")
-        before, after = np.load(archive / "test-scores.npz"), np.load(out / "test-scores.npz")
+        before, after = saved_scores(archive), saved_scores(out)
         for key in ("y", "id", "logistic", "boost"):
             assert np.array_equal(before[key], after[key]), (kind, key)
         # The exact float32 benign model output is recoverable from the new float64 score.

@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "kind": "random",
+  "files": {
+    "boost.joblib": "f0eb4426d345de036acc6c1b2598261dca9d1daff52915444d261170fd1cbffb",
+    "encoded-input-audit.json": "4ffc03684d79fd76bf50af55cb04c71cd0f7186a5b57a7b62b164d8a7a293dfc",
+    "epochs.csv": "0fe18766210133c897af697257a5d6f332ef524a82f506e56e4faccece79cf4e",
+    "evaluation-code.json": "dd22a48d6a69e84d5b10769ac43abc1bc55b815bdc31b09b1cc77d4edb7fbdbb",
+    "gru-selection.json": "e4413a868e58b2a80a77298bc45b072ff95c8e5af8732572ef8db17f361d3894",
+    "length.joblib": "adde0d1b777b5926f627c97309ebdf3395702f686fa6283304069c737de7e81e",
+    "logistic.joblib": "eac06ead060c1403bfa32dc49b0609dfbd391ba7c933dd83719b03bdab4290d6",
+    "policy-frozen.json": "031c60baaeb55182ad4478e866d908097f3b8fb8381f56479780d81106cc94cd",
+    "progress.jsonl": "0331c20c70d35d56112fc579341085c398b77665ee92ff34ca0928e50959ab09",
+    "recovery-manifest.json": "df249f43ea775feef5020ee7a927a54a1986b94f705675a537743d92af97da37",
+    "results.json": "7d1460885ff42e72ed19b9e9df504682b1ca536cbb1a204d7c775471b56c5a94",
+    "settings.json": "4b0517e9e212c887c95a632dec0d3d4bbe27f23c620b3204bf6b083ab3baa725",
+    "t1-selection.json": "e2763aa5c396e13e7396910acb33ebd878012dd2205f89c6ab808b08537d609c",
+    "t2.h5": "ff60db1e6fd284a2aad90ec14a2f425d96225b1b0f61b571e20336c8e97cd707",
+    "test-scores.npz": "2eb1d68de599d154a5dc6c178e2068e483abb8cc303072caa14e8e6aa1d59fb6",
+    "timing.json": "b996cd465d1b12bee5a37260cd6f13d94d3e5d38f3f2dba3717e4b825c6db474",
+    "vocabulary.json": "759bf7d7ccfc631989305597be04c5ce85b35cf7ebb15ba9c9f58ad4c46ddbd4"
+  }
+}

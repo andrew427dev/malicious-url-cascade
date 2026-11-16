@@ -1,0 +1,259 @@
+{
+  "status": "PASS",
+  "auditor_sha256": "f7dc5478adf32c7638fc586706de0320c24fb60030e9fc95a7a3644dc209af23",
+  "result_audit_sha256": "5a430e6bef014d9eea7faacb96a3f63654f487d971d9079243149b19aaaa0bc2",
+  "error_cases": {
+    "random": {
+      "selection": "Smallest stable ID in each category; illustrative, not a random sample.",
+      "scores_sha256": "d6b3e29cd51087f846f28cc597b0f34aa02257b937808d461aa78add369dd7b6",
+      "policy_sha256": "d3403c838f94d0f2cf1270274c8c01ac5f459fd4956fa1ae7e66687acf403925",
+      "cases": [
+        {
+          "family": "logistic",
+          "category": "early_exit_miss",
+          "population": 172,
+          "id": "01647fbb36d02c50e94001ee7e84ceac79ab5310c5a7c829d35e0e9d6de64ae7",
+          "truth": 1,
+          "url_characters": 261,
+          "t1_malicious_probability": 0.010501337056309153,
+          "tau": 0.1,
+          "gru_malicious_probability": 0.9912497289478779,
+          "forwarded_basic": false,
+          "forwarded_boundary": false
+        },
+        {
+          "family": "logistic",
+          "category": "recovered_malicious",
+          "population": 8,
+          "id": "17e7500c66f0c3f68e14c128f4d2e255191e4140e9611d28a0c32c7c8be903bb",
+          "truth": 1,
+          "url_characters": 99,
+          "t1_malicious_probability": 0.09849690180327673,
+          "tau": 0.1,
+          "gru_malicious_probability": 0.9999251919507515,
+          "forwarded_basic": false,
+          "forwarded_boundary": true
+        },
+        {
+          "family": "logistic",
+          "category": "new_false_positive",
+          "population": 0
+        },
+        {
+          "family": "logistic",
+          "category": "gru_false_negative",
+          "population": 2444,
+          "id": "002275ffc8a2ea1770d19802c74221955c9d60d653f82e180d85e28972f08a92",
+          "truth": 1,
+          "url_characters": 33,
+          "t1_malicious_probability": 0.3537929169348588,
+          "tau": 0.1,
+          "gru_malicious_probability": 0.11959069967269897,
+          "forwarded_basic": true,
+          "forwarded_boundary": true
+        },
+        {
+          "family": "boost",
+          "category": "early_exit_miss",
+          "population": 353,
+          "id": "0004660ad28f309800f64e32fcad9cadd63a53c9f97efd80424caed22cc8241b",
+          "truth": 1,
+          "url_characters": 94,
+          "t1_malicious_probability": 0.04038985739500875,
+          "tau": 0.05,
+          "gru_malicious_probability": 0.9996796061459463,
+          "forwarded_basic": false,
+          "forwarded_boundary": false
+        },
+        {
+          "family": "boost",
+          "category": "recovered_malicious",
+          "population": 50,
+          "id": "007670d16f543d440326f31d44e49f367d8b6330bd4ca736f6a24a72ee9dc26b",
+          "truth": 1,
+          "url_characters": 76,
+          "t1_malicious_probability": 0.048893394189457574,
+          "tau": 0.05,
+          "gru_malicious_probability": 0.9966852578800172,
+          "forwarded_basic": false,
+          "forwarded_boundary": true
+        },
+        {
+          "family": "boost",
+          "category": "new_false_positive",
+          "population": 8,
+          "id": "01bd026b5aae95ce8a524cdff26a81b61814c8e05c7c7789b9fb689e3b0f8df8",
+          "truth": 0,
+          "url_characters": 50,
+          "t1_malicious_probability": 0.04668371633449827,
+          "tau": 0.05,
+          "gru_malicious_probability": 0.9248528257012367,
+          "forwarded_basic": false,
+          "forwarded_boundary": true
+        },
+        {
+          "family": "boost",
+          "category": "gru_false_negative",
+          "population": 2444,
+          "id": "002275ffc8a2ea1770d19802c74221955c9d60d653f82e180d85e28972f08a92",
+          "truth": 1,
+          "url_characters": 33,
+          "t1_malicious_probability": 0.5394885265286198,
+          "tau": 0.05,
+          "gru_malicious_probability": 0.11959069967269897,
+          "forwarded_basic": true,
+          "forwarded_boundary": true
+        }
+      ]
+    },
+    "domain": {
+      "selection": "Smallest stable ID in each category; illustrative, not a random sample.",
+      "scores_sha256": "055a95fae90bd3868db7edaa03623e6dd8447e71f27660b106e0284a60d20761",
+      "policy_sha256": "c414e9ed7796385710815ca1dccfa8f92bf2dd06962c9c9fe9511a1f50f602df",
+      "cases": [
+        {
+          "family": "logistic",
+          "category": "early_exit_miss",
+          "population": 619,
+          "id": "007fbe16572c679fdc70329c4ccc36903479450848e27705b4d893fde97bbbb8",
+          "truth": 1,
+          "url_characters": 104,
+          "t1_malicious_probability": 0.07394207756097318,
+          "tau": 0.1,
+          "gru_malicious_probability": 0.9123793914914131,
+          "forwarded_basic": false,
+          "forwarded_boundary": false
+        },
+        {
+          "family": "logistic",
+          "category": "recovered_malicious",
+          "population": 18,
+          "id": "16deec8cefe89b98e12333384d967e2f34dff955db178045e120013e2c98b985",
+          "truth": 1,
+          "url_characters": 48,
+          "t1_malicious_probability": 0.09915894918091449,
+          "tau": 0.1,
+          "gru_malicious_probability": 0.9945647758431733,
+          "forwarded_basic": false,
+          "forwarded_boundary": true
+        },
+        {
+          "family": "logistic",
+          "category": "new_false_positive",
+          "population": 16,
+          "id": "110d70a2f48dc436d6c58985c20b536e214920fd638e00552da2cd830cf3af08",
+          "truth": 0,
+          "url_characters": 49,
+          "t1_malicious_probability": 0.09833347710512387,
+          "tau": 0.1,
+          "gru_malicious_probability": 0.5192363262176514,
+          "forwarded_basic": false,
+          "forwarded_boundary": true
+        },
+        {
+          "family": "logistic",
+          "category": "gru_false_negative",
+          "population": 4003,
+          "id": "000af41f6e238ecea283481a23636fed3369ee5ad00f18139207a6b9e67fe8e4",
+          "truth": 1,
+          "url_characters": 14,
+          "t1_malicious_probability": 0.23887777192962853,
+          "tau": 0.1,
+          "gru_malicious_probability": 0.3108176589012146,
+          "forwarded_basic": true,
+          "forwarded_boundary": true
+        },
+        {
+          "family": "boost",
+          "category": "early_exit_miss",
+          "population": 129,
+          "id": "007fbe16572c679fdc70329c4ccc36903479450848e27705b4d893fde97bbbb8",
+          "truth": 1,
+          "url_characters": 104,
+          "t1_malicious_probability": 0.007896031587220624,
+          "tau": 0.02,
+          "gru_malicious_probability": 0.9123793914914131,
+          "forwarded_basic": false,
+          "forwarded_boundary": false
+        },
+        {
+          "family": "boost",
+          "category": "recovered_malicious",
+          "population": 9,
+          "id": "2105dd0450e54c216efa4380a7c03fc0b3fc9bd929a038971cfeb0ac126eb547",
+          "truth": 1,
+          "url_characters": 44,
+          "t1_malicious_probability": 0.019056594309697715,
+          "tau": 0.02,
+          "gru_malicious_probability": 0.9877982418984175,
+          "forwarded_basic": false,
+          "forwarded_boundary": true
+        },
+        {
+          "family": "boost",
+          "category": "new_false_positive",
+          "population": 32,
+          "id": "0b5d5ec7e85ff0ce89c3a548971d9ef7ff0397b5f521b21153d9d8deca037b05",
+          "truth": 0,
+          "url_characters": 47,
+          "t1_malicious_probability": 0.01911263615378982,
+          "tau": 0.02,
+          "gru_malicious_probability": 0.5270293056964874,
+          "forwarded_basic": false,
+          "forwarded_boundary": true
+        },
+        {
+          "family": "boost",
+          "category": "gru_false_negative",
+          "population": 4003,
+          "id": "000af41f6e238ecea283481a23636fed3369ee5ad00f18139207a6b9e67fe8e4",
+          "truth": 1,
+          "url_characters": 14,
+          "t1_malicious_probability": 0.24208962692583422,
+          "tau": 0.02,
+          "gru_malicious_probability": 0.3108176589012146,
+          "forwarded_basic": true,
+          "forwarded_boundary": true
+        }
+      ]
+    }
+  },
+  "evaluation_revision": {
+    "status": "PASS",
+    "revision_sha256": "ca8fb0efef43d1b06c1c823f1adaf74bb9a93e9d7e45b5461b785903af690093",
+    "cohorts": {
+      "random": {
+        "training_files_unchanged": "PASS",
+        "test_rows_and_t1_scores_unchanged": "PASS",
+        "float_conversion_reproduced": "PASS",
+        "test_score_values_changed": 31328,
+        "test_gru_decisions_changed": 0,
+        "tau_before": {
+          "logistic": 0.1,
+          "boost": 0.05
+        },
+        "tau_after": {
+          "logistic": 0.1,
+          "boost": 0.05
+        },
+        "corrected_complete_sha256": "19ec76a49a176199f01edabbad990e8b4110bfa3ba6fb823df42b453aa3a3913"
+      },
+      "domain": {
+        "training_files_unchanged": "PASS",
+        "test_rows_and_t1_scores_unchanged": "PASS",
+        "float_conversion_reproduced": "PASS",
+        "test_score_values_changed": 45331,
+        "test_gru_decisions_changed": 0,
+        "tau_before": {
+          "logistic": 0.1,
+          "boost": 0.02
+        },
+        "tau_after": {
+          "logistic": 0.1,
+          "boost": 0.02
+        },
+        "corrected_complete_sha256": "22107c803617feb0646c3c3e1c4fa9bd2ff78d6c3f6361fdedc2b7c74fd6aeb3"
+      }
+    }
+  }
+}

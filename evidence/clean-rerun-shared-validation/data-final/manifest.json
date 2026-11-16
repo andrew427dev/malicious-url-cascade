@@ -1,0 +1,557 @@
+{
+  "source_sha256": {
+    "df_final.csv": "303effaa48986335fb6f7af07b00b2fda193fca22d990d0a78a273d542e3bd08",
+    "all_top_domains_merged.csv": "da1cf85b221f618d396b135554d41df2581fb4af98bcd2c41cd7de08dfa9b501",
+    "df_another_validation.csv": "676d758897212240d71da36783f1190866c18d688f516b53202802b364503b80"
+  },
+  "raw_conflicting_urls": 96007,
+  "normalized_conflicting_urls": 94993,
+  "representation_conflicts": 1,
+  "stages": [
+    {
+      "step": "raw",
+      "rows": 1291488,
+      "benign": 823934,
+      "malicious": 467554
+    },
+    {
+      "step": "invalid_and_control_removed",
+      "rows": 1290846,
+      "benign": 823841,
+      "malicious": 467005
+    },
+    {
+      "step": "raw_and_normalized_conflicts_removed",
+      "rows": 1098995,
+      "benign": 727921,
+      "malicious": 371074
+    },
+    {
+      "step": "normalized_duplicates_removed",
+      "rows": 747988,
+      "benign": 382938,
+      "malicious": 365050
+    },
+    {
+      "step": "model_representation_conflicts_removed",
+      "rows": 747986,
+      "benign": 382937,
+      "malicious": 365049
+    },
+    {
+      "step": "model_representation_duplicates_removed",
+      "rows": 722749,
+      "benign": 378469,
+      "malicious": 344280
+    },
+    {
+      "step": "encoded_input_deduplication",
+      "rows": 717794,
+      "benign": 376309,
+      "malicious": 341485
+    },
+    {
+      "step": "unstable_normalization_quarantine",
+      "rows": 717793,
+      "benign": 376309,
+      "malicious": 341484
+    }
+  ],
+  "exclusion_reasons": {
+    "control_or_format_character": 200,
+    "unsupported_scheme": 13,
+    "invalid_host": 427,
+    "parse_error": 2,
+    "conflicting_label": 191851,
+    "duplicate_normalized_url": 351007,
+    "unusable_model_input": 0,
+    "conflicting_model_representation": 2,
+    "duplicate_model_representation": 25237
+  },
+  "final": {
+    "rows": 717793,
+    "benign": 376309,
+    "malicious": 341484
+  },
+  "splits": {
+    "random": {
+      "train": {
+        "rows": 502454,
+        "benign": 263416,
+        "malicious": 239038,
+        "fraction": 0.6999984675247599,
+        "domains": 185169
+      },
+      "model": {
+        "rows": 35889,
+        "benign": 18815,
+        "malicious": 17074,
+        "fraction": 0.049999094446449045,
+        "domains": 21352
+      },
+      "calibration": {
+        "rows": 35890,
+        "benign": 18815,
+        "malicious": 17075,
+        "fraction": 0.050000487605758204,
+        "domains": 21148
+      },
+      "policy": {
+        "rows": 35890,
+        "benign": 18816,
+        "malicious": 17074,
+        "fraction": 0.050000487605758204,
+        "domains": 21389
+      },
+      "test": {
+        "rows": 107670,
+        "benign": 56447,
+        "malicious": 51223,
+        "fraction": 0.1500014628172746,
+        "domains": 53827
+      }
+    },
+    "domain": {
+      "train": {
+        "rows": 494984,
+        "benign": 254767,
+        "malicious": 240217,
+        "fraction": 0.6895915674853336,
+        "domains": 169707
+      },
+      "model": {
+        "rows": 39042,
+        "benign": 21343,
+        "malicious": 17699,
+        "fraction": 0.054391725748231035,
+        "domains": 12122
+      },
+      "calibration": {
+        "rows": 51408,
+        "benign": 33615,
+        "malicious": 17793,
+        "fraction": 0.0716195337653056,
+        "domains": 12122
+      },
+      "policy": {
+        "rows": 30952,
+        "benign": 15015,
+        "malicious": 15937,
+        "fraction": 0.04312106693712533,
+        "domains": 12122
+      },
+      "test": {
+        "rows": 101407,
+        "benign": 51569,
+        "malicious": 49838,
+        "fraction": 0.14127610606400454,
+        "domains": 36367
+      }
+    }
+  },
+  "overlap_audit": {
+    "random": {
+      "train|model": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0
+      },
+      "train|calibration": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0
+      },
+      "train|policy": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0
+      },
+      "train|test": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0
+      },
+      "model|calibration": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0
+      },
+      "model|policy": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0
+      },
+      "model|test": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0
+      },
+      "calibration|policy": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0
+      },
+      "calibration|test": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0
+      },
+      "policy|test": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0
+      }
+    },
+    "domain": {
+      "train|model": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0,
+        "domain": 0
+      },
+      "train|calibration": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0,
+        "domain": 0
+      },
+      "train|policy": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0,
+        "domain": 0
+      },
+      "train|test": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0,
+        "domain": 0
+      },
+      "model|calibration": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0,
+        "domain": 0
+      },
+      "model|policy": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0,
+        "domain": 0
+      },
+      "model|test": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0,
+        "domain": 0
+      },
+      "calibration|policy": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0,
+        "domain": 0
+      },
+      "calibration|test": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0,
+        "domain": 0
+      },
+      "policy|test": {
+        "id": 0,
+        "url_key": 0,
+        "representation_key": 0,
+        "domain": 0
+      }
+    }
+  },
+  "feature_names": [
+    "use_of_ip",
+    "abnormal_url",
+    "count.",
+    "count-www",
+    "count@",
+    "count_dir",
+    "count_embed_domian",
+    "count-https",
+    "count-http",
+    "count%",
+    "count?",
+    "count-",
+    "count=",
+    "url_length",
+    "hostname_length",
+    "count-digits",
+    "count-letters",
+    "fd_length"
+  ],
+  "seed": 42,
+  "labels": {
+    "malicious": 1,
+    "benign": 0
+  },
+  "normalizer_tests": "PASS",
+  "domain_method": "GroupShuffleSplit, offline bundled PSL incl private suffixes; actual row proportions reported",
+  "label_limit": "Conflicts excluded without relabeling. Remaining source labels have not been independently adjudicated.",
+  "files": {
+    "clean.csv": "25f854a87fc4f7f7b8be0e3596fc4d017ef8224a0560231680ca64ba6e60b6da",
+    "domain-encoded.npy": "4b871b9734acf46c2f19507c5ce9c08d3c0ee37f7ca89b850391aa47b6792e78",
+    "domain-vocabulary.json": "f6a6b0d23eba194f6ac5cbf871d88b265e662b7fcb3c59b3d0d34922bd53228b",
+    "domain_indices.npz": "0dd0f39cae08d13dd7c6977e099f08adf82816bab4b8c518cc276ec96e1390cb",
+    "features.npy": "1062c4baf78e34bc4865f2c957d395bb3a6317022bb398d9bb8bf1a3ef3de378",
+    "normalization-quarantine.csv": "685a0952d76b58a684feb44b96a99e7eb92784063a9e3cc0196d0af5cc6c7694",
+    "random-encoded.npy": "91a5e351513f98311cbb105a8754a008401377837ec3ad9249821e1133f8abf4",
+    "random-vocabulary.json": "759bf7d7ccfc631989305597be04c5ce85b35cf7ebb15ba9c9f58ad4c46ddbd4",
+    "random_indices.npz": "a55198dd946f2d6cf48386040f97231e1149789c949743dc8c990b1691584d12"
+  },
+  "prepare_sha256": "f06df599a55fac3933d29210c90c437d03839cc65327c7ffaffe6ccd97313727",
+  "encoded_refinement": [
+    {
+      "round": 1,
+      "before": {
+        "rows": 722749,
+        "benign": 378469,
+        "malicious": 344280
+      },
+      "audits": {
+        "random": {
+          "duplicate_rows": 3728,
+          "vocabulary_size": 10000
+        },
+        "domain": {
+          "duplicate_rows": 3789,
+          "vocabulary_size": 10000
+        }
+      },
+      "removed_conflict_rows": 17,
+      "removed_duplicate_rows": 3990
+    },
+    {
+      "round": 2,
+      "before": {
+        "rows": 718742,
+        "benign": 376885,
+        "malicious": 341857
+      },
+      "audits": {
+        "random": {
+          "duplicate_rows": 197,
+          "vocabulary_size": 10000
+        },
+        "domain": {
+          "duplicate_rows": 398,
+          "vocabulary_size": 10000
+        }
+      },
+      "removed_conflict_rows": 0,
+      "removed_duplicate_rows": 452
+    },
+    {
+      "round": 3,
+      "before": {
+        "rows": 718290,
+        "benign": 376504,
+        "malicious": 341786
+      },
+      "audits": {
+        "random": {
+          "duplicate_rows": 96,
+          "vocabulary_size": 10000
+        },
+        "domain": {
+          "duplicate_rows": 90,
+          "vocabulary_size": 10000
+        }
+      },
+      "removed_conflict_rows": 0,
+      "removed_duplicate_rows": 186
+    },
+    {
+      "round": 4,
+      "before": {
+        "rows": 718104,
+        "benign": 376469,
+        "malicious": 341635
+      },
+      "audits": {
+        "random": {
+          "duplicate_rows": 13,
+          "vocabulary_size": 10000
+        },
+        "domain": {
+          "duplicate_rows": 87,
+          "vocabulary_size": 10000
+        }
+      },
+      "removed_conflict_rows": 2,
+      "removed_duplicate_rows": 96
+    },
+    {
+      "round": 5,
+      "before": {
+        "rows": 718006,
+        "benign": 376409,
+        "malicious": 341597
+      },
+      "audits": {
+        "random": {
+          "duplicate_rows": 2,
+          "vocabulary_size": 10000
+        },
+        "domain": {
+          "duplicate_rows": 54,
+          "vocabulary_size": 10000
+        }
+      },
+      "removed_conflict_rows": 0,
+      "removed_duplicate_rows": 56
+    },
+    {
+      "round": 6,
+      "before": {
+        "rows": 717950,
+        "benign": 376388,
+        "malicious": 341562
+      },
+      "audits": {
+        "random": {
+          "duplicate_rows": 2,
+          "vocabulary_size": 10000
+        },
+        "domain": {
+          "duplicate_rows": 28,
+          "vocabulary_size": 10000
+        }
+      },
+      "removed_conflict_rows": 0,
+      "removed_duplicate_rows": 30
+    },
+    {
+      "round": 7,
+      "before": {
+        "rows": 717920,
+        "benign": 376372,
+        "malicious": 341548
+      },
+      "audits": {
+        "random": {
+          "duplicate_rows": 3,
+          "vocabulary_size": 10000
+        },
+        "domain": {
+          "duplicate_rows": 112,
+          "vocabulary_size": 10000
+        }
+      },
+      "removed_conflict_rows": 0,
+      "removed_duplicate_rows": 115
+    },
+    {
+      "round": 8,
+      "before": {
+        "rows": 717805,
+        "benign": 376317,
+        "malicious": 341488
+      },
+      "audits": {
+        "random": {
+          "duplicate_rows": 5,
+          "vocabulary_size": 10000
+        },
+        "domain": {
+          "duplicate_rows": 0,
+          "vocabulary_size": 10000
+        }
+      },
+      "removed_conflict_rows": 0,
+      "removed_duplicate_rows": 5
+    },
+    {
+      "round": 9,
+      "before": {
+        "rows": 717800,
+        "benign": 376313,
+        "malicious": 341487
+      },
+      "audits": {
+        "random": {
+          "duplicate_rows": 3,
+          "vocabulary_size": 10000
+        },
+        "domain": {
+          "duplicate_rows": 0,
+          "vocabulary_size": 10000
+        }
+      },
+      "removed_conflict_rows": 0,
+      "removed_duplicate_rows": 3
+    },
+    {
+      "round": 10,
+      "before": {
+        "rows": 717797,
+        "benign": 376311,
+        "malicious": 341486
+      },
+      "audits": {
+        "random": {
+          "duplicate_rows": 2,
+          "vocabulary_size": 10000
+        },
+        "domain": {
+          "duplicate_rows": 0,
+          "vocabulary_size": 10000
+        }
+      },
+      "removed_conflict_rows": 0,
+      "removed_duplicate_rows": 2
+    },
+    {
+      "round": 11,
+      "before": {
+        "rows": 717795,
+        "benign": 376310,
+        "malicious": 341485
+      },
+      "audits": {
+        "random": {
+          "duplicate_rows": 1,
+          "vocabulary_size": 10000
+        },
+        "domain": {
+          "duplicate_rows": 0,
+          "vocabulary_size": 10000
+        }
+      },
+      "removed_conflict_rows": 0,
+      "removed_duplicate_rows": 1
+    },
+    {
+      "round": 12,
+      "before": {
+        "rows": 717794,
+        "benign": 376309,
+        "malicious": 341485
+      },
+      "audits": {
+        "random": {
+          "duplicate_rows": 0,
+          "vocabulary_size": 10000
+        },
+        "domain": {
+          "duplicate_rows": 0,
+          "vocabulary_size": 10000
+        }
+      },
+      "removed_conflict_rows": 0,
+      "removed_duplicate_rows": 0
+    }
+  ],
+  "encoded_refinement_method": "Union exact encoded+numeric collisions across both training-only vocabularies; remove conflicting components entirely, retain lowest ID for equal-label components; re-split/refit until zero collisions, before classifier training.",
+  "previous_manifest_sha256": "9763652654b0f5cca27ad65e528f34ca2961651f8e1131d08a208c62f61cf3ca",
+  "refine_sha256": "f080d1767e42ac8f3dcfb10509b4e93dca4f1d503a651dfc29867ab97bf9bdf0",
+  "normalization_quarantine_rows": 1,
+  "finalization_method": "Exclude non-idempotent normalization; retain existing assignments; refit each vocabulary using remaining train rows only; require all exact encoded inputs unique.",
+  "previous_token_manifest_sha256": "8d4bdd4b1924b37a4f387ff1f24d68f06824b82521986247be3a73d3277bac8e",
+  "finalize_sha256": "da4f0d089c907b5ae4ffcbdc18dfc10904039da4d0cd95c12591aeaefb2fb05a"
+}

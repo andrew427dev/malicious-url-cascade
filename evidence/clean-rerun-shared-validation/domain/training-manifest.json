@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "seal_origin": "verified_prior_completion_before_corrected_evaluation",
+  "prior_complete_sha256": "213d4744115bdb725e62d34b0bdda43cec91d4fe703e0eb78f414f4f2193b2b2",
+  "files": {
+    "settings.json": "a5df877444e1e0171a679254be44e30583448d61d484de8066e17041e29d629f",
+    "t1-selection.json": "e6ea3a63538ca31af4acb961655d0b45ddbaf0307a011d2cfa37d207bd619e25",
+    "gru-selection.json": "9027bdf0fa9927ebdccc5d629b378ffe98e77897ef0f2532c10e20a96ea45e8f",
+    "vocabulary.json": "f6a6b0d23eba194f6ac5cbf871d88b265e662b7fcb3c59b3d0d34922bd53228b",
+    "logistic.joblib": "120a27eff972ab7494f10a3fa4e4ea1cc717c334234e8cfc258d12c2c1b9a4ed",
+    "boost.joblib": "d633afbb359c933d96a16d7a353132dbca652f55e80b9cd150fe648e75706eac",
+    "length.joblib": "bad29f97ee815eb8d817498bb2f95cca42ea91e639fdafb802e79da6f54884e8",
+    "t2.h5": "e78d2c018dcd9230c3f549eff10260df23e92fbe58692f3c3a48c726373fa74a",
+    "encoded-input-audit.json": "4ffc03684d79fd76bf50af55cb04c71cd0f7186a5b57a7b62b164d8a7a293dfc",
+    "progress.jsonl": "6de2a64e1312e23e90baf1623a0663632fb5bdd871999f210ed555b158fe6393",
+    "epochs.csv": "e0fa32099ccc1db3941267813c760174645e5852f30ef175ba309ceb5a892f4e"
+  }
+}

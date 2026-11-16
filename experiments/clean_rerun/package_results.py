@@ -10,6 +10,11 @@ def main():
     audit = json.loads((ROOT / "result-audit.json").read_text(encoding="utf-8"))
     if audit["status"] != "PASS" or audit["learning_curves"]["status"] != "PASS":
         raise RuntimeError("unverified_results")
+    diagnostics = json.loads((ROOT / "diagnostics.json").read_text(encoding="utf-8"))
+    if diagnostics["status"] != "PASS" or diagnostics["result_audit_sha256"] != sha(
+        ROOT / "result-audit.json"
+    ):
+        raise RuntimeError("unverified_or_stale_diagnostics")
     target = ROOT / "재실험 코드와 검증 결과.zip"
     names = {}
     run_prefix = "runs/clean-rerun-shared-validation/"
@@ -51,6 +56,7 @@ def main():
             "environment.json",
             "data-audit.json",
             "result-audit.json",
+            "diagnostics.json",
             "policy-synthetic-checks.json",
             "upstream-reproduction-source.json",
             "source-snapshot.json",
@@ -72,6 +78,10 @@ def main():
         revision = ROOT / "evaluation-revision.json"
         if revision.exists():
             add(revision, run_prefix + revision.name)
+            add(
+                ROOT / "verification/prepare_evaluation_revision.py",
+                run_prefix + "verification/prepare_evaluation_revision.py",
+            )
         for path in sorted(ROOT.glob("figure-*.svg")):
             add(path, "docs/clean-rerun/" + path.name)
         for suffix in (".pdf", ".md"):
