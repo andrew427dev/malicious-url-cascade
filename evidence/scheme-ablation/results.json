@@ -1,0 +1,507 @@
+{
+  "note": "Scheme shortcut ablation on the frozen clean-rerun splits (first-stage LR/HGB only).\n\nThe GRU text branch already strips http://, https:// and www. (adapters.preprocess_link),\nso scheme presence can reach the models only through the 18 numeric features\n(e.g. hostname_length is 0 and abnormal_url is ~0 whenever the scheme is absent).\n\nConditions, all on the same frozen train / shared validation / test rows of PR #3:\n  original        features of url_key as in PR #3 (reproduction check)\n  scheme_removed  leading http(s):// removed before feature extraction, then refit\n  format_probe    original models scored on test URLs whose scheme was removed (no refit)\nSelection and calibration follow experiment.py: same grids, validation AP, sigmoid on the\nshared validation, threshold 0.5. The test set is never used for selection.\n",
+  "python": "3.11.9",
+  "data_hash_equal_to_pr3": {
+    "clean.csv": false,
+    "domain-encoded.npy": true,
+    "domain-vocabulary.json": true,
+    "domain_indices.npz": false,
+    "features.npy": false,
+    "normalization-quarantine.csv": true,
+    "random-encoded.npy": true,
+    "random-vocabulary.json": true,
+    "random_indices.npz": false
+  },
+  "splits": {
+    "random": {
+      "scheme_by_label": {
+        "train": {
+          "with_scheme": {
+            "rows": 204284,
+            "malicious": 181316,
+            "benign": 22968
+          },
+          "without_scheme": {
+            "rows": 298170,
+            "malicious": 57722,
+            "benign": 240448
+          }
+        },
+        "test": {
+          "with_scheme": {
+            "rows": 44026,
+            "malicious": 38860,
+            "benign": 5166
+          },
+          "without_scheme": {
+            "rows": 63644,
+            "malicious": 12363,
+            "benign": 51281
+          }
+        }
+      },
+      "scheme_only_rule_test": {
+        "n": 107670,
+        "tn": 51281,
+        "fp": 5166,
+        "fn": 12363,
+        "tp": 38860,
+        "accuracy": 0.8371969908052382,
+        "precision": 0.8826602462181439,
+        "recall": 0.7586435780801593,
+        "f1": 0.8159665718275259,
+        "pr_auc_ap": 0.7844475979132207,
+        "roc_auc": 0.8335620498156745,
+        "fpr": 0.09151947844881039
+      },
+      "test_rows_whose_stripped_url_is_in_train": 265,
+      "models": {
+        "logistic": {
+          "selection": {
+            "original": {
+              "entries": [
+                {
+                  "setting": 0.1,
+                  "validation_ap": 0.9416540825146515
+                },
+                {
+                  "setting": 1.0,
+                  "validation_ap": 0.9416198997375461
+                },
+                {
+                  "setting": 10.0,
+                  "validation_ap": 0.9415954357489205
+                }
+              ],
+              "winner": 0.1
+            },
+            "scheme_removed": {
+              "entries": [
+                {
+                  "setting": 0.1,
+                  "validation_ap": 0.8482575851014221
+                },
+                {
+                  "setting": 1.0,
+                  "validation_ap": 0.8486127035485189
+                },
+                {
+                  "setting": 10.0,
+                  "validation_ap": 0.8486747720990856
+                }
+              ],
+              "winner": 10.0
+            }
+          },
+          "original": {
+            "n": 107670,
+            "tn": 55383,
+            "fp": 1064,
+            "fn": 12425,
+            "tp": 38798,
+            "accuracy": 0.8747190489458531,
+            "precision": 0.9733079122974261,
+            "recall": 0.757433184311735,
+            "f1": 0.8519075588735796,
+            "pr_auc_ap": 0.9407086897910553,
+            "roc_auc": 0.9273864313594598,
+            "fpr": 0.018849540276719756
+          },
+          "scheme_removed": {
+            "n": 107670,
+            "tn": 50365,
+            "fp": 6082,
+            "fn": 20839,
+            "tp": 30384,
+            "accuracy": 0.7499674932664624,
+            "precision": 0.8332145011791806,
+            "recall": 0.5931710364484705,
+            "f1": 0.6929945603211349,
+            "pr_auc_ap": 0.8473152192247139,
+            "roc_auc": 0.8424112735693089,
+            "fpr": 0.10774709019079845
+          },
+          "scheme_removed_excluding_collisions": {
+            "n": 107405,
+            "tn": 50311,
+            "fp": 6080,
+            "fn": 20731,
+            "tp": 30283,
+            "accuracy": 0.7503747497788743,
+            "precision": 0.8327970739487941,
+            "recall": 0.5936213588426706,
+            "f1": 0.6931572381748057,
+            "pr_auc_ap": 0.8471045777968574,
+            "roc_auc": 0.8424200328820934,
+            "fpr": 0.10781862353921726
+          },
+          "format_probe_original_model": {
+            "n": 107670,
+            "tn": 56148,
+            "fp": 299,
+            "fn": 39864,
+            "tp": 11359,
+            "accuracy": 0.626980588836259,
+            "precision": 0.9743523760507806,
+            "recall": 0.22175585186342073,
+            "f1": 0.36128560296432943,
+            "pr_auc_ap": 0.837862982876188,
+            "roc_auc": 0.8213964136652352,
+            "fpr": 0.0052970042694917355
+          },
+          "format_probe_detail": {
+            "malicious_with_scheme_rows": 38860,
+            "detected_before": 37719,
+            "detected_after_scheme_removed": 10280,
+            "benign_without_scheme_rows": 51281
+          }
+        },
+        "boost": {
+          "selection": {
+            "original": {
+              "entries": [
+                {
+                  "setting": 7,
+                  "validation_ap": 0.9628577597304814
+                },
+                {
+                  "setting": 15,
+                  "validation_ap": 0.9699222110640545
+                },
+                {
+                  "setting": 31,
+                  "validation_ap": 0.9741931389660817
+                }
+              ],
+              "winner": 31
+            },
+            "scheme_removed": {
+              "entries": [
+                {
+                  "setting": 7,
+                  "validation_ap": 0.9174485765094118
+                },
+                {
+                  "setting": 15,
+                  "validation_ap": 0.934909268338197
+                },
+                {
+                  "setting": 31,
+                  "validation_ap": 0.94338991982963
+                }
+              ],
+              "winner": 31
+            }
+          },
+          "original": {
+            "n": 107670,
+            "tn": 54811,
+            "fp": 1636,
+            "fn": 7418,
+            "tp": 43805,
+            "accuracy": 0.9159097241571469,
+            "precision": 0.9639972711868137,
+            "recall": 0.8551822423520684,
+            "f1": 0.9063353471819913,
+            "pr_auc_ap": 0.9744057381170435,
+            "roc_auc": 0.9712159983253366,
+            "fpr": 0.0289829397487909
+          },
+          "scheme_removed": {
+            "n": 107670,
+            "tn": 51711,
+            "fp": 4736,
+            "fn": 10213,
+            "tp": 41010,
+            "accuracy": 0.8611590972415715,
+            "precision": 0.8964718226730206,
+            "recall": 0.8006169103722937,
+            "f1": 0.8458373294558055,
+            "pr_auc_ap": 0.9430750973734323,
+            "roc_auc": 0.9372567264424821,
+            "fpr": 0.08390171311141424
+          },
+          "scheme_removed_excluding_collisions": {
+            "n": 107405,
+            "tn": 51660,
+            "fp": 4731,
+            "fn": 10139,
+            "tp": 40875,
+            "accuracy": 0.8615520692705181,
+            "precision": 0.8962636495198,
+            "recall": 0.8012506370800172,
+            "f1": 0.8460981163320224,
+            "pr_auc_ap": 0.9431271274076792,
+            "roc_auc": 0.9374310359879756,
+            "fpr": 0.08389636644145343
+          },
+          "format_probe_original_model": {
+            "n": 107670,
+            "tn": 54533,
+            "fp": 1914,
+            "fn": 22900,
+            "tp": 28323,
+            "accuracy": 0.7695365468561345,
+            "precision": 0.9367000694513344,
+            "recall": 0.5529352048884291,
+            "f1": 0.6953842376626564,
+            "pr_auc_ap": 0.8892267136250619,
+            "roc_auc": 0.8806758525535675,
+            "fpr": 0.03390791361808422
+          },
+          "format_probe_detail": {
+            "malicious_with_scheme_rows": 38860,
+            "detected_before": 38636,
+            "detected_after_scheme_removed": 23154,
+            "benign_without_scheme_rows": 51281
+          }
+        }
+      }
+    },
+    "domain": {
+      "scheme_by_label": {
+        "train": {
+          "with_scheme": {
+            "rows": 203837,
+            "malicious": 182933,
+            "benign": 20904
+          },
+          "without_scheme": {
+            "rows": 291147,
+            "malicious": 57284,
+            "benign": 233863
+          }
+        },
+        "test": {
+          "with_scheme": {
+            "rows": 41425,
+            "malicious": 37714,
+            "benign": 3711
+          },
+          "without_scheme": {
+            "rows": 59982,
+            "malicious": 12124,
+            "benign": 47858
+          }
+        }
+      },
+      "scheme_only_rule_test": {
+        "n": 101407,
+        "tn": 47858,
+        "fp": 3711,
+        "fn": 12124,
+        "tp": 37714,
+        "accuracy": 0.8438470717011646,
+        "precision": 0.9104164152082076,
+        "recall": 0.7567318110678599,
+        "f1": 0.8264904725902064,
+        "pr_auc_ap": 0.8084988841585836,
+        "roc_auc": 0.842384986764902,
+        "fpr": 0.07196183753805581
+      },
+      "test_rows_whose_stripped_url_is_in_train": 0,
+      "models": {
+        "logistic": {
+          "selection": {
+            "original": {
+              "entries": [
+                {
+                  "setting": 0.1,
+                  "validation_ap": 0.8978493159149256
+                },
+                {
+                  "setting": 1.0,
+                  "validation_ap": 0.8962246715096709
+                },
+                {
+                  "setting": 10.0,
+                  "validation_ap": 0.895920630259129
+                }
+              ],
+              "winner": 0.1
+            },
+            "scheme_removed": {
+              "entries": [
+                {
+                  "setting": 0.1,
+                  "validation_ap": 0.7672622323416194
+                },
+                {
+                  "setting": 1.0,
+                  "validation_ap": 0.7661272439860711
+                },
+                {
+                  "setting": 10.0,
+                  "validation_ap": 0.765947783351215
+                }
+              ],
+              "winner": 0.1
+            }
+          },
+          "original": {
+            "n": 101407,
+            "tn": 50945,
+            "fp": 624,
+            "fn": 12911,
+            "tp": 36927,
+            "accuracy": 0.8665279517193093,
+            "precision": 0.9833825996644563,
+            "recall": 0.7409406476985433,
+            "f1": 0.84511780658893,
+            "pr_auc_ap": 0.9403321715641977,
+            "roc_auc": 0.9199869529222557,
+            "fpr": 0.012100292811572844
+          },
+          "scheme_removed": {
+            "n": 101407,
+            "tn": 49683,
+            "fp": 1886,
+            "fn": 23099,
+            "tp": 26739,
+            "accuracy": 0.7536166142376759,
+            "precision": 0.9341135371179039,
+            "recall": 0.5365183193547093,
+            "f1": 0.6815696570358002,
+            "pr_auc_ap": 0.8678449924239949,
+            "roc_auc": 0.8416403265916831,
+            "fpr": 0.03657235936318331
+          },
+          "scheme_removed_excluding_collisions": {
+            "n": 101407,
+            "tn": 49683,
+            "fp": 1886,
+            "fn": 23099,
+            "tp": 26739,
+            "accuracy": 0.7536166142376759,
+            "precision": 0.9341135371179039,
+            "recall": 0.5365183193547093,
+            "f1": 0.6815696570358002,
+            "pr_auc_ap": 0.8678449924239949,
+            "roc_auc": 0.8416403265916831,
+            "fpr": 0.03657235936318331
+          },
+          "format_probe_original_model": {
+            "n": 101407,
+            "tn": 51335,
+            "fp": 234,
+            "fn": 38792,
+            "tp": 11046,
+            "accuracy": 0.6151547723529934,
+            "precision": 0.9792553191489362,
+            "recall": 0.22163810746819695,
+            "f1": 0.36146470761477795,
+            "pr_auc_ap": 0.8537186452513138,
+            "roc_auc": 0.8292432555458238,
+            "fpr": 0.004537609804339817
+          },
+          "format_probe_detail": {
+            "malicious_with_scheme_rows": 37714,
+            "detected_before": 35774,
+            "detected_after_scheme_removed": 9893,
+            "benign_without_scheme_rows": 47858
+          }
+        },
+        "boost": {
+          "selection": {
+            "original": {
+              "entries": [
+                {
+                  "setting": 7,
+                  "validation_ap": 0.9498964459062889
+                },
+                {
+                  "setting": 15,
+                  "validation_ap": 0.9554850397325297
+                },
+                {
+                  "setting": 31,
+                  "validation_ap": 0.9601664666818208
+                }
+              ],
+              "winner": 31
+            },
+            "scheme_removed": {
+              "entries": [
+                {
+                  "setting": 7,
+                  "validation_ap": 0.8741830105169303
+                },
+                {
+                  "setting": 15,
+                  "validation_ap": 0.8869270587201157
+                },
+                {
+                  "setting": 31,
+                  "validation_ap": 0.9089329181961141
+                }
+              ],
+              "winner": 31
+            }
+          },
+          "original": {
+            "n": 101407,
+            "tn": 50174,
+            "fp": 1395,
+            "fn": 8720,
+            "tp": 41118,
+            "accuracy": 0.9002534341810723,
+            "precision": 0.9671865076564815,
+            "recall": 0.8250331072675469,
+            "f1": 0.8904722201167286,
+            "pr_auc_ap": 0.9671499426467332,
+            "roc_auc": 0.9599353393291497,
+            "fpr": 0.02705113537202583
+          },
+          "scheme_removed": {
+            "n": 101407,
+            "tn": 48486,
+            "fp": 3083,
+            "fn": 12844,
+            "tp": 36994,
+            "accuracy": 0.8429398365004388,
+            "precision": 0.9230730843126981,
+            "recall": 0.7422850034110519,
+            "f1": 0.8228660401490298,
+            "pr_auc_ap": 0.9325748001857798,
+            "roc_auc": 0.9182327352540243,
+            "fpr": 0.0597839787469216
+          },
+          "scheme_removed_excluding_collisions": {
+            "n": 101407,
+            "tn": 48486,
+            "fp": 3083,
+            "fn": 12844,
+            "tp": 36994,
+            "accuracy": 0.8429398365004388,
+            "precision": 0.9230730843126981,
+            "recall": 0.7422850034110519,
+            "f1": 0.8228660401490298,
+            "pr_auc_ap": 0.9325748001857798,
+            "roc_auc": 0.9182327352540243,
+            "fpr": 0.0597839787469216
+          },
+          "format_probe_original_model": {
+            "n": 101407,
+            "tn": 50657,
+            "fp": 912,
+            "fn": 23981,
+            "tp": 25857,
+            "accuracy": 0.7545238494384017,
+            "precision": 0.9659307407822482,
+            "recall": 0.5188209799751193,
+            "f1": 0.6750558042998681,
+            "pr_auc_ap": 0.8795214339190416,
+            "roc_auc": 0.8593974806671625,
+            "fpr": 0.01768504333999108
+          },
+          "format_probe_detail": {
+            "malicious_with_scheme_rows": 37714,
+            "detected_before": 37029,
+            "detected_after_scheme_removed": 21768,
+            "benign_without_scheme_rows": 47858
+          }
+        }
+      }
+    }
+  }
+}
