@@ -1,0 +1,54 @@
+{
+  "random": {
+    "train": {
+      "rows": 502454,
+      "sha256": "a5f9eb05271a5ca7c7fb597ddd4b9622a3169b0653ed39fdf1a69a478c5a439d"
+    },
+    "model": {
+      "rows": 35889,
+      "sha256": "8e36f8dfe012e2deaf75d3edf605861dd2e2f9c498809c60971888a5567c44ab"
+    },
+    "calibration": {
+      "rows": 35890,
+      "sha256": "feae748a82a1ba41be61cd7b0c98eab5259b28b49f6447a63e0525dcc0bee0e7"
+    },
+    "policy": {
+      "rows": 35890,
+      "sha256": "bddafc5938b404622a80fa1b2b56d7134a54d93c8343482b224c859c1821b378"
+    },
+    "test": {
+      "rows": 107670,
+      "sha256": "98a7e1a5f7d9fefc35de243f724b45ef10c61874c24ae8cf6150c40ab7d383f0"
+    },
+    "shared_validation": {
+      "rows": 107669,
+      "sha256": "03367afa5fbc9b448bb0f1896205fa57c60b5eb795e597066c6dbd363a35d6db"
+    }
+  },
+  "domain": {
+    "train": {
+      "rows": 494984,
+      "sha256": "97347aacb62482d42a60abac5cde0a90a93852452efe727dee846e4c256ccf20"
+    },
+    "model": {
+      "rows": 39042,
+      "sha256": "09d0a39cee85d1bd85867ab07b796f9d3daf9bc8d206cc34ccdd2fef40748e9f"
+    },
+    "calibration": {
+      "rows": 51408,
+      "sha256": "e7c61dba2afcd82dbb5c2eb799ee686d9ea739cc5856626f2e9ac9700a8baf60"
+    },
+    "policy": {
+      "rows": 30952,
+      "sha256": "a1e15abf6dcae9960e558323e5e56f812256aeafd58f840b169b996cc550fa80"
+    },
+    "test": {
+      "rows": 101407,
+      "sha256": "771dfc2996e03a250a72c5ae0395a194fb5a5c673a1caccf67841eaa448c7c57"
+    },
+    "shared_validation": {
+      "rows": 121402,
+      "sha256": "45d95caecaa5d3a70e0417e7aee6e321ba1674c19dfdb089bcc9d746a4f1d659"
+    }
+  }
+}
