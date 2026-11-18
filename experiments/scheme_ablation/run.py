@@ -7,7 +7,6 @@ so scheme presence can reach the models only through the 18 numeric features
 Conditions, all on the same frozen train / shared validation / test rows of PR #3:
   original        features of url_key as in PR #3 (reproduction check)
   scheme_removed  leading http(s):// removed before feature extraction, then refit
-  format_probe    original models scored on test URLs whose scheme was removed (no refit)
 Selection and calibration follow experiment.py: same grids, validation AP, sigmoid on the
 shared validation, threshold 0.5. The test set is never used for selection.
 """
@@ -19,7 +18,6 @@ import warnings
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.exceptions import ConvergenceWarning
@@ -29,7 +27,8 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "clean_rerun"))
-from common import ROOT, SOURCE, sha, validation_indices, write_json  # noqa: E402
+from common import ROOT, SOURCE, validation_indices, write_json  # noqa: E402
+from verify_inputs import verified_rows  # noqa: E402
 
 sys.path.insert(0, str(SOURCE))
 from urlcascade.features import extract_features  # noqa: E402
@@ -57,9 +56,6 @@ def metrics(y, score, pred):
 
 
 SCHEME = re.compile(r"^[A-Za-z][A-Za-z0-9+.-]*://")
-EXPECTED_DATA = Path(__file__).resolve().parents[2] / (
-    "evidence/clean-rerun-shared-validation/data-final/manifest.json"
-)
 
 
 def strip_scheme(url):
@@ -124,16 +120,7 @@ def scheme_table(has, y, idx):
 def main():
     self_test()
     data = ROOT / "data-final"
-    expected = json.loads(EXPECTED_DATA.read_text(encoding="utf-8"))["files"]
-    # Encoded arrays hold every row in id order, so equal hashes prove the same rows and order.
-    # .npz embeds zip timestamps; clean.csv/features.npy may differ by Python urllib version.
-    identity = ("random-encoded.npy", "domain-encoded.npy", "random-vocabulary.json",
-                "domain-vocabulary.json", "normalization-quarantine.csv")
-    for name in identity:
-        if sha(data / name) != expected[name]:
-            raise RuntimeError("rows_differ_from_pr3_evidence:" + name)
-    file_check = {n: sha(data / n) == expected[n] for n in expected}
-    df = pd.read_csv(data / "clean.csv", keep_default_na=False)
+    df, file_check = verified_rows(data)
     y = df.y_mal.to_numpy()
     x_orig = np.load(data / "features.npy")
     urls = df.url_key.tolist()
@@ -170,10 +157,7 @@ def main():
             m_strip, sel_strip = fit_family(family, x_strip, y, tr, va)
             p_orig = m_orig.predict_proba(x_orig[te])[:, 1]
             p_strip = m_strip.predict_proba(x_strip[te])[:, 1]
-            p_probe = m_orig.predict_proba(x_strip[te])[:, 1]
             keep = ~collided
-            mal_with_scheme = (y[te] == 1) & has[te]
-            ben_without = (y[te] == 0) & ~has[te]
             r["models"][family] = {
                 "selection": {"original": sel_orig, "scheme_removed": sel_strip},
                 "original": metrics(y[te], p_orig, p_orig >= 0.5),
@@ -181,13 +165,6 @@ def main():
                 "scheme_removed_excluding_collisions": metrics(
                     y[te][keep], p_strip[keep], p_strip[keep] >= 0.5
                 ),
-                "format_probe_original_model": metrics(y[te], p_probe, p_probe >= 0.5),
-                "format_probe_detail": {
-                    "malicious_with_scheme_rows": int(mal_with_scheme.sum()),
-                    "detected_before": int((p_orig[mal_with_scheme] >= 0.5).sum()),
-                    "detected_after_scheme_removed": int((p_probe[mal_with_scheme] >= 0.5).sum()),
-                    "benign_without_scheme_rows": int(ben_without.sum()),
-                },
             }
             print(kind, family, json.dumps(r["models"][family]["original"]["pr_auc_ap"]),
                   json.dumps(r["models"][family]["scheme_removed"]["pr_auc_ap"]), flush=True)

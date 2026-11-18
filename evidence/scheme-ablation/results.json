@@ -1,5 +1,5 @@
 {
-  "note": "Scheme shortcut ablation on the frozen clean-rerun splits (first-stage LR/HGB only).\n\nThe GRU text branch already strips http://, https:// and www. (adapters.preprocess_link),\nso scheme presence can reach the models only through the 18 numeric features\n(e.g. hostname_length is 0 and abnormal_url is ~0 whenever the scheme is absent).\n\nConditions, all on the same frozen train / shared validation / test rows of PR #3:\n  original        features of url_key as in PR #3 (reproduction check)\n  scheme_removed  leading http(s):// removed before feature extraction, then refit\n  format_probe    original models scored on test URLs whose scheme was removed (no refit)\nSelection and calibration follow experiment.py: same grids, validation AP, sigmoid on the\nshared validation, threshold 0.5. The test set is never used for selection.\n",
+  "note": "Archived Windows first-stage aggregates. The original split files were not retained, so ordered row identity with PR #3 could not be verified. Metrics and recorded file-hash comparisons are unchanged.",
   "python": "3.11.9",
   "data_hash_equal_to_pr3": {
     "clean.csv": false,
