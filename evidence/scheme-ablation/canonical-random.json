@@ -1,0 +1,151 @@
+{
+  "source": "Colab CPU, Python 3.11.18, TF 2.12.0; canonical.py then experiment.py random. Selected fields of results.json.",
+  "note": "experiment.py stopped at the final timing step (timing_prediction_mismatch): that step recomputes features from raw URLs without canonicalization. results.json is written before it; no timing was measured for this condition.",
+  "canonical_collision_exclusion": {
+    "rows": 1319,
+    "malicious": 1023,
+    "by_random_split": {
+      "train": 582,
+      "test": 345,
+      "model": 139,
+      "policy": 131,
+      "calibration": 122
+    },
+    "remaining_rows": 716474
+  },
+  "best_epoch": 10,
+  "gru": {
+    "n": 107325,
+    "tn": 55291,
+    "fp": 1083,
+    "fn": 2531,
+    "tp": 48420,
+    "recall": 0.9503248218876961,
+    "precision": 0.9781225380279983,
+    "fpr": 0.019210983786852095,
+    "pr_auc_ap": 0.9952410228473467,
+    "t2_call_rate": 1.0,
+    "recall_loss": 0.0,
+    "additional_misses": 0
+  },
+  "first_stage": {
+    "logistic": {
+      "n": 107325,
+      "tn": 50231,
+      "fp": 6143,
+      "fn": 20774,
+      "tp": 30177,
+      "recall": 0.5922749308158819,
+      "precision": 0.8308645374449339,
+      "fpr": 0.108968673501969,
+      "pr_auc_ap": 0.8482641886717701
+    },
+    "boost": {
+      "n": 107325,
+      "tn": 51745,
+      "fp": 4629,
+      "fn": 9406,
+      "tp": 41545,
+      "recall": 0.8153912582677475,
+      "precision": 0.8997487763676528,
+      "fpr": 0.08211232128286089,
+      "pr_auc_ap": 0.9484526888135203
+    }
+  },
+  "policies": {
+    "logistic_basic": {
+      "n": 107325,
+      "tn": 55313,
+      "fp": 1061,
+      "fn": 2877,
+      "tp": 48074,
+      "recall": 0.9435339836313321,
+      "precision": 0.9784064312608121,
+      "fpr": 0.01882073296200376,
+      "pr_auc_ap": 0.9916030688803827,
+      "t2_call_rate": 0.9389424644770556,
+      "recall_loss": 0.006790838256363957,
+      "additional_misses": 346,
+      "tau": 0.1
+    },
+    "logistic_random": {
+      "n": 107325,
+      "tn": 55310,
+      "fp": 1064,
+      "fn": 2859,
+      "tp": 48092,
+      "recall": 0.9438872642342643,
+      "precision": 0.9783546260883718,
+      "fpr": 0.018873948983573988,
+      "pr_auc_ap": 0.9917917672493404,
+      "t2_call_rate": 0.9419892848823667,
+      "recall_loss": 0.006437557653431729,
+      "additional_misses": 328,
+      "tau": 0.1
+    },
+    "logistic_boundary": {
+      "n": 107325,
+      "tn": 55313,
+      "fp": 1061,
+      "fn": 2854,
+      "tp": 48097,
+      "recall": 0.9439853977350788,
+      "precision": 0.9784165344399691,
+      "fpr": 0.01882073296200376,
+      "pr_auc_ap": 0.9918393322647195,
+      "t2_call_rate": 0.9419892848823667,
+      "recall_loss": 0.006339424152617221,
+      "additional_misses": 323,
+      "tau": 0.1
+    },
+    "boost_basic": {
+      "n": 107325,
+      "tn": 55355,
+      "fp": 1019,
+      "fn": 2877,
+      "tp": 48074,
+      "recall": 0.9435339836313321,
+      "precision": 0.9792434766667346,
+      "fpr": 0.018075708660020576,
+      "pr_auc_ap": 0.991675862935585,
+      "t2_call_rate": 0.7998509201024925,
+      "recall_loss": 0.006790838256363957,
+      "additional_misses": 346,
+      "tau": 0.05
+    },
+    "boost_random": {
+      "n": 107325,
+      "tn": 55354,
+      "fp": 1020,
+      "fn": 2865,
+      "tp": 48086,
+      "recall": 0.9437695040332869,
+      "precision": 0.9792286075021382,
+      "fpr": 0.01809344733387732,
+      "pr_auc_ap": 0.9918020290696776,
+      "t2_call_rate": 0.8098579082226881,
+      "recall_loss": 0.006555317854409138,
+      "additional_misses": 334,
+      "tau": 0.05
+    },
+    "boost_boundary": {
+      "n": 107325,
+      "tn": 55347,
+      "fp": 1027,
+      "fn": 2818,
+      "tp": 48133,
+      "recall": 0.9446919589409433,
+      "precision": 0.9791090317331164,
+      "fpr": 0.018217618050874518,
+      "pr_auc_ap": 0.992301550484457,
+      "t2_call_rate": 0.8098579082226881,
+      "recall_loss": 0.005632862946752763,
+      "additional_misses": 287,
+      "tau": 0.05
+    }
+  },
+  "tau": {
+    "logistic": 0.1,
+    "boost": 0.05
+  }
+}
