@@ -1,10 +1,12 @@
-"""Mitigation: canonicalize the URL format before feature extraction, then rerun experiment.py.
+"""Build a dataset with format-normalized numeric features for defensive experiments.
 
 canonical(u) = "http://" + u without its leading scheme. Every URL keeps a parsable host
 when possible. Exclude all rows in encoded-input groups that cross splits or labels.
 Reindex retained rows, preserve their assigned roles, and report their new denominators.
 
-usage: canonical.py DEST  ->  URLCASCADE_RUN_DIR=DEST experiment.py random
+Usage: canonical.py DEST. The CSV retains source row identities and original URL keys.
+The clean-rerun latency benchmark recomputes features from those original keys and
+cannot validate end-to-end predictions or latency for this preprocessing.
 """
 
 import hashlib

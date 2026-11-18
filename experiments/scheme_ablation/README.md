@@ -32,7 +32,9 @@ python experiments/scheme_ablation/verify_inputs.py --shared-models
 
 - `python experiments/scheme_ablation/run.py`는 원본 특징과 형식 정보를 제거한 특징으로 각각 1단계 모델을 학습하고 두 분할에서 시험한다. 결과는 실행 폴더의 새 `scheme-ablation/results.json`에 기록한다.
 - `python experiments/scheme_ablation/canonical.py C:\team\canonical-run`은 입력 형식을 통일한 새 `data-final`을 만든다. 변환 후 입력이 같아진 그룹이 분할 경계나 라벨을 넘으면 그룹 전체를 제외하고 남은 행의 인덱스를 다시 만든다. 같은 분할·라벨 안의 중복은 유지한다. 어휘는 #3의 학습 어휘를 사용한다.
-- 새 데이터의 `manifest.json`에서 전체·분할별 정상/악성 수, 분할 비율, 도메인 수와 파일 해시를 확인할 수 있다. 이 데이터를 이용해 새 모델을 학습하려면 `URLCASCADE_RUN_DIR`를 새 폴더로 바꾸고 [#3 실험 절차](../clean_rerun/README.md)를 따른다. 위 표의 재학습과 이 정규화 전처리는 서로 다른 실험이다.
+- 새 데이터의 `manifest.json`에서 전체·분할별 정상/악성 수, 분할 비율, 도메인 수와 파일 해시를 확인할 수 있다. 정규화 단계의 산출물은 여기까지다. 위 표는 `run.py`의 1단계 재학습 결과다.
+
+정규화한 특징은 `features.npy`에 저장하고, `clean.csv`의 `url_key`에는 행 추적을 위해 원래 주소를 유지한다. #3의 `experiment.py`는 속도 측정 시 원래 주소에서 특징을 다시 계산한다. 따라서 이 폴더로 #3의 전체 평가를 그대로 실행하면 예측 대조에서 중단될 수 있다. 정규화 모델의 종단 간 예측·속도를 측정하려면 시간 측정에도 동일한 정규화 전처리를 적용해야 한다.
 
 ### #3 공유본으로 다시 확인한 값
 
