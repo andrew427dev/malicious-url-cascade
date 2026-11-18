@@ -82,6 +82,7 @@ def main(kind="random"):
                 "target_early_exit_scheme_removed": int((~ms[target]).sum()),
             }
     dest = ROOT / "scheme-ablation" / f"cascade-probe-{kind}.json"
+    dest.parent.mkdir(exist_ok=True)
     write_json(dest, res)
     print(json.dumps({k: v for k, v in res.items() if k != "note"}, indent=1)[:3000])
 
