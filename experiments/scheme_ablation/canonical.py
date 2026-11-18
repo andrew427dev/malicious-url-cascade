@@ -9,6 +9,7 @@ usage: canonical.py DEST  ->  URLCASCADE_RUN_DIR=DEST experiment.py random
 """
 
 import json
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -29,11 +30,23 @@ def canonical(url):
     return "http://" + strip_scheme(url)
 
 
+def features(url):
+    # Upstream features.py compiles the hostname as a regex; 4 of 717,793 canonical URLs
+    # (backslash paths) yield an invalid pattern. They fall back to the scheme-free form,
+    # which still depends only on strip_scheme(url), so format invariance holds.
+    try:
+        return extract_features(canonical(url))
+    except re.error:
+        return extract_features(strip_scheme(url))
+
+
 def self_test():
     forms = ("https://a.example/x", "HTTP://a.example/x", "a.example/x")
     assert {canonical(u) for u in forms} == {"http://a.example/x"}
     assert canonical(canonical("a.example/x")) == canonical("a.example/x")
     assert extract_features(canonical("a.example/x"))[14] > 0
+    odd = r"\\198.51.100.7\share\x.exe"  # canonical hostname is an invalid regex
+    assert features(odd) == features("https://" + odd)
 
 
 def main(dest):
@@ -48,7 +61,7 @@ def main(dest):
         if name != "features.npy":
             shutil.copy(src / name, dest / "data-final" / name)
     urls = pd.read_csv(src / "clean.csv", keep_default_na=False).url_key
-    x = np.asarray([extract_features(canonical(u)) for u in urls], dtype=np.float32)
+    x = np.asarray([features(u) for u in urls], dtype=np.float32)
     np.save(dest / "data-final" / "features.npy", x)
     manifest["files"]["features.npy"] = sha(dest / "data-final" / "features.npy")
     manifest["canonicalization"] = __doc__.split("\n\n")[1]
