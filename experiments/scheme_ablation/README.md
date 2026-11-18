@@ -13,9 +13,25 @@ Windows에서 로지스틱 회귀(LR)와 부스팅 트리(HGB)를 무작위 분�
 | 도메인 | LR | 94.03% | 86.78% |
 | 도메인 | HGB | 96.71% | 93.26% |
 
-AP는 정밀도와 재현율을 여러 임계값에 걸쳐 요약한 지표다. 무작위 시험 집합에서 표기 형식에 따라 악성 비율이 88.3%와 19.4%로 달랐다. Colab에서 원본 조건의 GRU 재현율은 95.50%였고 #3에서는 95.23%였다. GRU를 포함한 결과는 단일 시드에 한정된다. [1단계 집계](../../evidence/scheme-ablation/results.json) · [무작위 분할 GRU·캐스케이드 집계](../../evidence/scheme-ablation/cascade-probe-random.json)
+AP는 정밀도와 재현율을 여러 임계값에 걸쳐 요약한 지표다. 무작위 시험 집합에서 표기 형식에 따라 악성 비율이 88.3%와 19.4%로 달랐다. [1단계 집계](../../evidence/scheme-ablation/results.json)
 
-당시 Windows·Colab의 원본 데이터와 순서별 ID·라벨 기록은 남아 있지 않다. Windows 기록에서 #3과 같은 해시는 두 인코딩 배열, 두 어휘 파일, 정규화 격리 파일이었다. CSV, 수치 특징, 두 분할 인덱스의 해시는 달랐고 원인은 확인되지 않았다. 행 수와 일부 파일의 일치만으로 당시 분할의 행 순서까지 확인할 수는 없다.
+### GRU 단독과 캐스케이드의 재현율
+
+Colab 실험에서는 모델과 정책을 고정하고 같은 무작위 시험 집합 107,670행을 두 표기 조건에서 평가했다. 재현율은 이 중 악성 URL 51,223개를 악성으로 탐지한 비율이다. [GRU·캐스케이드 원본 집계](../../evidence/scheme-ablation/cascade-probe-random.json)
+
+| 모델·정책 | 원본 표기 재현율 | URL 스킴 표기 제거 후 재현율 |
+|---|---:|---:|
+| GRU 단독 | 95.50% | 83.78% |
+| LR → GRU (기본) | 95.15% | 82.50% |
+| LR → GRU (경계) | 95.17% | 82.57% |
+| HGB → GRU (기본) | 94.71% | 80.13% |
+| HGB → GRU (경계) | 94.83% | 80.54% |
+
+이 표는 Colab에서 단일 시드로 측정한 결과다. 별도 실행인 #3에서 원본 표기의 GRU 단독 재현율은 95.23%였다.
+
+팀원은 Colab 원본 조건의 데이터를 #3 공유본과 대조해 무작위·도메인 분할 각각에서 학습, 검증 세 역할, 통합 검증, 시험의 **12개 묶음 모두 행 ID와 라벨의 순서가 일치했다**고 기록했다. 두 인코딩 배열의 해시도 일치했다. 다만 `clean.csv`와 `features.npy`의 해시는 달랐고 원인은 확인되지 않았다. [Colab 실행자의 대조 기록](https://github.com/andrew427dev/malicious-url-cascade/releases/tag/colab-artifacts-2026-11-18) · [팀 Drive 보관본](https://drive.google.com/file/d/17C6a932BkiLI4PEVmW-AHOCg4EjciDy6/view?usp=drivesdk)
+
+Windows에서 수행한 1단계 실험은 당시 행 ID와 라벨의 순서를 대조한 기록이 없다. #3과 해시가 같은 파일은 두 인코딩 배열, 두 어휘 파일, 정규화 격리 파일이었다. CSV, 수치 특징, 두 분할 인덱스의 해시는 달랐고 원인은 확인되지 않았다.
 
 ## 팀 공유본 확인
 
@@ -32,7 +48,7 @@ python experiments/scheme_ablation/verify_inputs.py --shared-models
 
 - `python experiments/scheme_ablation/run.py`는 원본 특징과 형식 정보를 제거한 특징으로 각각 1단계 모델을 학습하고 두 분할에서 시험한다. 결과는 실행 폴더의 새 `scheme-ablation/results.json`에 기록한다.
 - `python experiments/scheme_ablation/canonical.py C:\team\canonical-run`은 입력 형식을 통일한 새 `data-final`을 만든다. 변환 후 입력이 같아진 그룹이 분할 경계나 라벨을 넘으면 그룹 전체를 제외하고 남은 행의 인덱스를 다시 만든다. 같은 분할·라벨 안의 중복은 유지한다. 어휘는 #3의 학습 어휘를 사용한다.
-- 새 데이터의 `manifest.json`에서 전체·분할별 정상/악성 수, 분할 비율, 도메인 수와 파일 해시를 확인할 수 있다. 정규화 단계의 산출물은 여기까지다. 위 표는 `run.py`의 1단계 재학습 결과다.
+- 새 데이터의 `manifest.json`에서 전체·분할별 정상/악성 수, 분할 비율, 도메인 수와 파일 해시를 확인할 수 있다. 정규화 단계의 산출물은 여기까지다. 첫 번째 표의 AP는 `run.py`의 1단계 재학습 결과다.
 
 정규화한 특징은 `features.npy`에 저장하고, `clean.csv`의 `url_key`에는 행 추적을 위해 원래 주소를 유지한다. #3의 `experiment.py`는 속도 측정 시 원래 주소에서 특징을 다시 계산한다. 따라서 이 폴더로 #3의 전체 평가를 그대로 실행하면 예측 대조에서 중단될 수 있다. 정규화 모델의 종단 간 예측·속도를 측정하려면 시간 측정에도 동일한 정규화 전처리를 적용해야 한다.
 
