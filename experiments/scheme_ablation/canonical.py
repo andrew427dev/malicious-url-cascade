@@ -8,6 +8,7 @@ encodings and vocabularies as ROOT; only features.npy and its manifest digest ch
 usage: canonical.py DEST  ->  URLCASCADE_RUN_DIR=DEST experiment.py random
 """
 
+import hashlib
 import json
 import re
 import shutil
@@ -57,14 +58,41 @@ def main(dest):
         if (ROOT / name).exists():
             shutil.copy(ROOT / name, dest / name)
     manifest = json.loads((src / "manifest.json").read_text(encoding="utf-8"))
+    df = pd.read_csv(src / "clean.csv", keep_default_na=False)
+    x = np.asarray([features(u) for u in df.url_key], dtype=np.float32)
+    enc = {k: np.load(src / f"{k}-encoded.npy") for k in ("random", "domain")}
+    # Rows that differed only by scheme now share one model input. experiment.py refuses
+    # inputs spanning splits or labels, so every row of such a group is excluded (same rule
+    # PR #3 applied to conflicting URLs). Same-split same-label duplicates are kept.
+    keep = np.ones(len(df), bool)
+    for kind, e in enc.items():
+        key = [hashlib.sha256(e[i].tobytes() + x[i].tobytes()).digest() for i in range(len(df))]
+        g = pd.DataFrame({"key": key, "split": df[kind + "_split"], "label": df.y_mal})
+        agg = g.groupby("key").agg(s=("split", "nunique"), l=("label", "nunique"))
+        bad = set(agg.index[(agg.s > 1) | (agg.l > 1)])
+        keep &= ~np.array([k in bad for k in key])  # pandas isin misses some bytes keys
+    out = dest / "data-final"
+    new = np.cumsum(keep) - 1
+    df[keep].to_csv(out / "clean.csv", index=False)
+    np.save(out / "features.npy", x[keep])
+    for kind, e in enc.items():
+        np.save(out / f"{kind}-encoded.npy", e[keep])
+        parts = np.load(src / f"{kind}_indices.npz")
+        np.savez(out / f"{kind}_indices.npz", **{p: new[a[keep[a]]] for p, a in parts.items()})
     for name in manifest["files"]:
-        if name != "features.npy":
-            shutil.copy(src / name, dest / "data-final" / name)
-    urls = pd.read_csv(src / "clean.csv", keep_default_na=False).url_key
-    x = np.asarray([features(u) for u in urls], dtype=np.float32)
-    np.save(dest / "data-final" / "features.npy", x)
-    manifest["files"]["features.npy"] = sha(dest / "data-final" / "features.npy")
+        if not (out / name).exists():
+            shutil.copy(src / name, out / name)
+        manifest["files"][name] = sha(out / name)
+    dropped = df[~keep]
     manifest["canonicalization"] = __doc__.split("\n\n")[1]
+    manifest["canonical_collision_exclusion"] = {
+        "rows": int((~keep).sum()),
+        "malicious": int(dropped.y_mal.sum()),
+        "by_random_split": dropped.random_split.value_counts().to_dict(),
+        "remaining_rows": int(keep.sum()),
+    }
+    print(json.dumps(manifest["canonical_collision_exclusion"]))
+    x = x[keep]
     write_json(dest / "data-final" / "manifest.json", manifest)
     print("CANONICAL", dest, x.shape)
 
