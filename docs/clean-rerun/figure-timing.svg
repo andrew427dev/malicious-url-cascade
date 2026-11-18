@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="396" height="210" preserveAspectRatio="xMinYMin meet" viewBox="0 0 396 210" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="396" height="210"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-210)" style="clip-path: url(#clip)">
+		<g transform="">
+			<text x="0" y="189" style="font-family: Korean; font-size: 8.3px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,378) scale(1,-1)">GRU 단독</text>
+			<rect x="96" y="185" width="213.63636363636363" height="15" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,20%,30%); fill-rule: evenodd;"/>
+			<text x="313.6363636363636" y="189" style="font-family: Korean; font-size: 8px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,378) scale(1,-1)">0.0429</text>
+			<text x="0" y="163" style="font-family: Korean; font-size: 8.3px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,326) scale(1,-1)">LR 기본</text>
+			<rect x="96" y="159" width="203.47039435986687" height="15" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(41%,58%,70%); fill-rule: evenodd;"/>
+			<text x="303.4703943598669" y="163" style="font-family: Korean; font-size: 8px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,326) scale(1,-1)">0.0408</text>
+			<text x="0" y="137" style="font-family: Korean; font-size: 8.3px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,274) scale(1,-1)">LR 무작위</text>
+			<rect x="96" y="133" width="201.87457936067506" height="15" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(41%,58%,70%); fill-rule: evenodd;"/>
+			<text x="301.87457936067506" y="137" style="font-family: Korean; font-size: 8px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,274) scale(1,-1)">0.0405</text>
+			<text x="0" y="111" style="font-family: Korean; font-size: 8.3px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,222) scale(1,-1)">LR 경계</text>
+			<rect x="96" y="107" width="199.18581560569612" height="15" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(41%,58%,70%); fill-rule: evenodd;"/>
+			<text x="299.1858156056961" y="111" style="font-family: Korean; font-size: 8px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,222) scale(1,-1)">0.0400</text>
+			<text x="0" y="85" style="font-family: Korean; font-size: 8.3px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,170) scale(1,-1)">트리 기본</text>
+			<rect x="96" y="81" width="201.1982768406105" height="15" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(41%,58%,70%); fill-rule: evenodd;"/>
+			<text x="301.1982768406105" y="85" style="font-family: Korean; font-size: 8px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,170) scale(1,-1)">0.0404</text>
+			<text x="0" y="59" style="font-family: Korean; font-size: 8.3px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,118) scale(1,-1)">트리 무작위</text>
+			<rect x="96" y="55" width="199.50677274615458" height="15" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(41%,58%,70%); fill-rule: evenodd;"/>
+			<text x="299.5067727461546" y="59" style="font-family: Korean; font-size: 8px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,118) scale(1,-1)">0.0400</text>
+			<text x="0" y="33" style="font-family: Korean; font-size: 8.3px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,66) scale(1,-1)">트리 경계</text>
+			<rect x="96" y="29" width="202.24288273680776" height="15" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(41%,58%,70%); fill-rule: evenodd;"/>
+			<text x="302.24288273680776" y="33" style="font-family: Korean; font-size: 8px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,66) scale(1,-1)">0.0406</text>
+			<text x="96" y="0" style="font-family: Korean; font-size: 8px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,0) scale(1,-1)">배치 처리 시간 / URL (ms), 5회 측정 중앙값</text>
+		</g>
+	</g>
+</svg>

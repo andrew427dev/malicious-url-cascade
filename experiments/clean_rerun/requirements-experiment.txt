@@ -1,0 +1,8 @@
+tensorflow==2.12.0
+numpy==1.23.5
+pandas==1.5.3
+scikit-learn==1.2.2
+scipy==1.15.3
+tldextract==5.4.0
+joblib==1.6.0
+h5py==3.16.0

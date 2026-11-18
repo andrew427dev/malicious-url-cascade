@@ -1,0 +1,7 @@
+{
+  "code_sha256": "89f14e368842093a379cbfea1650bb886b9efaefc3a8cb043d7b4bc768c920a3",
+  "training_code_sha256": "041405b9538378fbecac25e28b464619a6521b4e0936922a15e00ff72c4ba199",
+  "model_loader": "h5py file handle; compile=False; weights unchanged",
+  "training_manifest_sha256": "23f0353767943fcdb9ccb620980588ca5ba7e5a1ec31030188ab56f84a8b89ab",
+  "probability_conversion": "float64 subtraction preserves the float32 GRU decision boundary"
+}

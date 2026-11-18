@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="396" height="210" preserveAspectRatio="xMinYMin meet" viewBox="0 0 396 210" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="396" height="210"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-210)" style="clip-path: url(#clip)">
+		<g transform="">
+			<text x="0" y="195" style="font-family: KoreanBold; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,390) scale(1,-1)">로지스틱 회귀: 선형 점수</text>
+			<rect x="0" y="137" width="108" height="40" rx="4" ry="4" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,96%); fill-rule: evenodd;"/>
+			<text x="21.371435546875" y="161.0" style="font-family: KoreanBold; font-size: 8.3px;fill: rgb(9%,20%,30%); stroke:none;" transform="translate(0,322) scale(1,-1)">18개 특징 표준화</text>
+			<text x="7.481249999999996" y="147.0" style="font-family: Korean; font-size: 7.2px;fill: rgb(40%,45%,49%); stroke:none;" transform="translate(0,294) scale(1,-1)">학습 집합에서 평균·표준편차</text>
+			<rect x="144" y="137" width="108" height="40" rx="4" ry="4" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,96%); fill-rule: evenodd;"/>
+			<text x="169.8882080078125" y="161.0" style="font-family: KoreanBold; font-size: 8.3px;fill: rgb(9%,20%,30%); stroke:none;" transform="translate(0,322) scale(1,-1)">가중 합 + 절편</text>
+			<text x="174.8689453125" y="147.0" style="font-family: Korean; font-size: 7.2px;fill: rgb(40%,45%,49%); stroke:none;" transform="translate(0,294) scale(1,-1)">z = Σ(w·x) + b</text>
+			<rect x="288" y="137" width="108" height="40" rx="4" ry="4" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,96%); fill-rule: evenodd;"/>
+			<text x="316.447509765625" y="161.0" style="font-family: KoreanBold; font-size: 8.3px;fill: rgb(9%,20%,30%); stroke:none;" transform="translate(0,322) scale(1,-1)">sigmoid 보정</text>
+			<text x="306.0263671875" y="147.0" style="font-family: Korean; font-size: 7.2px;fill: rgb(40%,45%,49%); stroke:none;" transform="translate(0,294) scale(1,-1)">공통 검증 15%로 적합</text>
+			<path d="M 108,157 L 144,157 Z" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="144 157, 138 154, 138 160" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,20%,30%); fill-rule: evenodd;"/>
+			<path d="M 252,157 L 288,157 Z" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="288 157, 282 154, 282 160" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,20%,30%); fill-rule: evenodd;"/>
+			<text x="0" y="104" style="font-family: KoreanBold; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,208) scale(1,-1)">트리 부스팅: 비선형 분기의 합</text>
+			<rect x="0" y="46" width="108" height="40" rx="4" ry="4" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,96%); fill-rule: evenodd;"/>
+			<text x="25.521435546875" y="70.0" style="font-family: KoreanBold; font-size: 8.3px;fill: rgb(9%,20%,30%); stroke:none;" transform="translate(0,140) scale(1,-1)">18개 수치 특징</text>
+			<text x="26.268749999999997" y="56.0" style="font-family: Korean; font-size: 7.2px;fill: rgb(40%,45%,49%); stroke:none;" transform="translate(0,112) scale(1,-1)">표준화 없이 사용</text>
+			<rect x="144" y="46" width="108" height="40" rx="4" ry="4" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,96%); fill-rule: evenodd;"/>
+			<text x="155.3186279296875" y="70.0" style="font-family: KoreanBold; font-size: 8.3px;fill: rgb(9%,20%,30%); stroke:none;" transform="translate(0,140) scale(1,-1)">초기 점수 + 60개 트리</text>
+			<text x="158.203125" y="56.0" style="font-family: Korean; font-size: 7.2px;fill: rgb(40%,45%,49%); stroke:none;" transform="translate(0,112) scale(1,-1)">손실을 줄이는 순차 학습</text>
+			<rect x="288" y="46" width="108" height="40" rx="4" ry="4" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,96%); fill-rule: evenodd;"/>
+			<text x="316.447509765625" y="70.0" style="font-family: KoreanBold; font-size: 8.3px;fill: rgb(9%,20%,30%); stroke:none;" transform="translate(0,140) scale(1,-1)">sigmoid 보정</text>
+			<text x="306.0263671875" y="56.0" style="font-family: Korean; font-size: 7.2px;fill: rgb(40%,45%,49%); stroke:none;" transform="translate(0,112) scale(1,-1)">공통 검증 15%로 적합</text>
+			<path d="M 108,66 L 144,66 Z" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="144 66, 138 63, 138 69" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,20%,30%); fill-rule: evenodd;"/>
+			<path d="M 252,66 L 288,66 Z" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="288 66, 282 63, 282 69" style="stroke: rgb(9%,20%,30%); stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,20%,30%); fill-rule: evenodd;"/>
+			<text x="0" y="8" style="font-family: Korean; font-size: 8px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,16) scale(1,-1)">p₁은 악성 점수이며, 임계값·재검사 정책을 거쳐 GRU 실행 여부를 결정한다.</text>
+		</g>
+	</g>
+</svg>

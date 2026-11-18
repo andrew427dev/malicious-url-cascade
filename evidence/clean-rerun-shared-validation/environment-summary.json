@@ -1,0 +1,23 @@
+{
+  "python": "3.10.18",
+  "cpu": "AMD Ryzen 7 7800X3D 8-Core Processor",
+  "platform": "Windows-10-10.0.26100-SP0",
+  "packages": {
+    "tensorflow": "2.12.0",
+    "keras": "2.12.0",
+    "numpy": "1.23.5",
+    "pandas": "1.5.3",
+    "scikit-learn": "1.2.2",
+    "scipy": "1.15.3",
+    "joblib": "1.6.0",
+    "tldextract": "5.4.0",
+    "h5py": "3.16.0"
+  },
+  "psl_snapshot_sha256": "b69315c085d53972724b8f2df111ffc329b0c84fe0a47d62c8c91655cc774a38",
+  "psl_private_suffixes": true,
+  "psl_network_refresh": false,
+  "physical_memory_gib": 31.145973205566406,
+  "available_memory_gib_at_capture": 14.75970458984375,
+  "disk_free_gib_at_capture": 231.38980102539062,
+  "pip_check": "PASS; No broken requirements found"
+}

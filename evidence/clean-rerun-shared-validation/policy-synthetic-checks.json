@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "cases": 48,
+  "includes": [
+    "threshold equality",
+    "zero candidates",
+    "zero recheck",
+    "all candidates rechecked",
+    "independent masks",
+    "additional misses and recovered errors"
+  ]
+}

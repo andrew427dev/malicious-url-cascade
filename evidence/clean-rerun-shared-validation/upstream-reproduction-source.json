@@ -1,0 +1,9 @@
+{
+  "url": "https://github.com/munna0912/URL_CLASSIFIER/blob/835bd5e1710531407c0b5ca09da3d7c3de8d1bbc/Model_Training.ipynb",
+  "blob_sha": "e5a6b1037a45dee109d6ab78eba32c123aee6f96",
+  "initial_fit_cell": 9,
+  "epoch20_validation_accuracy": 0.9834,
+  "epoch20_validation_loss": 0.0565,
+  "comparison_scope": "Initial 80/20 internal validation only. Later all-data retraining includes former test data and is not independent evaluation.",
+  "local_historical_evidence": "C:/Users/User/Desktop/coding/Side_Project/malicious-url-cascade/evidence/experiment-a-internal.json"
+}

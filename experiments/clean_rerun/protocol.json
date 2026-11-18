@@ -1,0 +1,14 @@
+{
+  "name": "shared-validation-70-15-15",
+  "decision_date": "2026-11-16",
+  "decision": "User explicitly requested full validation reuse for model selection, sigmoid calibration and threshold selection.",
+  "training": "Same frozen 70% training rows; all models refitted from scratch.",
+  "validation": "Union of the former model/calibration/policy partitions, shared by all three selection stages.",
+  "test": "Same frozen 15% test rows; scoring follows model, calibrator and threshold freezing.",
+  "prior_test_results_seen": true,
+  "prior_test_exposure": "The 5/5/5 validation experiment was completed and its test results were inspected before this user-requested change. This rerun is not a never-seen blind test.",
+  "test_used_for_parameter_selection": false,
+  "selection_grid_changed_after_test": false,
+  "selection_rule": "Keep the prespecified model grids, seed 42, 20 GRU epochs, recall-loss bound 0.01, and main recheck rate 0.05.",
+  "domain_check": "The same domain-group split is retained. Its row ratios differ from the target group ratios."
+}

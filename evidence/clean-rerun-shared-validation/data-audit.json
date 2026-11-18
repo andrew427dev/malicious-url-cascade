@@ -1,0 +1,57 @@
+{
+  "status": "PASS",
+  "final": {
+    "rows": 717793,
+    "benign": 376309,
+    "malicious": 341484
+  },
+  "raw_sources": {
+    "df_final.csv": {
+      "rows": 781332,
+      "benign": 428077,
+      "malicious": 353255,
+      "sha256": "303effaa48986335fb6f7af07b00b2fda193fca22d990d0a78a273d542e3bd08"
+    },
+    "all_top_domains_merged.csv": {
+      "rows": 2961,
+      "benign": 2961,
+      "malicious": 0,
+      "sha256": "da1cf85b221f618d396b135554d41df2581fb4af98bcd2c41cd7de08dfa9b501"
+    },
+    "df_another_validation.csv": {
+      "rows": 507195,
+      "benign": 392896,
+      "malicious": 114299,
+      "sha256": "676d758897212240d71da36783f1190866c18d688f516b53202802b364503b80"
+    }
+  },
+  "checks": {
+    "random": {
+      "partition_cover": "PASS",
+      "both_classes": "PASS",
+      "encoded_unique": "PASS",
+      "rows": 717793,
+      "shared_validation": {
+        "rows": 107669,
+        "benign": 56446,
+        "malicious": 51223,
+        "disjoint_from_train_and_test": "PASS"
+      }
+    },
+    "domain": {
+      "partition_cover": "PASS",
+      "both_classes": "PASS",
+      "encoded_unique": "PASS",
+      "rows": 717793,
+      "shared_validation": {
+        "rows": 121402,
+        "benign": 69973,
+        "malicious": 51429,
+        "disjoint_from_train_and_test": "PASS"
+      }
+    }
+  },
+  "manifest_sha256": "7ed6a4bdde80b3a6a8066b0d5f8f69092c0f6fd4a69faf735a8908903bdd23b5",
+  "audit_sha256": "051617c7ba36a75fa3ff7e5b324611092721565759bea3610f79ab2f962d9665",
+  "label_semantics": "source conflicts removed; independent relabeling NOT_RUN"
+}
