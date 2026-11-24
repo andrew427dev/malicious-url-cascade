@@ -100,7 +100,26 @@ def build(root):
     original_table("표 6.")
     h(CHAPTERS[4])
     for n in range(7, 18):
-        original_table(f"표 {n}.")
+        caption = f"표 {n}."
+        original_table(caption)
+        if n in (12, 13):
+            source_page = next(
+                page
+                for page in content
+                if any(
+                    block[0] == "table" and block[1].startswith(caption)
+                    for block in page["blocks"]
+                )
+            )
+            footnote = next(
+                block[1]
+                for block in source_page["blocks"]
+                if block[0] == "paragraph" and block[1].startswith("¹")
+            )
+            p(footnote)
+            p(
+                "두 재현율의 분모는 해당 분할의 전체 시험 URL 중 실제 악성인 행 수다. 전체 판정 전환 수는 접두어가 있던 행의 반전 합계¹와 처음부터 접두어가 없던 행의 전환 수²를 더한 값이다."
+            )
     for group in GROUP:
         paired = read(root / (group + "-original") / "fixed-prefix.json")["pairs"]
         yes, no = paired["with_prefix"], paired["without_prefix"]
