@@ -50,10 +50,15 @@ def build(root):
 
     tm = read(root / "random-original/timing.json")["summary"]
     policy = min((n for n in tm if n != "gru"), key=lambda n: tm[n]["ms"])
+    model_name = (
+        POLICY[policy]
+        .replace("LR", "로지스틱 회귀(LR)")
+        .replace("HGB", "히스토그램 기반 그래디언트 부스팅(HGB)")
+    )
     obs = read(root / "random-original/results.json")["policies"][policy]
     delta = tm["gru"]["ms"] - tm[policy]["ms"]
     p(
-        f"이번에는 학습·검증·시험 집합 안에서 전처리한 전체 URL 문자열이 같을 때 첫 행만 남겼다. 원래 표기의 무작위 시험에서 가장 빠른 캐스케이드인 {POLICY[policy]}의 1,000건 처리 중앙값은 {tm[policy]['ms']:.2f} ms였다. 같은 URL의 GRU 단독은 {tm['gru']['ms']:.2f} ms로, 캐스케이드에서 {abs(delta):.2f} ms {'줄었다' if delta >= 0 else '늘었다'}. 캐스케이드는 전체 시험 {obs['n']:,}건에서 악성을 {obs['additional_misses']:,}건 더 놓쳤다."
+        f"이번에는 학습·검증·시험 집합 안에서 전처리한 전체 URL 문자열이 같을 때 첫 행만 남겼다. 원래 표기의 무작위 시험에서 가장 빠른 캐스케이드인 {model_name}의 1,000건 처리 중앙값은 {tm[policy]['ms']:.2f} ms였다. 같은 URL의 게이트 순환 유닛(GRU) 단독은 {tm['gru']['ms']:.2f} ms로, 캐스케이드에서 {abs(delta):.2f} ms {'줄었다' if delta >= 0 else '늘었다'}. 캐스케이드는 전체 시험 {obs['n']:,}건에서 악성을 {obs['additional_misses']:,}건 더 놓쳤다."
     )
     h(CHAPTERS[0])
     p(

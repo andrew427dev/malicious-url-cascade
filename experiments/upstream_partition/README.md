@@ -46,4 +46,10 @@ if ($LASTEXITCODE) { throw "Notion summary generation failed" }
 
 재실행 시 새 출력 폴더를 사용한다. 여섯 GRU의 입력·어휘·행 목록 해시는 조건별 `training-inputs.json`에 기록되고, 팀 분할별 독립 대조는 `full-input-audit.json`에 남는다. `feature-example.json`에는 원저자 함수와 새 어휘로 계산한 두 표기의 수치·문자 배열이 있다. 두 표기를 합친 14개 구성의 시간 측정 순서는 각 회차의 `pair_order`로 복원할 수 있다. `summary/performance.csv`와 `summary/timing.csv`에는 각각 28개 비교 결과가 있다. `report/document-checks.json`에는 제출본의 장·표·그림 대조 결과가 남는다.
 
+정제 데이터 보관본은 다음 명령으로 만든다. 여섯 ZIP 각각에 역할별 원본 URL·실제 입력 표기·전처리 문자열·라벨·순서·원본 행 ID, 수치·토큰 배열과 어휘가 들어 있다. 생성 후 모든 CSV 행과 텐서를 다시 읽어 대조하고 `manifest.json`에 바이트 수와 SHA-256을 남긴다.
+
+```powershell
+python "$script/archive_data.py" $env:URLCASCADE_RUN_DIR (Join-Path $env:URLCASCADE_RUN_DIR 'cohort-archives')
+```
+
 각 조건 폴더의 `*-rows.csv.gz`는 순서가 있는 원본 CSV 행 ID와 라벨이다. `results.json`은 시험 성능, `scores.npz`는 행 단위 점수, `fixed-prefix.json`은 고정 모델 표기 비교, `routing.json`은 검증 후보와 선택 결과, `sensitivity.json`은 임계값·비율·시드별 원본이다. `timing.json`에는 1,000개 ID와 실제 실행 순서·소요 시간이 들어 있다. `data.json`에 처리 단계별 행 수와 역할 간 교집합을 기록한다.
