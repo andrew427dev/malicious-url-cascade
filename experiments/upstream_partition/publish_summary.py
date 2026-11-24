@@ -4,7 +4,7 @@ import argparse
 from html import escape
 from pathlib import Path
 
-from report_content import CHAPTERS, POLICY, GROUP, read
+from report_content import CHAPTERS, POLICY, read
 from feature_table import example
 from table_layout import present
 
@@ -106,47 +106,18 @@ def build(root):
     )
     original_table("표 6.")
     h(CHAPTERS[4])
-    for n in range(7, 18):
-        caption = f"표 {n}."
-        original_table(caption)
-        if n in (12, 13):
-            source_page = next(
-                page
-                for page in content
-                if any(
-                    block[0] == "table" and block[1].startswith(caption)
-                    for block in page["blocks"]
-                )
-            )
-            footnote = next(
-                block[1]
-                for block in source_page["blocks"]
-                if block[0] == "paragraph" and block[1].startswith("¹")
-            )
-            p(footnote)
-            p(
-                "두 재현율의 분모는 해당 분할의 전체 시험 URL 중 실제 악성인 행 수다. 전체 판정 전환 수는 접두어가 있던 행의 반전 합계¹와 처음부터 접두어가 없던 행의 전환 수²를 더한 값이다."
-            )
-    for group in GROUP:
-        paired = read(root / (group + "-original") / "fixed-prefix.json")["pairs"]
-        yes, no = paired["with_prefix"], paired["without_prefix"]
-        p(
-            f"{GROUP[group]} 분할의 고정 모델에서 처음부터 접두어가 있던 {yes['rows']:,}건 중 문자 토큰은 {yes['token_changes']:,}건, 수치 입력은 {yes['numeric_changes']:,}건 바뀌었다. GRU 단독의 판정은 {yes['flips']['gru']['changed']:,}건 뒤집혔다. 처음부터 접두어가 없던 {no['rows']:,}건에서는 GRU 판정이 {no['flips']['gru']['changed']:,}건 바뀌었다."
-        )
-    original_table("1단계 단독")
-    original_table("표 18.")
-    original_table("접두어 제거 후 학습 원문")
-    original_table("표 19.")
-    original_table("표 20.")
-    original_table("표 21.")
-    joint = read(root / "summary/common-test.json")
-    p(
-        "두 표기의 공통 시험 URL은 "
-        + ", ".join(f"{GROUP[g]} {joint[g]['common_n']:,}건" for g in GROUP)
-        + "이다. 고정 모델 실험은 입력 변화에 대한 반응을, 표기 통일 후 재학습은 그 표기에서 훈련된 분류기의 성능을 측정한다."
-    )
+    start = next(i for i, page in enumerate(content) if page["title"] == CHAPTERS[4])
+    end = next(i for i, page in enumerate(content) if page["title"] == CHAPTERS[5])
+    for page in content[start:end]:
+        for block in page["blocks"]:
+            if block[0] == "table":
+                for part in present(*block[1:]):
+                    sub(part.caption)
+                    table(part.headers, part.rows)
+            elif page["title"].startswith("추가 실험") and block[0] == "paragraph":
+                p(block[1])
     h(CHAPTERS[5])
-    original_table("표 22.")
+    original_table("표 19.")
     p(
         "초기 준비 실행에서 보조 기준선의 시험 점수가 먼저 산출됐다. 최종 비교에는 경량 모델을 다시 학습하고 네 조건의 분기 기준을 검증 집합에서 모두 고정한 뒤 계산한 수치를 사용했다."
     )

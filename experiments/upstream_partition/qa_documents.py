@@ -109,7 +109,10 @@ def verify(root):
         assert len(section) == 1, (condition, timing)
         return {tuple(row) for row in section[0][2]}
 
+    assert len(perf) == len(timing) == 28
     for r in perf:
+        if not r["condition"].endswith("-original"):
+            continue
         data_cells = matching_table(r["condition"])
         cells = [
             POLICY[r["policy"]],
@@ -119,6 +122,8 @@ def verify(root):
         ]
         assert tuple(cells) in data_cells, (r["condition"], r["policy"])
     for r in timing:
+        if not r["condition"].endswith("-original"):
+            continue
         data_cells = matching_table(r["condition"], timing=True)
         cells = [
             POLICY[r["policy"]],
@@ -129,6 +134,49 @@ def verify(root):
             f"{float(r['time_saved_pct']):.2f}",
         ]
         assert tuple(cells) in data_cells
+
+    def result_lookup(rows, condition):
+        found = {r["policy"]: r for r in rows if r["condition"] == condition}
+        assert set(found) == set(POLICY)
+        return found
+
+    paired = []
+    retr = []
+    for g, label in GROUP.items():
+        fixed = json.loads(
+            (root / (g + "-original") / "fixed-prefix.json").read_text(encoding="utf8")
+        )
+        for key, group in (("with_prefix", "있음"), ("without_prefix", "없음")):
+            v = fixed["pairs"][key]
+            paired.append(
+                [
+                    label + " · " + group,
+                    *[
+                        f"{v[k]:,}"
+                        for k in ("rows", "token_changes", "numeric_changes")
+                    ],
+                    f"{v['flips']['gru']['changed']:,}",
+                ]
+            )
+        old, new = [result_lookup(perf, g + "-" + f) for f in ("original", "stripped")]
+        t0, t1 = [result_lookup(timing, g + "-" + f) for f in ("original", "stripped")]
+        winner = min((n for n in t1 if n != "gru"), key=lambda n: float(t1[n]["ms"]))
+        for n in ("gru", winner):
+            retr.append(
+                [
+                    label,
+                    POLICY[n],
+                    " → ".join(
+                        f"{100 * float(r[n]['recall']):.2f}%" for r in (old, new)
+                    ),
+                    " → ".join(f"{float(t[n]['ms']):.2f}" for t in (t0, t1)),
+                    " → ".join(
+                        f"{int(r[n]['additional_misses']):,}" for r in (old, new)
+                    ),
+                ]
+            )
+    assert next(rows for cap, _, rows in expected if cap.startswith("표 17.")) == paired
+    assert next(rows for cap, _, rows in expected if cap.startswith("표 18.")) == retr
     setup = pages[index_pages["System Setup"] - 1 : index_pages[CHAPTERS[3]] - 1]
     setup_text = "".join(setup)
     frag = next(t for t in doc.tables if t.cell(0, 1).text == "원저자 열 이름")

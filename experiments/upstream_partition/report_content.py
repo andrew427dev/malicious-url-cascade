@@ -306,14 +306,14 @@ def build(root):
         "팀 GRU는 20회 학습 중 검증 손실이 가장 작은 회차를 선택했다. 분기 임계값은 후보 12개 중 검증 악성 재현율 손실이 GRU 단독보다 1%p 이내인 값으로 제한하고, GRU 호출이 가장 적은 값을 골랐다. 동률이면 작은 임계값을 택했다. 모델·보정기·분기 기준은 각 조건의 동일한 검증 집합에서 결정했다."
     )
     rows = []
-    for g, f in product_conditions():
-        k = g + "-" + f
+    for g in GROUP:
+        k = g + "-original"
         cfg = data(k, "routing")["families"]
         st = data(k, "stage1/t1-selected")["selection"]
         rows.append(
             [
                 GROUP[g],
-                shortform(f),
+                "원래",
                 data(k, "trained")["epoch"],
                 st["logistic"]["winner"],
                 st["boost"]["winner"],
@@ -384,162 +384,94 @@ def build(root):
     )
     for g in GROUP:
         page(f"{GROUP[g]} 분할의 탐지 성능")
-        for form in FORM:
-            k = g + "-" + form
-            rows = data(k, "results")["policies"]
-            gr = rows["gru"]
-            sub(FORM[form])
-            para(
-                f"시험 {number(gr['n'])}건 중 악성 {number(gr['tp'] + gr['fn'])}건, 정상 {number(gr['tn'] + gr['fp'])}건이다."
-            )
-            table(
-                "표 "
-                + str(8 + list(GROUP).index(g) * 2 + list(FORM).index(form))
-                + ". "
-                + GROUP[g]
-                + " 분할, "
-                + FORM[form],
-                [
-                    "구성",
-                    "정확도 %",
-                    "재현율 %",
-                    "오탐률 %",
-                    "미탐",
-                    "추가 미탐",
-                    "GRU 건",
-                    "호출 %",
-                ],
-                [
-                    [
-                        POLICY[n],
-                        pct(r["accuracy"]),
-                        pct(r["recall"]),
-                        pct(r["fpr"]),
-                        number(r["fn"]),
-                        number(r["additional_misses"]),
-                        number(r["t2_calls"]),
-                        pct(r["t2_call_rate"]),
-                    ]
-                    for n, r in rows.items()
-                ],
-            )
-            if form == "original":
-                examples = check["examples_by_source_id"][k]["boost"]
-                if examples:
-                    para(
-                        "HGB 경계 재검사에서 조기 종료한 악성 주소의 원본 행 ID는 "
-                        + ", ".join(examples)
-                        + "이다. 같은 GRU를 단독으로 실행하면 이 주소들은 악성으로 탐지됐다."
-                    )
-        joint = data("summary", "common-test")[g]
-        para(
-            f"두 표기의 공통 시험 URL은 {number(joint['common_n'])}건이다. "
-            + (
-                "원본 ID·라벨·순서가 같아 각 표기에서 구한 전체 시험 결과가 공통 URL에서의 결과와 일치한다."
-                if joint["ordered_ids_equal"]
-                else "공통 대상에서 별도로 분기와 성능을 다시 계산한 값은 common-test.json에 기록했다."
-            )
-        )
-        joint = data("summary", "common-test")[g]
-        retr = joint["stripped"]
-        para(
-            f"표기를 처음부터 통일하면 훈련 시 보던 특징 분포도 달라진다. 새 모델을 학습한 뒤 공통 시험 URL {number(joint['common_n'])}건에서 GRU 단독 재현율은 {pct(retr['gru']['recall'])}%, HGB 경계는 {pct(retr['boost_boundary']['recall'])}%였다."
-        )
-    for g in GROUP:
-        page(f"{GROUP[g]} 분할에서 고정 모델의 접두 표기 시험")
         k = g + "-original"
-        paired = data(k, "fixed-prefix")
-        original = data(k, "results")["policies"]
-        h = paired["pairs"]["with_prefix"]
-        no = paired["pairs"]["without_prefix"]
+        rows = data(k, "results")["policies"]
+        gr = rows["gru"]
         para(
-            f"이미 학습한 분류기에 표기만 다른 같은 주소가 들어오는 상황을 평가했다. 시험 행·라벨·순서와 모델·어휘·보정기·임계값을 고정했다. 원래 접두어가 있던 {number(h['rows'])}건 중 50칸 토큰 배열이 변한 주소는 {number(h['token_changes'])}건, 수치 특징이 하나 이상 변한 주소는 {number(h['numeric_changes'])}건이다."
+            f"시험 {number(gr['n'])}건 중 악성 {number(gr['tp'] + gr['fn'])}건, 정상 {number(gr['tn'] + gr['fp'])}건이다."
         )
         table(
             "표 "
-            + str(12 + list(GROUP).index(g))
+            + str(8 + list(GROUP).index(g))
             + ". "
             + GROUP[g]
-            + " 분할에서 원래 모델에 접두어만 제거해 입력한 결과",
+            + " 분할, "
+            + FORM["original"],
             [
                 "구성",
-                "원래 재현율 %",
-                "제거 재현율 %",
-                "반전 합계¹",
-                "악성→정상¹",
-                "정상→악성¹",
-                "접두어 없음²",
+                "정확도 %",
+                "재현율 %",
+                "오탐률 %",
+                "미탐",
+                "추가 미탐",
+                "GRU 건",
+                "호출 %",
             ],
             [
                 [
                     POLICY[n],
+                    pct(r["accuracy"]),
                     pct(r["recall"]),
-                    pct(paired["stripped"][n]["recall"]),
-                    number(h["flips"][n]["changed"]),
-                    number(h["flips"][n]["malicious_to_benign"]),
-                    number(h["flips"][n]["benign_to_malicious"]),
-                    number(no["flips"][n]["changed"]),
+                    pct(r["fpr"]),
+                    number(r["fn"]),
+                    number(r["additional_misses"]),
+                    number(r["t2_calls"]),
+                    pct(r["t2_call_rate"]),
                 ]
-                for n, r in original.items()
+                for n, r in rows.items()
             ],
         )
-        para(
-            f"¹ 원래 접두어가 있던 주소에서의 모델 판정 전환 건수다. ² 처음부터 접두어가 없던 {number(no['rows'])}건에서 바뀐 판정 수다. 이 집단에서 토큰 변화는 {number(no['token_changes'])}건, 수치 변화는 {number(no['numeric_changes'])}건이었다. 재검사는 전체 후보의 순위와 예산에 따라 대상을 정하므로 다른 행의 점수 변화도 영향을 줄 수 있다."
-        )
-        if (
-            h["token_changes"] == 0
-            and h["numeric_changes"]
-            and h["flips"]["gru"]["changed"]
-        ):
-            flips = h["flips"]["gru"]
+        examples = check["examples_by_source_id"][k]["boost"]
+        if examples:
             para(
-                f"GRU 단독은 접두어가 있던 주소 중 {number(flips['malicious_to_benign'])}건을 악성에서 정상으로, {number(flips['benign_to_malicious'])}건을 정상에서 악성으로 바꿨다. 이 주소들의 문자 토큰과 모델 가중치는 그대로였으므로 GRU 판정 차이는 수치 입력의 변화에서 생겼다."
+                "HGB 경계 재검사에서 조기 종료한 악성 주소의 원본 행 ID는 "
+                + ", ".join(examples)
+                + "이다. 같은 GRU를 단독으로 실행하면 이 주소들은 악성으로 탐지됐다."
             )
     for g in GROUP:
         page(f"{GROUP[g]} 분할의 실제 처리 시간")
-        for form in FORM:
-            k = g + "-" + form
-            tm = data(k, "timing")["summary"]
-            table(
-                "표 "
-                + str(14 + list(GROUP).index(g) * 2 + list(FORM).index(form))
-                + ". "
-                + GROUP[g]
-                + " 분할, "
-                + FORM[form]
-                + " · 동일 1,000건",
+        k = g + "-original"
+        tm = data(k, "timing")["summary"]
+        table(
+            "표 "
+            + str(10 + list(GROUP).index(g))
+            + ". "
+            + GROUP[g]
+            + " 분할, "
+            + FORM["original"]
+            + " · 동일 1,000건",
+            [
+                "구성",
+                "GRU 건",
+                "호출 절감 %",
+                "중앙값 ms",
+                "5회 범위 ms",
+                "시간 단축 %",
+            ],
+            [
                 [
-                    "구성",
-                    "GRU 건",
-                    "호출 절감 %",
-                    "중앙값 ms",
-                    "5회 범위 ms",
-                    "시간 단축 %",
-                ],
-                [
-                    [
-                        POLICY[n],
-                        number(r["calls"]),
-                        f"{r['calls_saved_pct']:.1f}",
-                        f"{r['ms']:.2f}",
-                        f"{r['min_ms']:.2f}–{r['max_ms']:.2f}",
-                        f"{r['time_saved_pct']:.2f}",
-                    ]
-                    for n, r in tm.items()
-                ],
-            )
+                    POLICY[n],
+                    number(r["calls"]),
+                    f"{r['calls_saved_pct']:.1f}",
+                    f"{r['ms']:.2f}",
+                    f"{r['min_ms']:.2f}–{r['max_ms']:.2f}",
+                    f"{r['time_saved_pct']:.2f}",
+                ]
+                for n, r in tm.items()
+            ],
+        )
         para(
             "시간 단축률은 (GRU 단독 시간 − 해당 구성 시간) / GRU 단독 시간이다. 음수는 시간이 늘었다는 뜻이다. 표의 호출 절감률은 이 1,000건에서 계산했다. 전체 시험의 호출률과 분모가 다르다."
         )
     page("경량 분류기만으로 판정한 결과")
     rows = []
-    for g, f in product_conditions():
-        res = data(g + "-" + f, "results")
+    for g in GROUP:
+        res = data(g + "-original", "results")
         for fam, m in res["first_stage"].items():
             rows.append(
                 [
                     GROUP[g],
-                    shortform(f),
+                    "원래",
                     "LR" if fam == "logistic" else "HGB",
                     pct(m["accuracy"]),
                     pct(m["recall"]),
@@ -549,72 +481,41 @@ def build(root):
                 ]
             )
     table(
-        "1단계 단독 · 보정한 악성 확률 0.5를 기준으로 판정",
+        "표 12. 1단계 단독 · 보정한 악성 확률 0.5를 기준으로 판정",
         ["분할", "표기", "모델", "정확도 %", "재현율 %", "오탐률 %", "미탐 건", "AP %"],
         rows,
     )
     para(
         "단독 모델은 시험 URL 전체를 수치 특징만으로 판정해 GRU 호출이 0건이다. 캐스케이드는 분기 임계값 이상인 주소와 재검사에 선택된 주소를 GRU로 보내므로, 1단계 단독의 악성 미탐 수와 캐스케이드의 추가 미탐 수는 의미가 다르다."
     )
-    page("경량 분류기 단독과 표기 특징")
+    page("수치 특징 제거와 학습량에 따른 변화")
     rlist = []
     for g in GROUP:
         orig = data(g + "-original", "results")["first_stage"]
-        stripped = data(g + "-stripped", "results")["first_stage"]
         controls = data(g + "-original", "controls-final")
         for fam in ("logistic", "boost"):
-            a, b, c = orig[fam], stripped[fam], controls[fam + "_omit_columns"]
             rlist.append(
                 [
                     GROUP[g],
-                    ("LR" if fam == "logistic" else "HGB"),
-                    pct(a["pr_auc_ap"]),
-                    pct(a["recall"]),
-                    pct(a["fpr"]),
-                    pct(b["pr_auc_ap"]),
-                    pct(c["pr_auc_ap"]),
+                    "LR" if fam == "logistic" else "HGB",
+                    pct(orig[fam]["pr_auc_ap"]),
+                    pct(controls[fam + "_omit_columns"]["pr_auc_ap"]),
                 ]
             )
     table(
-        "표 18. 1단계 모델 단독 시험 · 원래 입력과 두 재학습 조건",
-        [
-            "분할",
-            "모델",
-            "원래 AP %",
-            "재현율 %",
-            "오탐률 %",
-            "통일 AP %",
-            "9열 제외 AP %",
-        ],
+        "표 13. 표기 관련 특징을 제외한 1단계 모델의 평균 정밀도",
+        ["분할", "모델", "18개 특징 AP %", "9개 특징 AP %"],
         rlist,
     )
     para(
-        "단독 판정은 보정한 악성 확률 0.5 이상을 악성으로 본다. 통일 AP는 접두어를 제거한 URL에서 18개 특징을 다시 계산한 뒤 모델을 새로 적합한 결과다. 별도 열 제거 실험은 원래 표기에서 abnormal_url, 경로 /·// 횟수, https·http 횟수, 원문 길이, netloc 길이, 영문을 포함한 문자 수, 첫 디렉터리 길이의 9개 열을 제외하고 다시 학습했다."
-    )
-    page("학습 원문 중복과 보조 기준선")
-    diagnostic = []
-    for group in GROUP:
-        d = data(group + "-stripped", "controls-final")["stripped_collision_diagnostic"]
-        diagnostic.append(
-            [
-                GROUP[group],
-                number(d["overlap_rows"]),
-                number(d["kept"]),
-                pct(d["first_stage"]["logistic"]["pr_auc_ap"]),
-                pct(d["first_stage"]["boost"]["pr_auc_ap"]),
-            ]
-        )
-    table(
-        "접두어 제거 후 학습 원문과 겹치는 시험 행을 제외한 별도 진단",
-        ["분할", "겹침 행", "진단 분모", "LR AP %", "HGB AP %"],
-        diagnostic,
+        "원래 표기에서 abnormal_url, 경로의 /·// 횟수, https·http 횟수, 원문 길이, netloc 길이, 영문을 포함한 문자 수, 첫 디렉터리 길이 등 9개 열을 제외하고 다시 학습했다."
     )
     c = data("random-original", "controls-final")
     para(
         f"원래 표기 무작위 시험에서 URL 길이 하나로 학습한 모델의 AP는 {pct(c['length']['pr_auc_ap'])}%, 접두 표기 유무만으로 악성을 판정한 단순 규칙의 정확도는 {pct(c['scheme_only']['accuracy'])}%였다. 이는 공개 데이터 안에서 형식과 라벨이 함께 변하는 정도를 보여 준다. 수집 출처가 원인인지는 이 결과만으로 알 수 없다."
     )
     table(
-        "표 19. 원래 표기 무작위 분할에서 학습량에 따른 검증 AP (%)",
+        "표 14. 원래 표기 무작위 분할에서 학습량에 따른 검증 AP (%)",
         ["학습 비율", "학습 행", "LR", "HGB"],
         [
             [
@@ -628,8 +529,8 @@ def build(root):
     )
     page("재검사 예산과 임계값 민감도")
     rows = []
-    for g, f in product_conditions():
-        k = g + "-" + f
+    for g in GROUP:
+        k = g + "-original"
         result = data(k, "results")["policies"]
         sw = data(k, "sensitivity")
         for fam in ("logistic", "boost"):
@@ -639,7 +540,7 @@ def build(root):
             rows.append(
                 [
                     GROUP[g],
-                    shortform(f),
+                    "원래",
                     "LR" if fam == "logistic" else "HGB",
                     number(a["rechecks"]),
                     number(a["recovered_malicious"]),
@@ -648,7 +549,7 @@ def build(root):
                 ]
             )
     table(
-        "표 20. 기본 분기에서 놓쳤으나 재검사로 되찾은 악성 URL",
+        "표 15. 기본 분기에서 놓쳤으나 재검사로 되찾은 악성 URL",
         ["분할", "표기", "모델", "재검사 건", "경계 회복", "무작위 평균", "30회 범위"],
         rows,
     )
@@ -664,7 +565,7 @@ def build(root):
         if r["tau"] == tau and r["policy"] in ("basic", "boundary")
     ]
     table(
-        "표 21. 원래 표기 무작위 분할 HGB의 재검사 비율별 변화",
+        "표 16. 원래 표기 무작위 분할 HGB의 재검사 비율별 변화",
         ["재검사 비율", "재검사 건", "악성 재현율 %", "추가 미탐", "GRU 호출 %"],
         [
             [
@@ -680,25 +581,103 @@ def build(root):
     para(
         "12개 분기 임계값과 5개 재검사 비율의 전 조합은 조건별 sensitivity.json에 저장했다. 시험 민감도는 정책의 동작을 설명하며, 본 비교의 임계값은 앞서 검증 집합에서 정한 값이다."
     )
+    page("추가 실험 · 접두어를 제거한 결과")
+    counts = []
+    to_benign = []
+    retrained = []
+    paired_counts = []
+    all_common = data("summary", "common-test")
+    for g in GROUP:
+        orig = g + "-original"
+        stripped = g + "-stripped"
+        pairs = data(orig, "fixed-prefix")["pairs"]
+        to_benign.append(
+            f"{GROUP[g]} {number(pairs['with_prefix']['flips']['gru']['malicious_to_benign'])}건"
+        )
+        for key, label in (("with_prefix", "있음"), ("without_prefix", "없음")):
+            group = pairs[key]
+            counts.append(
+                [
+                    GROUP[g] + " · " + label,
+                    number(group["rows"]),
+                    number(group["token_changes"]),
+                    number(group["numeric_changes"]),
+                    number(group["flips"]["gru"]["changed"]),
+                ]
+            )
+        joint = all_common[g]
+        policy = fastest(stripped)[0]
+        for name in ("gru", policy):
+            metrics = [joint[form][name] for form in ("original", "stripped")]
+            times = [
+                data(kind, "timing")["summary"][name]["ms"] for kind in (orig, stripped)
+            ]
+            misses = [
+                metric["fn"] - joint[form]["gru"]["fn"]
+                for metric, form in zip(metrics, ("original", "stripped"))
+            ]
+            retrained.append(
+                [
+                    GROUP[g],
+                    POLICY[name],
+                    " → ".join(pct(m["recall"]) + "%" for m in metrics),
+                    " → ".join(f"{v:.2f}" for v in times),
+                    " → ".join(number(v) for v in misses),
+                ]
+            )
+        paired_counts.append(f"{GROUP[g]} {number(joint['common_n'])}건")
+    para(
+        "모델·어휘·보정기·임계값을 고정한 채 같은 시험 행에서 맨 앞의 http:// 또는 https://만 뗐다. 원래 순서대로 두 입력을 다시 계산했다. 표의 판정 변화는 GRU 단독에서 정상과 악성이 뒤집힌 건수다."
+    )
+    table(
+        "표 17. 고정한 GRU에 접두 표기만 바꿔 입력한 결과",
+        ["분할 · 원래 접두어", "시험 URL", "토큰 변화", "수치 변화", "판정 변화"],
+        counts,
+    )
+    para(
+        "접두어를 떼자 GRU가 악성에서 정상으로 판정을 바꾼 주소는 "
+        + ", ".join(to_benign)
+        + "이었다. 7개 구성의 양방향 판정 변화는 분할별 fixed-prefix.json에 저장했다."
+    )
+    para(
+        "다음은 학습·검증·시험에서 처음부터 접두어를 떼고 모델을 새로 학습한 결과다. 화살표는 원래 표기 → 접두어 제거를 뜻한다. 분할별로 GRU 단독과 재학습 조건에서 가장 빨랐던 캐스케이드를 비교했다."
+    )
+    table(
+        "표 18. 접두어 제거 후 재학습 · 같은 구성의 두 학습 조건 비교",
+        ["분할", "구성", "악성 재현율", "시간 (ms)", "추가 미탐"],
+        retrained,
+    )
+    identical = all(all_common[g]["ordered_ids_equal"] for g in GROUP)
+    para(
+        "두 표기의 공통 시험 URL은 "
+        + ", ".join(paired_counts)
+        + "이다. "
+        + (
+            "두 분할 모두 전체 시험 행·라벨·순서가 일치했다. "
+            if identical
+            else "탐지 성능은 공통 행에서 비교했다. "
+        )
+        + "시간은 같은 1,000건의 5회 중앙값이고 추가 미탐은 각 표기의 GRU 단독 대비 건수다. 7개 구성 전체의 성능·시간은 결과 파일 summary/performance.csv와 summary/timing.csv에 있다."
+    )
     page(CHAPTERS[5], True)
     table(
-        "표 22. 각 조건에서 가장 빠른 구성과 GRU 단독 대비 손익",
+        "표 19. 원래 표기에서 분할별로 가장 빠른 구성과 GRU 단독 대비 손익",
         ["분할", "표기", "구성", "절약 ms", "시간 단축 %", "추가 미탐 건"],
         [
-            [GROUP[g], shortform(f), POLICY[n], f"{ms:.2f}", f"{r:.2f}", number(m)]
-            for g, f in product_conditions()
-            for n, ms, r, m in [fastest(g + "-" + f, include_gru=True)]
+            [GROUP[g], "원래", POLICY[n], f"{ms:.2f}", f"{r:.2f}", number(m)]
+            for g in GROUP
+            for n, ms, r, m in [fastest(g + "-original", include_gru=True)]
         ],
     )
     para(
         "절약 시간은 고정한 1,000건 배치의 차이이고 추가 미탐은 해당 분할의 전체 시험 결과다. 예열 후 5회 측정한 한 장비의 결과이므로 중앙값이 비슷하고 범위가 겹치는 구성의 속도 순위는 다른 부하나 배치 크기에서 달라질 수 있다."
     )
     slow = []
-    for g, f in product_conditions():
-        t = data(g + "-" + f, "timing")["summary"]
+    for g in GROUP:
+        t = data(g + "-original", "timing")["summary"]
         slow.extend(
             [
-                f"{GROUP[g]}·{shortform(f)} {POLICY[n]} ({r['time_saved_pct']:.2f}%)"
+                f"{GROUP[g]}·원래 {POLICY[n]} ({r['time_saved_pct']:.2f}%)"
                 for n, r in t.items()
                 if r["calls"] < 1000 and r["time_saved_pct"] < 0
             ]
@@ -730,7 +709,6 @@ def build(root):
     page(CHAPTERS[6], True)
     sub("이번 재실험의 결론")
     para(sentence("random-original"))
-    para(sentence("random-stripped"))
     para(sentence("domain-original"))
     para(
         "원래 표기에서는 무작위 분할과 등록 도메인 분할의 가장 빠른 구성이 달랐다. "
@@ -745,11 +723,3 @@ def build(root):
         "[2] Paul Viola and Michael Jones. Rapid Object Detection Using a Boosted Cascade of Simple Features. CVPR, 2001, vol. 1, pp. 511–518. DOI 10.1109/CVPR.2001.990517. 쉬운 입력을 앞 단계에서 처리하고 나머지에 더 복잡한 검사를 적용하는 구조를 참고했다."
     )
     return output
-
-
-def product_conditions():
-    return [(g, f) for g in GROUP for f in FORM]
-
-
-def shortform(form):
-    return "원래" if form == "original" else "통일"
