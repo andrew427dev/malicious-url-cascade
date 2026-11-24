@@ -53,10 +53,29 @@ def mask_for(ids, p, tau, rate, policy, seed=0):
     return mask
 
 
+def verify_cohort_inputs(kind):
+    out = ROOT / kind
+    inputs = read(out / "full-input-audit.json")
+    roles = ("train", "validation", "test")
+    required = {"data.json", "vocab.json"} | {
+        role + suffix
+        for role in roles
+        for suffix in (".pkl", "-rows.csv.gz", "-features.npy", "-tokens.npy")
+    }
+    if inputs["status"] != "PASS" or set(inputs["files"]) != required:
+        raise ValueError("Incomplete or failed input audit for " + kind)
+    records_by_role = read(out / "data.json")["stages"]
+    if inputs["rows_rebuilt_from_source"] != {
+        r: records_by_role[r]["after"]["rows"] for r in roles
+    }:
+        raise ValueError("Full row coverage differs for " + kind)
+    for name, digest in inputs["files"].items():
+        assert sha(out / name) == digest, name
+
+
 def audit(kind):
     out = ROOT / kind
-    for name, digest in read(out / "full-input-audit.json")["files"].items():
-        assert sha(out / name) == digest, name
+    verify_cohort_inputs(kind)
     records = read(out / "results.json")
     with np.load(out / "scores.npz") as z:
         ids, y, gru = z["id"], z["y"], z["gru"]
@@ -72,6 +91,7 @@ def audit(kind):
     check_policy(y, gru, np.ones(len(y), bool), records["policies"]["gru"])
     sweeps = read(out / "sensitivity.json")
     representative = {}
+    categories = []
     for f in FAMILIES:
         assert frozen["first_stage_sha256"][f] == sha(out / "stage1" / (f + ".joblib"))
         grid = frozen["families"][f]["grid"]
@@ -84,7 +104,37 @@ def audit(kind):
         for policy, rate in POLICIES:
             mask = mask_for(ids, p[f], tau, rate, policy)
             check_policy(y, gru, mask, records["policies"][f + "_" + policy])
-        representative[f] = [str(i) for i in ids[(y == 1) & (gru > 0.5) & ~mask][:3]]
+        base = p[f] >= tau
+        rescued = mask & ~base & (gru > 0.5)
+        boundary = records["policies"][f + "_boundary"]
+        groups = {
+            "early_exit_miss": (
+                (y == 1) & (gru > 0.5) & ~mask,
+                boundary["additional_misses"],
+            ),
+            "recovered_malicious": (
+                (y == 1) & rescued,
+                boundary["recovered_malicious"],
+            ),
+            "new_false_positive": ((y == 0) & rescued, boundary["new_false_positives"]),
+            "gru_false_negative": (
+                (y == 1) & (gru <= 0.5),
+                records["policies"]["gru"]["fn"],
+            ),
+        }
+        for tag, (selected, expected_count) in groups.items():
+            assert int(selected.sum()) == expected_count
+            stable = sorted(ids[selected].tolist())
+            categories.append(
+                {
+                    "family": f,
+                    "category": tag,
+                    "population": len(stable),
+                    "first_source_id": stable[0] if stable else None,
+                }
+            )
+            if tag == "early_exit_miss":
+                representative[f] = stable[:3]
         for entry in sweeps[f]["random_seeds"]:
             check_policy(
                 y, gru, mask_for(ids, p[f], tau, 0.05, "random", entry["seed"]), entry
@@ -143,6 +193,7 @@ def audit(kind):
         assert all(r["calls"] == expected for r in rows)
         for r in rows:
             close(r["total_ms"], r["features_ms"] + r["route_ms"] + r["gru_ms"])
+    write_json(out / "representative-cases.json", categories)
     return representative
 
 

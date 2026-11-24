@@ -209,7 +209,15 @@ def supplemental(y, ids, gru, p, tau):
                         **cascade_metrics(y, gru, mask, p >= t),
                     }
                 )
-    return {"random_seeds": seeds, "sensitivity": grid}
+    fields = ("recall", "f1", "fpr", "recovered_malicious", "new_false_positives")
+    return {
+        "random_seeds": seeds,
+        "sensitivity": grid,
+        "random_mean": {m: float(np.mean([r[m] for r in seeds])) for m in fields},
+        "random_sample_sd": {
+            m: float(np.std([r[m] for r in seeds], ddof=1)) for m in fields
+        },
+    }
 
 
 def controls(out, frame, y, x, first):
@@ -256,6 +264,17 @@ def controls(out, frame, y, x, first):
         str(v): {"n": int((has == v).sum()), "malicious": int(y[has == v].sum())}
         for v in (False, True)
     }
+    result["raw_scheme_by_label"] = {}
+    for part, cohort in (("train", pd.read_pickle(out / "train.pkl")), ("test", frame)):
+        raw_prefix = cohort.url.str.match(PREFIX)
+        result["raw_scheme_by_label"][part] = {
+            str(flag): {
+                "n": int((raw_prefix == flag).sum()),
+                "malicious": int(((raw_prefix == flag) & (cohort.type == 0)).sum()),
+                "benign": int(((raw_prefix == flag) & (cohort.type == 1)).sum()),
+            }
+            for flag in (False, True)
+        }
     write_json(out / "controls-final.json", result)
 
 

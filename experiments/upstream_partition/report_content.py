@@ -62,9 +62,9 @@ def build(root):
     def data(kind, name):
         return read(root / kind / (name + ".json"))
 
-    def fastest(kind):
+    def fastest(kind, include_gru=False):
         t = data(kind, "timing")["summary"]
-        n = min((k for k in t if k != "gru"), key=lambda k: t[k]["ms"])
+        n = min((k for k in t if include_gru or k != "gru"), key=lambda k: t[k]["ms"])
         p = data(kind, "results")["policies"][n]
         return (
             n,
@@ -145,6 +145,49 @@ def build(root):
     sub("원문의 지표를 읽는 방법")
     para(
         "원저자 README는 내부 정확도를 98.4%로 요약했고, 공개 노트북의 20회차 로그는 98.34%다. 별도 파일의 71.11%는 별도 평가 정확도다. 당시 난수 시드, 최초 셔플과 분할 행 목록, 가중치 초기값이 공개되지 않았다. 이번 실행은 시드 42로 절차를 재현했다. 결과 표는 각 수치를 같은 역할의 집합에서 같은 지표와 비교한다."
+    )
+    page("원저자 학습 블록별 정제 경로")
+    source_rows = []
+    for kind, label in (
+        ("author-validation", "첫 학습"),
+        ("author-final", "최종 학습"),
+    ):
+        stages = data(kind, "source-stages")
+        previous = stages["shuffled"]["rows"]
+        for step, text in (
+            ("shuffled", "결합·셔플"),
+            ("exact_row_unique", "전체 열 중복 제거"),
+            ("nonmissing", "결측 제거"),
+        ):
+            count = stages[step]["rows"]
+            source_rows.append(
+                [label, text, number(previous), number(count), number(previous - count)]
+            )
+            previous = count
+        for role, step in data(kind, "data")["stages"].items():
+            name = {
+                "train": "학습",
+                "validation": "내부 검증",
+                "external": "별도 평가",
+            }[role]
+            source_rows.append(
+                [
+                    label,
+                    name + " 문자열 중복 제거",
+                    number(step["before"]["rows"]),
+                    number(step["after"]["rows"]),
+                    number(step["removed"]),
+                ]
+            )
+    table(
+        "원저자 절차에서 단계별로 남긴 행",
+        ["학습 블록", "처리 또는 집합", "입력 행", "남은 행", "제외 행"],
+        source_rows,
+    )
+    conf1 = data("author-validation", "source-stages")["conflicting_raw_urls"]
+    conf2 = data("author-final", "source-stages")["conflicting_raw_urls"]
+    para(
+        f"첫 학습 풀에서 라벨이 상충한 원본 URL은 {number(conf1)}개, 세 파일 전체에서는 {number(conf2)}개였다. 원저자 코드는 전체 열이 같은 행을 먼저 제거하므로 같은 원문에 서로 다른 라벨이 붙은 행은 이 단계에 남는다. 각 집합 안의 문자열 중복 제거에서 어느 행이 먼저 오는지에 따라 남는 라벨도 달라질 수 있다. 별도 평가 행은 첫 학습 풀의 분할과 독립적으로 세 번째 파일에서 읽었다."
     )
     page(CHAPTERS[2], True)
     para(
@@ -631,12 +674,12 @@ def build(root):
     )
     page(CHAPTERS[5], True)
     table(
-        "표 22. 각 조건의 가장 빠른 캐스케이드와 같은 GRU 대비 손익",
+        "표 22. 각 조건에서 가장 빠른 구성과 GRU 단독 대비 손익",
         ["분할", "표기", "구성", "절약 ms", "시간 단축 %", "추가 미탐 건"],
         [
             [GROUP[g], shortform(f), POLICY[n], f"{ms:.2f}", f"{r:.2f}", number(m)]
             for g, f in product_conditions()
-            for n, ms, r, m in [fastest(g + "-" + f)]
+            for n, ms, r, m in [fastest(g + "-" + f, include_gru=True)]
         ],
     )
     para(
@@ -659,6 +702,19 @@ def build(root):
     )
     para(
         "검증 때의 허용 손실 1%p는 시험 집합에서 보장되는 상한이 아니다. 운영에 필요한 미탐 상한을 먼저 정한 뒤, 별도 검증 자료에서 경계 재검사 비율을 올리거나 분기 임계값을 낮추면 더 많은 후보가 GRU로 넘어간다. 이때 회복한 악성 수와 늘어난 배치 시간을 함께 재야 한다."
+    )
+    selected_tau = data("random-original", "routing")["families"]["boost"]["tau"]
+    sensitivity = data("random-original", "sensitivity")["boost"]["sensitivity"]
+    by_rate = {
+        r["rate"]: r
+        for r in sensitivity
+        if r["tau"] == selected_tau and r["policy"] == "boundary"
+    }
+    five, ten = by_rate[0.05], by_rate[0.10]
+    recovered = five["additional_misses"] - ten["additional_misses"]
+    more_calls = ten["t2_calls"] - five["t2_calls"]
+    para(
+        f"원래 표기의 무작위 분할에서 HGB의 검증 임계값 {selected_tau:g}을 유지하고 경계 재검사를 5%에서 10%로 높이면, 전체 시험에서 GRU 호출이 {number(more_calls)}건 늘고 추가 미탐은 {number(five['additional_misses'])}건에서 {number(ten['additional_misses'])}건으로 바뀌었다. 이때 되찾은 악성은 {number(recovered)}건이다. 10% 조건의 처리 시간은 별도로 측정해야 한다."
     )
     para(
         "초기 준비 실행에서 보조 기준선 시험 점수가 분기 기준 확정 전에 산출됐다. 최종 비교에서는 경량 분류기를 새로 적합하고 네 조건의 분기 기준을 검증 자료로 모두 고정한 뒤 시험 점수를 다시 계산했다. 같은 공개 자료에 대한 과거 시험 노출이 있으며, 후보 선택·보정·분기 기준에도 같은 검증 자료를 썼다. 모든 라벨의 실제 악성 여부를 독립적으로 확인하지 않았고, 각 모델의 학습 시드는 하나다. 기간과 수집 출처가 다른 데이터, 다양한 배치 크기와 단건 요청에서 다시 측정할 필요가 있다."
