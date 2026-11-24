@@ -244,7 +244,7 @@ def build(root):
     )
     page("수치 특징 18개의 열 순서와 계산 방법")
     para(
-        "원저자의 FeatureCreation.create_features가 열을 붙이는 순서다. 원래 표기 조건에서는 문자 전처리 전 원문에 계산하며, 표기 통일 조건에서는 맨 앞 접두어만 제거한 뒤 같은 함수를 적용한다."
+        "원저자 코드가 수치 특징을 계산해 모델에 넣는 순서다. 원래 표기 조건에서는 문자 전처리 전 원문에 계산하며, 표기 통일 조건에서는 맨 앞 접두어만 제거한 뒤 같은 함수를 적용한다."
     )
     table(
         "표 4. 원저자 수치 입력의 열 순서",
@@ -421,13 +421,6 @@ def build(root):
                 for n, r in rows.items()
             ],
         )
-        examples = check["examples_by_source_id"][k]["boost"]
-        if examples:
-            para(
-                "HGB 경계 재검사에서 조기 종료한 악성 주소의 원본 행 ID는 "
-                + ", ".join(examples)
-                + "이다. 같은 GRU를 단독으로 실행하면 이 주소들은 악성으로 탐지됐다."
-            )
     for g in GROUP:
         page(f"{GROUP[g]} 분할의 실제 처리 시간")
         k = g + "-original"
@@ -579,7 +572,7 @@ def build(root):
         ],
     )
     para(
-        "12개 분기 임계값과 5개 재검사 비율의 전 조합은 조건별 sensitivity.json에 저장했다. 시험 민감도는 정책의 동작을 설명하며, 본 비교의 임계값은 앞서 검증 집합에서 정한 값이다."
+        "민감도 분석에서는 분기 임계값 12개와 재검사 비율 5개를 조합했다. 시험 민감도는 정책의 동작을 설명하며, 본 비교의 임계값은 앞서 검증 집합에서 정한 값이다."
     )
     page("추가 실험 · 접두어를 제거한 결과")
     counts = []
@@ -637,7 +630,7 @@ def build(root):
     para(
         "접두어를 떼자 GRU가 악성에서 정상으로 판정을 바꾼 주소는 "
         + ", ".join(to_benign)
-        + "이었다. 7개 구성의 양방향 판정 변화는 분할별 fixed-prefix.json에 저장했다."
+        + "이었다."
     )
     para(
         "다음은 학습·검증·시험에서 처음부터 접두어를 떼고 모델을 새로 학습한 결과다. 화살표는 원래 표기 → 접두어 제거를 뜻한다. 분할별로 GRU 단독과 재학습 조건에서 가장 빨랐던 캐스케이드를 비교했다."
@@ -657,7 +650,7 @@ def build(root):
             if identical
             else "탐지 성능은 공통 행에서 비교했다. "
         )
-        + "시간은 같은 1,000건의 5회 중앙값이고 추가 미탐은 각 표기의 GRU 단독 대비 건수다. 저장소의 evidence/upstream-partition-20261124 아래 summary/performance.csv와 summary/timing.csv에 7개 구성의 전체 성능과 시간이 있다. 재학습 모델의 행별 점수와 라벨은 random-stripped와 domain-stripped 폴더의 scores.npz와 test-rows.csv.gz에 보관했다."
+        + "시간은 같은 1,000건의 5회 중앙값이고 추가 미탐은 각 표기의 GRU 단독 대비 건수다."
     )
     page(CHAPTERS[5], True)
     table(

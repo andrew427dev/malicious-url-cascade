@@ -136,16 +136,17 @@ def build(root):
         "11월 23일에는 전체 데이터에서 같은 모델 입력을 제거하고 접두어 통일 시 충돌 그룹을 제외했다. "
         f"이번에는 각 집합에서 전처리한 전체 문자열이 같은 첫 행을 남겼다. 접두어 통일 후 무작위 시험 대상이 107,325건에서 {n:,}건으로 달라져 두 보고서 사이의 점수 차이로 캐스케이드의 개선량을 계산할 수 없다."
     )
-    sub("재실행과 자료 위치")
-    p(
-        "저장소 루트에서 python experiments/upstream_partition/run_study.py <새 출력 폴더>를 실행한다. 문서 생성과 검수 명령은 실험 코드의 README.md에 있다."
-    )
-    p(
-        "출력 폴더의 summary/performance.csv는 전체 시험 성능, summary/timing.csv는 1,000건 처리 시간이다. 조건별 timing.json에서 측정한 순서, 각 회차의 시간, 표본 식별자를 확인할 수 있다. scores.npz와 *-rows.csv.gz에 행 단위 점수와 라벨이 들어 있다."
+    sub("실험 자료와 재실행")
+    repo = "https://github.com/andrew427dev/malicious-url-cascade"
+    records = repo + "/tree/main/evidence/upstream-partition-20261124"
+    files = repo + "/blob/main/evidence/upstream-partition-20261124"
+    body.append(
+        f'<p><a href="{files}/summary/performance.csv">전체 시험 성능표</a> · <a href="{files}/summary/timing.csv">1,000건 처리 시간표</a> · <a href="{records}">분할별 측정 원본</a></p>'
     )
     body.append(
-        '<p><a href="https://github.com/andrew427dev/malicious-url-cascade/tree/main/evidence/upstream-partition-20261124">이번 실험의 결과표와 측정 원본</a> · <a href="https://github.com/andrew427dev/malicious-url-cascade/tree/main/experiments/upstream_partition">재실행 코드와 명령</a></p>'
+        f'<p><a href="{repo}/tree/main/experiments/upstream_partition">재실행 코드와 사용법</a></p>'
     )
+    p("실험 코드 폴더에서 python run_study.py 새실험을 실행한다.")
     sub("보고서 첨부")
     return "\n".join(body)
 
