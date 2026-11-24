@@ -155,6 +155,8 @@ def build(root):
     for tag, *args in content[-1]["blocks"]:
         if tag == "paragraph":
             p(args[0])
+        elif tag == "sub":
+            sub(args[0])
     sub("재실행과 자료 위치")
     p(
         "저장소 루트에서 python experiments/upstream_partition/run_study.py <새 출력 폴더>를 실행한다. 문서 생성과 검수 명령은 실험 코드의 README.md에 있다."

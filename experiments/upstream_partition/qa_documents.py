@@ -139,6 +139,14 @@ def verify(root):
         assert tight(n) in setup_text and tight(definition) in setup_text, n
     assert tight(example(root)) in setup_text
     assert any(p.text == example(root) for p in doc.paragraphs)
+    end = pages[index_pages[CHAPTERS[-1]] - 1]
+    labels = [
+        tight(s)
+        for s in ("이번 재실험의 결론", "11월 23일 보고서와의 비교", "참고문헌")
+    ]
+    assert all(s in end for s in labels) and [end.index(s) for s in labels] == sorted(
+        end.index(s) for s in labels
+    )
     assert all(len(s) > 35 for s in pages)
     qa = dest / "rendered"
     qa.mkdir(exist_ok=True)
