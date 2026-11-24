@@ -1,0 +1,92 @@
+{
+  "source": "stage-level rounds in <condition>/timing.json (4 conditions x 7 policies x 5 repeats)",
+  "model": "gru_ms = intercept(condition) + per_call_ms * calls; breakeven = stage_ms / per_call_ms",
+  "rounds": 140,
+  "gru_per_call_ms": 0.02749363478513843,
+  "gru_per_call_ms_ci95": [
+    0.025574264080932194,
+    0.029620846834601516
+  ],
+  "rows": [
+    {
+      "condition": "random-original",
+      "stage": "LR",
+      "stage_ms": 0.4128,
+      "breakeven_calls_saved_pct": 1.5014384355725032,
+      "breakeven_low_pct": 1.3936130938626263,
+      "breakeven_high_pct": 1.614122692616511,
+      "boundary_calls_saved_pct": 4.900000000000004,
+      "boundary_time_saved_pct": 2.190657386289785
+    },
+    {
+      "condition": "random-original",
+      "stage": "HGB",
+      "stage_ms": 4.8603,
+      "breakeven_calls_saved_pct": 17.677909952550962,
+      "breakeven_low_pct": 16.408376259933437,
+      "breakeven_high_pct": 19.004652429564022,
+      "boundary_calls_saved_pct": 30.300000000000004,
+      "boundary_time_saved_pct": 8.79146331375631
+    },
+    {
+      "condition": "random-stripped",
+      "stage": "LR",
+      "stage_ms": 0.3953,
+      "breakeven_calls_saved_pct": 1.4377873391032232,
+      "breakeven_low_pct": 1.334533081404787,
+      "breakeven_high_pct": 1.5456945261417319,
+      "boundary_calls_saved_pct": 4.5000000000000036,
+      "boundary_time_saved_pct": 3.4595088411006003
+    },
+    {
+      "condition": "random-stripped",
+      "stage": "HGB",
+      "stage_ms": 5.0975,
+      "breakeven_calls_saved_pct": 18.54065510012315,
+      "breakeven_low_pct": 17.20916362879055,
+      "breakeven_high_pct": 19.932147348867893,
+      "boundary_calls_saved_pct": 18.999999999999993,
+      "boundary_time_saved_pct": -1.1013210563642684
+    },
+    {
+      "condition": "domain-original",
+      "stage": "LR",
+      "stage_ms": 0.4955,
+      "breakeven_calls_saved_pct": 1.802235331458758,
+      "breakeven_low_pct": 1.672808352734814,
+      "breakeven_high_pct": 1.9374946564716116,
+      "boundary_calls_saved_pct": 7.899999999999996,
+      "boundary_time_saved_pct": 4.383918988075564
+    },
+    {
+      "condition": "domain-original",
+      "stage": "HGB",
+      "stage_ms": 4.604,
+      "breakeven_calls_saved_pct": 16.74569417968945,
+      "breakeven_low_pct": 15.543107277479487,
+      "breakeven_high_pct": 18.002473054279115,
+      "boundary_calls_saved_pct": 9.399999999999997,
+      "boundary_time_saved_pct": -7.6387976830444515
+    },
+    {
+      "condition": "domain-stripped",
+      "stage": "LR",
+      "stage_ms": 0.4916,
+      "breakeven_calls_saved_pct": 1.7880502299598897,
+      "breakeven_low_pct": 1.6596419499584958,
+      "breakeven_high_pct": 1.922244950800089,
+      "boundary_calls_saved_pct": 8.799999999999997,
+      "boundary_time_saved_pct": 6.850933144342064
+    },
+    {
+      "condition": "domain-stripped",
+      "stage": "HGB",
+      "stage_ms": 5.0426,
+      "breakeven_calls_saved_pct": 18.340972517485234,
+      "breakeven_low_pct": 17.023821189708528,
+      "breakeven_high_pct": 19.717478415184157,
+      "boundary_calls_saved_pct": 8.899999999999997,
+      "boundary_time_saved_pct": 1.3555310566886303
+    }
+  ]
+}
