@@ -9,6 +9,7 @@ from docx import Document
 from docx.oxml.ns import qn
 from make_report import numbered_sections
 import pymupdf
+from PIL import Image, ImageChops
 from feature_table import FEATURE_ROWS, example
 from report_content import CHAPTERS
 
@@ -143,6 +144,13 @@ def verify(root):
     qa.mkdir(exist_ok=True)
     for n, p in enumerate(pdf, 1):
         pix = p.get_pixmap(matrix=pymupdf.Matrix(1.5, 1.5))
+        rgb = Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
+        red, green, blue = rgb.split()
+        assert not ImageChops.difference(red, green).getbbox(), (n, "red/green differ")
+        assert not ImageChops.difference(green, blue).getbbox(), (
+            n,
+            "green/blue differ",
+        )
         pix.save(qa / f"page-{n:02}.png")
     (dest / "document-checks.json").write_text(
         json.dumps(
@@ -151,6 +159,7 @@ def verify(root):
                 "tables": len(expected),
                 "cover_tables": 1,
                 "nov23_table_format": "PASS",
+                "neutral_rgb_all_pages": True,
                 "figures": 1,
                 "toc": index_pages,
                 "features": len(FEATURE_ROWS),

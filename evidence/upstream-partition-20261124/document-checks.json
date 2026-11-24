@@ -3,6 +3,7 @@
   "tables": 25,
   "cover_tables": 1,
   "nov23_table_format": "PASS",
+  "neutral_rgb_all_pages": true,
   "figures": 1,
   "toc": {
     "Introduction & Motivation": 3,

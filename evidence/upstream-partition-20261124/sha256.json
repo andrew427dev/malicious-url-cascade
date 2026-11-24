@@ -18,7 +18,7 @@
   "evidence/upstream-partition-20261124/author-validation/validation-rows.csv.gz": "1a9c5d48a0e0fa2697f7d7da20e7391c1215a0cbb883557a5e7990b83f37a4b8",
   "evidence/upstream-partition-20261124/author-validation/validation-scores.npz": "f079de4747770b924361d1eb08cb2c1eb2e14e2a84dcffef176a5300410f1070",
   "evidence/upstream-partition-20261124/cohort-archives.json": "e71d9672bac6eacec09acf1147fd3a74c7f497edc82fb3969a807fea985be462",
-  "evidence/upstream-partition-20261124/document-checks.json": "79911840e6f7ee07b0bde7b48d4de972b6b74bc2aa0d3f83023e48c1f60595b6",
+  "evidence/upstream-partition-20261124/document-checks.json": "a4dd968705326d8dc30cde5e195380cd17c9d96fbc2b23ec2b5143b373e06439",
   "evidence/upstream-partition-20261124/domain-original/controls-final.json": "a2ee3974d3c93a4aef9e5380fd58721c19bd092bfee67335b2cdcc65702ec738",
   "evidence/upstream-partition-20261124/domain-original/data.json": "a9a7c0d0b176decf30fad89cf8565b0edb12f7997984f28fcb3db731c80a1057",
   "evidence/upstream-partition-20261124/domain-original/epochs.csv": "4c4f818aa322975ee42694a51ee4f62d32c7b59186f2a080486b9f6a67767322",
@@ -96,8 +96,8 @@
   "evidence/upstream-partition-20261124/summary/timing.csv": "3348635a75d9ee582b44018010269da61b4327a6aca7ec881126ca454f4a99e8",
   "evidence/upstream-partition-20261124/team-source.json": "9ed1538d46e86415ed573c0c65e5866a8ab62441ea791876d0b58ffc680a4ac9",
   "evidence/upstream-partition-20261124/training-source.tar.gz": "343b0532c134350ff8e2a1a6264eb486abfb0a72e9efec40bcc9af82efa0d0b1",
-  "docs/upstream-partition-20261124/cascade.png": "31f5b19089463abca06ea59e431f23664def81d8e8d7835a3fecf39a4d7c6264",
+  "docs/upstream-partition-20261124/cascade.png": "00ced740704d560dfd71e5eaa353bb397156f5a9d7fc6156b8b5380a44f86909",
   "docs/upstream-partition-20261124/notion-body.html": "ed5276659f7f612567e7d809336078cabe9b518b59a3c3b55d731638966ad5d3",
-  "docs/upstream-partition-20261124/report-ko.docx": "d6fe09c145de288739cf9e8704a6c185dacebb0f692239761d73b595b6c7f5ab",
-  "docs/upstream-partition-20261124/report-ko.pdf": "d29bdf0efcaea8e3ceb5652b5c991f7776f4a336d3959178208b6ae351a30792"
+  "docs/upstream-partition-20261124/report-ko.docx": "b1f127f51904e4c892c89bbb72b72efed28dd1d9032889c748cbfd8d99bc3d2a",
+  "docs/upstream-partition-20261124/report-ko.pdf": "4a9423195306a9ca912620701b085aa325407a8cd3b5b8a974305078154e58e3"
 }

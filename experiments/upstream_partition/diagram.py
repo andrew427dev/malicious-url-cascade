@@ -7,7 +7,7 @@ def draw(path, regular, bold):
     scale = 2
     image = Image.new("RGB", (1250 * scale, 473 * scale), "white")
     canvas = ImageDraw.Draw(image)
-    ink, dark, panel, line = "#131313", "#242525", "#F3F3F2", "#434343"
+    ink, dark, panel, line = "#131313", "#252525", "#F3F3F3", "#434343"
 
     def points(coords):
         return [tuple(round(v * scale) for v in p) for p in coords]
@@ -98,4 +98,4 @@ def draw(path, regular, bold):
         "두 출력 결합",
         ["정상 확률 ≥ 0.5 정상", "미만이면 악성"],
     )
-    image.save(path)
+    image.convert("L").save(path)
