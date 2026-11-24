@@ -16,6 +16,7 @@ from docx.shared import Cm, Pt
 
 from diagram import draw
 from report_content import build
+from table_layout import present
 
 HERE = Path(__file__).resolve().parent
 
@@ -49,32 +50,16 @@ def numbered_sections(pages):
         yield number, page
 
 
-def table(doc, caption, heads, rows):
-    p = doc.add_paragraph(caption, style="Caption")
+def table(doc, layout, follows_with_note):
+    p = doc.add_paragraph(layout.caption, style="Caption")
     p.paragraph_format.keep_with_next = True
+    heads, rows, widths = layout.headers, layout.rows, layout.widths
     count = len(heads)
-    widths = {
-        2: [0.43, 0.57],
-        3: [0.34, 0.29, 0.37],
-        4: [0.28, 0.28, 0.22, 0.22],
-        5: [0.24, 0.16, 0.20, 0.20, 0.20],
-        6: [0.19, 0.14, 0.16, 0.15, 0.22, 0.14],
-        7: [0.17, 0.13, 0.14, 0.14, 0.14, 0.14, 0.14],
-        8: [0.165, 0.12, 0.12, 0.12, 0.11, 0.12, 0.14, 0.105],
-    }[count]
-    if heads[:2] == ["순서", "원저자 열 이름"]:
-        widths = [0.068, 0.258, 0.674]
-    elif heads[0] == "파일":
-        widths = [0.43, 0.14, 0.14, 0.29]
-    elif heads[0] == "단계":
-        widths = [0.60, 0.20, 0.20]
-    elif heads[0] == "학습 블록":
-        widths = [0.17, 0.32, 0.17, 0.17, 0.17]
     tab = doc.add_table(rows=0, cols=count)
     tab.alignment = WD_TABLE_ALIGNMENT.CENTER
     tab.autofit = False
     for col, w in zip(tab.columns, widths):
-        col.width = Cm(16 * w)
+        col.width = Cm(w)
     borders = OxmlElement("w:tblBorders")
     for side in ("top", "left", "bottom", "right", "insideH", "insideV"):
         el = OxmlElement("w:" + side)
@@ -101,7 +86,7 @@ def table(doc, caption, heads, rows):
         if i == 0:
             row._tr.get_or_add_trPr().append(OxmlElement("w:tblHeader"))
         for j, (cell, value, w) in enumerate(zip(row.cells, values, widths)):
-            cell.width = Cm(16 * w)
+            cell.width = Cm(w)
             cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
             if i == 0:
                 fill = OxmlElement("w:shd")
@@ -112,11 +97,18 @@ def table(doc, caption, heads, rows):
             p.style = "Cell"
             if numeric[j]:
                 p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-            # Dense result matrices and the 18-feature table keep the same font and rules.
-            if count >= 6 or heads[:2] == ["순서", "원저자 열 이름"]:
-                p.paragraph_format.space_before = Pt(1)
-                p.paragraph_format.space_after = Pt(1)
-                p.paragraph_format.line_spacing = Pt(14)
+            if heads[:2] == ["순서", "원저자 열 이름"]:
+                p.paragraph_format.space_before = Pt(1.5)
+                p.paragraph_format.space_after = Pt(1.5)
+                p.paragraph_format.line_spacing = Pt(15)
+            elif layout.caption.startswith("1단계 단독"):
+                p.paragraph_format.space_before = Pt(2)
+                p.paragraph_format.space_after = Pt(2)
+            # Keep the header with two data rows and the final two rows together.
+            # The final row leads into its note; long tables may flow in between.
+            p.paragraph_format.keep_with_next = (
+                i < 2 or i == len(rows) - 1 or (i == len(rows) and follows_with_note)
+            )
             p.add_run(str(value)).bold = i == 0
 
 
@@ -165,13 +157,20 @@ def make(root, regular, bold):
             number + "  " + page["title"],
             style="Heading 1" if page["chapter"] else "Heading 2",
         )
-        p.paragraph_format.page_break_before = True
+        p.paragraph_format.page_break_before = bool(page["chapter"])
+        p.paragraph_format.keep_with_next = True
         bookmark(p, i)
-        for tag, *values in page["blocks"]:
+        for index, (tag, *values) in enumerate(page["blocks"]):
             if tag == "paragraph":
                 doc.add_paragraph(values[0])
             elif tag == "table":
-                table(doc, *values)
+                layouts = present(*values)
+                has_note = (
+                    index + 1 < len(page["blocks"])
+                    and page["blocks"][index + 1][0] == "paragraph"
+                )
+                for j, layout in enumerate(layouts):
+                    table(doc, layout, has_note and j == len(layouts) - 1)
             elif tag == "figure":
                 p = doc.add_paragraph()
                 p.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -180,7 +179,8 @@ def make(root, regular, bold):
                 p.add_run().add_picture(str(figure), width=Cm(16))
                 doc.add_paragraph(values[0], style="Caption")
             elif tag == "sub":
-                doc.add_paragraph(values[0], style="Minor heading")
+                p = doc.add_paragraph(values[0], style="Minor heading")
+                p.paragraph_format.keep_with_next = True
             else:
                 raise ValueError(f"Unexpected body block {tag}")
     doc.core_properties.title = pages[0]["title"]

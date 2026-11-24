@@ -11,6 +11,7 @@ from make_report import numbered_sections
 import pymupdf
 from PIL import Image, ImageChops
 from feature_table import FEATURE_ROWS, example
+from table_layout import present
 from report_content import CHAPTERS
 
 
@@ -35,12 +36,21 @@ def verify(root):
     for number, page in numbered_sections(content):
         title = page["title"]
         heading = tight(f"{number} {title}")
-        hits = [n for n, s in enumerate(pages[2:], 3) if s.startswith(str(n) + heading)]
+        hits = [n for n, s in enumerate(pages[2:], 3) if heading in s]
         assert len(hits) == 1, (title, hits)
         n = hits[0]
         assert heading + str(n) in toc, (title, n)
         index_pages[title] = n
     assert list(index_pages.values()) == sorted(index_pages.values())
+    for p in doc.paragraphs:
+        if p.style.name not in ("Heading 2", "Minor heading", "Caption"):
+            continue
+        forced = p.paragraph_format.page_break_before
+        style = p.style
+        while forced is None and style is not None:
+            forced = style.paragraph_format.page_break_before
+            style = style.base_style
+        assert not forced, ("forced break", p.text)
     expected = [
         (caption, heads, rows)
         for page in content
@@ -48,10 +58,20 @@ def verify(root):
         if typ == "table"
         for caption, heads, rows in [payload]
     ]
-    assert len(doc.tables) == 1 + len(expected)
+    printed = [part for data in expected for part in present(*data)]
+    assert len(doc.tables) == 1 + len(printed)
     assert doc.tables[0].cell(0, 0).text == "소속"
     all_pdf = "".join(pages)
-    for tab, (caption, headers, rows) in zip(doc.tables[1:], expected):
+    offsets = [all_pdf.index(tight(part.caption)) for part in printed] + [len(all_pdf)]
+    assert offsets == sorted(offsets)
+    for i, (tab, part) in enumerate(zip(doc.tables[1:], printed)):
+        caption, headers, rows = part.caption, part.headers, part.rows
+        section = all_pdf[offsets[i] : offsets[i + 1]]
+        assert len(headers) <= 5 and tight("".join(headers)) in section, caption
+        for row in rows:
+            needle = tight("".join(row))
+            assert needle in section, (caption, row)
+            section = section[section.index(needle) + len(needle) :]
         borders = tab._tbl.tblPr.find(qn("w:tblBorders"))
         for side, color in (
             ("top", "303030"),
@@ -87,22 +107,10 @@ def verify(root):
             if caption in t[0] and ("동일 1,000건" in t[0]) == timing
         ]
         assert len(section) == 1, (condition, timing)
-        title, _, rows = section[0]
-        # Word exports a title once and writes rows in order. Limit the PDF check
-        # to this table, including any continuation up to the next table caption.
-        start = all_pdf.index(tight(title)) + len(tight(title))
-        end = min(
-            [
-                i
-                for other, _, _ in expected
-                if (i := all_pdf.find(tight(other), start)) >= 0
-            ],
-            default=len(all_pdf),
-        )
-        return {tuple(r) for r in rows}, all_pdf[start:end]
+        return {tuple(row) for row in section[0][2]}
 
     for r in perf:
-        data_cells, pdf_section = matching_table(r["condition"])
+        data_cells = matching_table(r["condition"])
         cells = [
             POLICY[r["policy"]],
             *[f"{100 * float(r[k]):.2f}" for k in ("accuracy", "recall", "fpr")],
@@ -110,13 +118,8 @@ def verify(root):
             f"{100 * float(r['t2_call_rate']):.2f}",
         ]
         assert tuple(cells) in data_cells, (r["condition"], r["policy"])
-        assert tight("".join(cells)) in pdf_section, (
-            r["condition"],
-            r["policy"],
-            "PDF performance",
-        )
     for r in timing:
-        data_cells, pdf_section = matching_table(r["condition"], timing=True)
+        data_cells = matching_table(r["condition"], timing=True)
         cells = [
             POLICY[r["policy"]],
             f"{int(r['calls']):,}",
@@ -126,11 +129,6 @@ def verify(root):
             f"{float(r['time_saved_pct']):.2f}",
         ]
         assert tuple(cells) in data_cells
-        assert tight("".join(cells)) in pdf_section, (
-            r["condition"],
-            r["policy"],
-            "PDF timing",
-        )
     setup = pages[index_pages["System Setup"] - 1 : index_pages[CHAPTERS[3]] - 1]
     setup_text = "".join(setup)
     frag = next(t for t in doc.tables if t.cell(0, 1).text == "원저자 열 이름")
@@ -140,13 +138,14 @@ def verify(root):
     assert tight(example(root)) in setup_text
     assert any(p.text == example(root) for p in doc.paragraphs)
     end = pages[index_pages[CHAPTERS[-1]] - 1]
-    labels = [
-        tight(s)
-        for s in ("이번 재실험의 결론", "11월 23일 보고서와의 비교", "참고문헌")
-    ]
+    labels = [tight(s) for s in ("이번 재실험의 결론", "참고문헌")]
     assert all(s in end for s in labels) and [end.index(s) for s in labels] == sorted(
         end.index(s) for s in labels
     )
+    for historical in ("11월23일", "이전보고서", "107,325"):
+        assert historical not in all_pdf and historical not in tight(
+            "".join(p.text for p in doc.paragraphs)
+        )
     assert all(len(s) > 35 for s in pages)
     qa = dest / "rendered"
     qa.mkdir(exist_ok=True)
@@ -164,7 +163,9 @@ def verify(root):
         json.dumps(
             {
                 "pages": len(pdf),
-                "tables": len(expected),
+                "tables": len(printed),
+                "source_tables": len(expected),
+                "max_columns": max(len(p.headers) for p in printed),
                 "cover_tables": 1,
                 "nov23_table_format": "PASS",
                 "neutral_rgb_all_pages": True,

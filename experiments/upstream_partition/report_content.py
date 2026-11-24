@@ -423,14 +423,27 @@ def build(root):
                     for n, r in rows.items()
                 ],
             )
+            if form == "original":
+                examples = check["examples_by_source_id"][k]["boost"]
+                if examples:
+                    para(
+                        "HGB 경계 재검사에서 조기 종료한 악성 주소의 원본 행 ID는 "
+                        + ", ".join(examples)
+                        + "이다. 같은 GRU를 단독으로 실행하면 이 주소들은 악성으로 탐지됐다."
+                    )
         joint = data("summary", "common-test")[g]
         para(
             f"두 표기의 공통 시험 URL은 {number(joint['common_n'])}건이다. "
             + (
-                "원본 ID·라벨·순서가 같아 위 두 표가 공통 URL 비교 결과이기도 하다."
+                "원본 ID·라벨·순서가 같아 각 표기에서 구한 전체 시험 결과가 공통 URL에서의 결과와 일치한다."
                 if joint["ordered_ids_equal"]
                 else "공통 대상에서 별도로 분기와 성능을 다시 계산한 값은 common-test.json에 기록했다."
             )
+        )
+        joint = data("summary", "common-test")[g]
+        retr = joint["stripped"]
+        para(
+            f"표기를 처음부터 통일하면 훈련 시 보던 특징 분포도 달라진다. 새 모델을 학습한 뒤 공통 시험 URL {number(joint['common_n'])}건에서 GRU 단독 재현율은 {pct(retr['gru']['recall'])}%, HGB 경계는 {pct(retr['boost_boundary']['recall'])}%였다."
         )
     for g in GROUP:
         page(f"{GROUP[g]} 분할에서 고정 모델의 접두 표기 시험")
@@ -482,12 +495,6 @@ def build(root):
             para(
                 f"GRU 단독은 접두어가 있던 주소 중 {number(flips['malicious_to_benign'])}건을 악성에서 정상으로, {number(flips['benign_to_malicious'])}건을 정상에서 악성으로 바꿨다. 이 주소들의 문자 토큰과 모델 가중치는 그대로였으므로 GRU 판정 차이는 수치 입력의 변화에서 생겼다."
             )
-        sub("접두 표기를 통일해 다시 학습한 경우")
-        joint = data("summary", "common-test")[g]
-        retr = joint["stripped"]
-        para(
-            f"표기를 처음부터 통일하면 훈련 시 보던 특징 분포도 달라진다. 새 모델을 학습한 뒤 공통 시험 URL {number(joint['common_n'])}건에서 GRU 단독 재현율은 {pct(retr['gru']['recall'])}%, HGB 경계는 {pct(retr['boost_boundary']['recall'])}%였다. 위 표의 접두어 제거 열은 원래 모델이 받는 입력만 바꾼 결과다."
-        )
     for g in GROUP:
         page(f"{GROUP[g]} 분할의 실제 처리 시간")
         for form in FORM:
@@ -549,15 +556,6 @@ def build(root):
     para(
         "단독 모델은 시험 URL 전체를 수치 특징만으로 판정해 GRU 호출이 0건이다. 캐스케이드는 분기 임계값 이상인 주소와 재검사에 선택된 주소를 GRU로 보내므로, 1단계 단독의 악성 미탐 수와 캐스케이드의 추가 미탐 수는 의미가 다르다."
     )
-    sub("조기 종료로 생긴 오류 사례")
-    for g in GROUP:
-        ids = check["examples_by_source_id"][g + "-original"]["boost"]
-        if ids:
-            para(
-                f"{GROUP[g]} 분할의 원래 표기에서 HGB 경계 재검사 후에도 정상으로 조기 종료한 악성 사례의 원본 행 ID는 "
-                + ", ".join(ids)
-                + "이다. 같은 GRU를 단독으로 적용하면 이 행들은 악성으로 탐지됐다."
-            )
     page("경량 분류기 단독과 표기 특징")
     rlist = []
     for g in GROUP:
@@ -593,6 +591,7 @@ def build(root):
     para(
         "단독 판정은 보정한 악성 확률 0.5 이상을 악성으로 본다. 통일 AP는 접두어를 제거한 URL에서 18개 특징을 다시 계산한 뒤 모델을 새로 적합한 결과다. 별도 열 제거 실험은 원래 표기에서 abnormal_url, 경로 /·// 횟수, https·http 횟수, 원문 길이, netloc 길이, 영문을 포함한 문자 수, 첫 디렉터리 길이의 9개 열을 제외하고 다시 학습했다."
     )
+    page("학습 원문 중복과 보조 기준선")
     diagnostic = []
     for group in GROUP:
         d = data(group + "-stripped", "controls-final")["stripped_collision_diagnostic"]
@@ -732,17 +731,11 @@ def build(root):
     sub("이번 재실험의 결론")
     para(sentence("random-original"))
     para(sentence("random-stripped"))
-    sub("11월 23일 보고서와의 비교")
+    para(sentence("domain-original"))
     para(
-        "11월 23일 보고서는 최종 모델 입력이 같은 행을 전역에서 제거했고, 표기 통일 때 충돌 그룹을 제외해 무작위 시험에서 345행이 더 빠져 107,325행을 평가했다. 이번에는 집합 안의 전처리 전체 문자열을 기준으로 첫 행만 남겼다. "
-        f"이번 접두 표기 통일 조건에서는 무작위 시험 {number(data('random-stripped', 'results')['policies']['gru']['n'])}행을 평가했다. 분할 전 모집단과 시험 대상이 달라져 두 날짜의 재현율이나 시간을 빼서 캐스케이드의 개선량으로 볼 수 없다."
-    )
-    old = data("random-stripped", "timing")["summary"]["boost_boundary"]
-    loss = data("random-stripped", "results")["policies"]["boost_boundary"][
-        "additional_misses"
-    ]
-    para(
-        f"이전 보고서에서는 표기 통일 후 HGB 경계 재검사로 호출이 줄어도 1,000건 처리 시간이 늘었다. 이번 같은 유형의 비교에서는 GRU 단독 대비 호출 {1000 - old['calls']}건 감소, 시간 {abs(old['time_saved_pct']):.2f}% {'감소' if old['time_saved_pct'] >= 0 else '증가'}, 전체 시험의 추가 미탐 {number(loss)}건을 관측했다. 같은 실험 안에서 세 수치를 함께 봐야 분기 비용을 판단할 수 있다."
+        "원래 표기에서는 무작위 분할과 등록 도메인 분할의 가장 빠른 구성이 달랐다. "
+        "처리 시간을 줄인 구성도 악성 주소를 추가로 놓쳤다. 적용 환경에서 허용할 미탐 수준을 정하고, "
+        "그 범위에서 분기 기준과 재검사 비율을 선택할 필요가 있다."
     )
     sub("참고문헌")
     para(

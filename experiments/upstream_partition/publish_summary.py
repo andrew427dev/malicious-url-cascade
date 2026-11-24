@@ -6,6 +6,7 @@ from pathlib import Path
 
 from report_content import CHAPTERS, POLICY, GROUP, read
 from feature_table import example
+from table_layout import present
 
 
 def build(root):
@@ -50,8 +51,9 @@ def build(root):
 
     def original_table(prefix):
         cap, heads, rows = next(t for t in tables if t[0].startswith(prefix))
-        sub(cap)
-        table(heads, rows)
+        for part in present(cap, heads, rows):
+            sub(part.caption)
+            table(part.headers, part.rows)
 
     tm = read(root / "random-original/timing.json")["summary"]
     policy = min((n for n in tm if n != "gru"), key=lambda n: tm[n]["ms"])
@@ -157,6 +159,12 @@ def build(root):
             p(args[0])
         elif tag == "sub":
             sub(args[0])
+    sub("11월 23일 보고서와 달라진 점")
+    n = read(root / "random-stripped/results.json")["policies"]["gru"]["n"]
+    p(
+        "11월 23일에는 전체 데이터에서 같은 모델 입력을 제거하고 접두어 통일 시 충돌 그룹을 제외했다. "
+        f"이번에는 각 집합에서 전처리한 전체 문자열이 같은 첫 행을 남겼다. 접두어 통일 후 무작위 시험 대상이 107,325건에서 {n:,}건으로 달라져 두 보고서 사이의 점수 차이로 캐스케이드의 개선량을 계산할 수 없다."
+    )
     sub("재실행과 자료 위치")
     p(
         "저장소 루트에서 python experiments/upstream_partition/run_study.py <새 출력 폴더>를 실행한다. 문서 생성과 검수 명령은 실험 코드의 README.md에 있다."
