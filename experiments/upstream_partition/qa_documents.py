@@ -6,6 +6,8 @@ import re
 from pathlib import Path
 
 from docx import Document
+from docx.oxml.ns import qn
+from make_report import numbered_sections
 import pymupdf
 from feature_table import FEATURE_ROWS, example
 from report_content import CHAPTERS
@@ -23,16 +25,21 @@ def verify(root):
     pages = [tight(p.get_text()) for p in pdf]
     assert len(pdf) >= 8 and len(doc.inline_shapes) == 1
     actual = [p.text for p in doc.paragraphs if p.style.name == "Heading 1"]
-    assert actual == CHAPTERS
-    index_pages = {}
-    for i, title in enumerate(CHAPTERS, 1):
-        hits = [n for n, s in enumerate(pages[1:], 2) if tight(title) in s]
-        assert len(hits) == 1, (title, hits)
-        p = hits[0]
-        assert tight(f"{i}{title}{p}") in pages[0], (title, p)
-        index_pages[title] = p
-    assert list(index_pages.values()) == sorted(index_pages.values())
+    assert actual == [f"{i}  {title}" for i, title in enumerate(CHAPTERS, 1)]
+    assert "컴퓨터보안팀프로젝트결과보고서" in pages[0]
+    assert "목차" in pages[1]
+    toc = re.sub(r"\.{2,}", "", pages[1])
     content = json.loads((dest / "content.json").read_text(encoding="utf8"))
+    index_pages = {}
+    for number, page in numbered_sections(content):
+        title = page["title"]
+        heading = tight(f"{number} {title}")
+        hits = [n for n, s in enumerate(pages[2:], 3) if s.startswith(str(n) + heading)]
+        assert len(hits) == 1, (title, hits)
+        n = hits[0]
+        assert heading + str(n) in toc, (title, n)
+        index_pages[title] = n
+    assert list(index_pages.values()) == sorted(index_pages.values())
     expected = [
         (caption, heads, rows)
         for page in content
@@ -40,9 +47,23 @@ def verify(root):
         if typ == "table"
         for caption, heads, rows in [payload]
     ]
-    assert len(doc.tables) == len(expected)
+    assert len(doc.tables) == 1 + len(expected)
+    assert doc.tables[0].cell(0, 0).text == "소속"
     all_pdf = "".join(pages)
-    for tab, (caption, headers, rows) in zip(doc.tables, expected):
+    for tab, (caption, headers, rows) in zip(doc.tables[1:], expected):
+        borders = tab._tbl.tblPr.find(qn("w:tblBorders"))
+        for side, color in (
+            ("top", "303030"),
+            ("bottom", "303030"),
+            ("insideH", "D6D6D6"),
+        ):
+            assert borders.find(qn("w:" + side)).get(qn("w:color")) == color
+        for side in ("left", "right", "insideV"):
+            assert borders.find(qn("w:" + side)).get(qn("w:val")) == "nil"
+        assert all(
+            cell._tc.tcPr.find(qn("w:shd")).get(qn("w:fill")) == "F1F1F1"
+            for cell in tab.rows[0].cells
+        )
         assert [[c.text for c in row.cells] for row in tab.rows] == [headers, *rows], (
             caption
         )
@@ -128,6 +149,8 @@ def verify(root):
             {
                 "pages": len(pdf),
                 "tables": len(expected),
+                "cover_tables": 1,
+                "nov23_table_format": "PASS",
                 "figures": 1,
                 "toc": index_pages,
                 "features": len(FEATURE_ROWS),

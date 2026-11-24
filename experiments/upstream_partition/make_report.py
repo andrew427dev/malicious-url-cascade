@@ -1,159 +1,172 @@
-"""Compose the Korean DOCX and semantic report content from the verified results."""
+"""Render this run's findings using the team's November 23 report format."""
 
 import argparse
 import json
 import os
+import re
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from docx import Document
 from docx.enum.table import WD_TABLE_ALIGNMENT, WD_CELL_VERTICAL_ALIGNMENT
-from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_TAB_ALIGNMENT
+from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_TAB_ALIGNMENT, WD_TAB_LEADER
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
-from docx.shared import Cm, Pt, RGBColor
+from docx.shared import Cm, Pt
+
 from diagram import draw
-from report_content import build, CHAPTERS
+from report_content import build
 
-FONT = "맑은 고딕"
-
-
-def font(run, size=None, bold=None):
-    run.font.name = FONT
-    run._element.get_or_add_rPr().rFonts.set(qn("w:eastAsia"), FONT)
-    if size:
-        run.font.size = Pt(size)
-    if bold is not None:
-        run.bold = bold
+HERE = Path(__file__).resolve().parent
 
 
 def field(p, instruction):
-    f = OxmlElement("w:fldSimple")
-    f.set(qn("w:instr"), instruction)
-    p._p.append(f)
+    el = OxmlElement("w:fldSimple")
+    el.set(qn("w:instr"), instruction)
+    p._p.append(el)
+
+
+def bookmark(p, index):
+    start = OxmlElement("w:bookmarkStart")
+    start.set(qn("w:id"), str(index))
+    start.set(qn("w:name"), f"section{index}")
+    p._p.insert(1, start)
+    end = OxmlElement("w:bookmarkEnd")
+    end.set(qn("w:id"), str(index))
+    p._p.append(end)
+
+
+def numbered_sections(pages):
+    chapter, subsection = 0, 0
+    for page in pages[1:]:
+        if page["chapter"]:
+            chapter += 1
+            subsection = 0
+            number = str(chapter)
+        else:
+            subsection += 1
+            number = f"{chapter}.{subsection}"
+        yield number, page
 
 
 def table(doc, caption, heads, rows):
-    p = doc.add_paragraph()
-    p.paragraph_format.space_before = Pt(7)
-    p.paragraph_format.space_after = Pt(4)
+    p = doc.add_paragraph(caption, style="Caption")
     p.paragraph_format.keep_with_next = True
-    font(p.add_run(caption), 10, True)
     count = len(heads)
     widths = {
         2: [0.43, 0.57],
         3: [0.34, 0.29, 0.37],
-        4: [0.27, 0.28, 0.22, 0.23],
+        4: [0.28, 0.28, 0.22, 0.22],
         5: [0.24, 0.16, 0.20, 0.20, 0.20],
-        6: [0.205, 0.125, 0.17, 0.15, 0.20, 0.15],
-        7: [0.165, 0.13, 0.14, 0.14, 0.14, 0.14, 0.145],
-        8: [0.18, 0.12, 0.12, 0.12, 0.11, 0.12, 0.13, 0.10],
+        6: [0.19, 0.14, 0.16, 0.15, 0.22, 0.14],
+        7: [0.17, 0.13, 0.14, 0.14, 0.14, 0.14, 0.14],
+        8: [0.165, 0.12, 0.12, 0.12, 0.11, 0.12, 0.14, 0.105],
     }[count]
     if heads[:2] == ["순서", "원저자 열 이름"]:
-        widths = [0.07, 0.26, 0.67]
+        widths = [0.068, 0.258, 0.674]
     elif heads[0] == "파일":
         widths = [0.43, 0.14, 0.14, 0.29]
     elif heads[0] == "단계":
-        widths = [0.64, 0.18, 0.18]
+        widths = [0.60, 0.20, 0.20]
+    elif heads[0] == "학습 블록":
+        widths = [0.17, 0.32, 0.17, 0.17, 0.17]
     tab = doc.add_table(rows=0, cols=count)
-    tab.style = "Table Grid"
     tab.alignment = WD_TABLE_ALIGNMENT.CENTER
     tab.autofit = False
     for col, w in zip(tab.columns, widths):
-        col.width = Cm(17.4 * w)
+        col.width = Cm(16 * w)
     borders = OxmlElement("w:tblBorders")
     for side in ("top", "left", "bottom", "right", "insideH", "insideV"):
         el = OxmlElement("w:" + side)
-        for k, v in {"val": "single", "sz": "4", "color": "D9D9D9"}.items():
-            el.set(qn("w:" + k), v)
+        if side in ("top", "bottom", "insideH"):
+            color, size = ("D6D6D6", "3") if side == "insideH" else ("303030", "7")
+            for k, v in {
+                "val": "single",
+                "sz": size,
+                "space": "0",
+                "color": color,
+            }.items():
+                el.set(qn("w:" + k), v)
+        else:
+            el.set(qn("w:val"), "nil")
         borders.append(el)
     tab._tbl.tblPr.append(borders)
+    numeric = [
+        all(re.fullmatch(r"[0-9.,%+−–—/ \-]+", str(row[j])) for row in rows)
+        for j in range(count)
+    ]
     for i, values in enumerate([heads, *rows]):
         row = tab.add_row()
         row._tr.get_or_add_trPr().append(OxmlElement("w:cantSplit"))
-        if not i:
+        if i == 0:
             row._tr.get_or_add_trPr().append(OxmlElement("w:tblHeader"))
         for j, (cell, value, w) in enumerate(zip(row.cells, values, widths)):
-            cell.width = Cm(17.4 * w)
+            cell.width = Cm(16 * w)
             cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
             if i == 0:
-                sh = OxmlElement("w:shd")
-                sh.set(qn("w:fill"), "E2EAF0")
-                cell._tc.get_or_add_tcPr().append(sh)
+                fill = OxmlElement("w:shd")
+                for k, v in {"val": "clear", "color": "auto", "fill": "F1F1F1"}.items():
+                    fill.set(qn("w:" + k), v)
+                cell._tc.get_or_add_tcPr().append(fill)
             p = cell.paragraphs[0]
-            fmt = p.paragraph_format
-            fmt.space_before = Pt(2)
-            fmt.space_after = Pt(2)
-            fmt.line_spacing = 1.08
-            if j and (
-                count >= 5 or heads[j] in ("정상", "악성", "남은 행", "이번 단계 제외")
-            ):
-                p.alignment = (
-                    WD_ALIGN_PARAGRAPH.RIGHT if i else WD_ALIGN_PARAGRAPH.CENTER
-                )
-            font(p.add_run(str(value)), 8.6 if count >= 7 else 9.1, i == 0)
+            p.style = "Cell"
+            if numeric[j]:
+                p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+            # Dense result matrices and the 18-feature table keep the same font and rules.
+            if count >= 6 or heads[:2] == ["순서", "원저자 열 이름"]:
+                p.paragraph_format.space_before = Pt(1)
+                p.paragraph_format.space_after = Pt(1)
+                p.paragraph_format.line_spacing = Pt(14)
+            p.add_run(str(value)).bold = i == 0
 
 
 def make(root, regular, bold):
-    from datetime import datetime, timedelta, timezone
-
-    written = datetime.now(timezone(timedelta(hours=9))).date()
     pages = build(root)
-    pages[0]["blocks"].insert(1, ("paragraph", f"작성일 {written.isoformat()}"))
-    directory = root / "report"
-    directory.mkdir(exist_ok=True)
-    (directory / "content.json").write_text(
+    dest = root / "report"
+    dest.mkdir(exist_ok=True)
+    (dest / "content.json").write_text(
         json.dumps(pages, ensure_ascii=False, indent=2), encoding="utf8"
     )
-    figure = directory / "cascade.png"
+    figure = dest / "cascade.png"
     draw(figure, regular, bold)
-    doc = Document()
-    sec = doc.sections[0]
-    sec.page_height = Cm(29.7)
-    sec.page_width = Cm(21)
-    sec.top_margin = Cm(2.15)
-    sec.bottom_margin = Cm(2.05)
-    sec.left_margin = Cm(1.8)
-    sec.right_margin = Cm(1.8)
-    sec.header_distance = Cm(0.9)
-    sec.footer_distance = Cm(0.9)
-    for name in ("Normal", "Title", "Heading 1", "Heading 2"):
-        style = doc.styles[name]
-        style.font.name = FONT
-        style._element.get_or_add_rPr().rFonts.set(qn("w:eastAsia"), FONT)
-        style.font.color.rgb = RGBColor.from_string(
-            "142735" if name == "Normal" else "111111"
+    doc = Document(HERE / "nov23-format.docx")
+    # The reference uses Calibri for Latin headings and Malgun Gothic for Korean.
+    for name in ("Title", "Heading 1", "Heading 2"):
+        fonts = doc.styles[name].element.get_or_add_rPr().rFonts
+        for k in ("asciiTheme", "hAnsiTheme", "eastAsiaTheme", "cstheme"):
+            fonts.attrib.pop(qn("w:" + k), None)
+        for k, v in (
+            ("ascii", "Calibri"),
+            ("hAnsi", "Calibri"),
+            ("eastAsia", "맑은 고딕"),
+        ):
+            fonts.set(qn("w:" + k), v)
+    written = datetime.now(timezone(timedelta(hours=9))).date()
+    doc.paragraphs[1].text = "원저자 전처리 기준\n악성 URL 탐지 재실험"
+    doc.paragraphs[
+        2
+    ].text = f"같은 GRU를 사용한 경량 분류기의 선택적 검사  ·  {written.isoformat()}"
+    toc = doc.add_paragraph("목차")
+    toc.paragraph_format.page_break_before = True
+    toc.paragraph_format.space_after = Pt(13)
+    toc.paragraph_format.line_spacing = Pt(33)
+    toc.runs[0].bold = True
+    toc.runs[0].font.size = Pt(23)
+    sections = list(numbered_sections(pages))
+    for i, (number, page) in enumerate(sections, 1):
+        p = doc.add_paragraph(style="toc 1" if page["chapter"] else "toc 2")
+        p.paragraph_format.tab_stops.add_tab_stop(
+            Cm(15.9), WD_TAB_ALIGNMENT.RIGHT, WD_TAB_LEADER.DOTS
         )
-    for border in doc.styles["Title"]._element.xpath(".//w:pBdr"):
-        border.getparent().remove(border)
-    normal = doc.styles["Normal"]
-    normal.font.size = Pt(10.5)
-    normal.paragraph_format.space_after = Pt(7)
-    normal.paragraph_format.line_spacing = 1.3
-    for name, sz in (("Title", 29), ("Heading 1", 21), ("Heading 2", 15)):
-        s = doc.styles[name]
-        s.font.size = Pt(sz)
-        s.font.bold = True
-        s.paragraph_format.space_before = Pt(0)
-        s.paragraph_format.space_after = Pt(10)
-    header = sec.header.paragraphs[0]
-    font(header.add_run("컴퓨터보안 팀프로젝트   /   악성 URL 탐지"), 8.5)
-    footer = sec.footer.paragraphs[0]
-    footer.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    field(footer, "PAGE")
-    for i, page in enumerate(pages):
+        p.add_run(number + "  " + page["title"] + "\t")
+        field(p, f"PAGEREF section{i} \\h")
+    for i, (number, page) in enumerate(sections, 1):
         p = doc.add_paragraph(
-            style="Title" if i == 0 else "Heading 1" if page["chapter"] else "Heading 2"
+            number + "  " + page["title"],
+            style="Heading 1" if page["chapter"] else "Heading 2",
         )
-        p.paragraph_format.page_break_before = bool(i)
-        p.add_run(page["title"])
-        if page["chapter"]:
-            tag = OxmlElement("w:bookmarkStart")
-            tag.set(qn("w:id"), str(i))
-            tag.set(qn("w:name"), f"chapter{CHAPTERS.index(page['title']) + 1}")
-            p._p.insert(1, tag)
-            end = OxmlElement("w:bookmarkEnd")
-            end.set(qn("w:id"), str(i))
-            p._p.append(end)
+        p.paragraph_format.page_break_before = True
+        bookmark(p, i)
         for tag, *values in page["blocks"]:
             if tag == "paragraph":
                 doc.add_paragraph(values[0])
@@ -162,26 +175,17 @@ def make(root, regular, bold):
             elif tag == "figure":
                 p = doc.add_paragraph()
                 p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-                p.add_run().add_picture(str(figure), width=Cm(17.2))
-                font(doc.add_paragraph().add_run(values[0]), 10, True)
-            elif tag == "subtitle":
-                font(doc.add_paragraph().add_run(values[0]), 14)
-            elif tag == "sub":
-                p = doc.add_paragraph()
-                p.paragraph_format.space_before = Pt(8)
+                p.paragraph_format.line_spacing = 1
                 p.paragraph_format.keep_with_next = True
-                font(p.add_run(values[0]), 12, True)
-            elif tag == "toc":
-                for n, title in enumerate(values[0], 1):
-                    p = doc.add_paragraph()
-                    p.paragraph_format.tab_stops.add_tab_stop(
-                        Cm(16.5), WD_TAB_ALIGNMENT.RIGHT
-                    )
-                    font(p.add_run(f"{n}   {title}\t"), 10)
-                    field(p, f"PAGEREF chapter{n} \\h")
+                p.add_run().add_picture(str(figure), width=Cm(16))
+                doc.add_paragraph(values[0], style="Caption")
+            elif tag == "sub":
+                doc.add_paragraph(values[0], style="Minor heading")
+            else:
+                raise ValueError(f"Unexpected body block {tag}")
     doc.core_properties.title = pages[0]["title"]
     doc.core_properties.author = "컴퓨터보안 팀프로젝트"
-    doc.save(directory / "원저자 전처리 기준 악성 URL 탐지 재실험 보고서.docx")
+    doc.save(dest / "원저자 전처리 기준 악성 URL 탐지 재실험 보고서.docx")
 
 
 if __name__ == "__main__":

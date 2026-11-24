@@ -30,14 +30,19 @@ def build(root):
 
     def table(heads, rows):
         def tr(row, cell):
+            style = "border-bottom:1px solid #d6d6d6;padding:4px;color:#161616"
+            if cell == "th":
+                style += ";background-color:#f1f1f1"
             return (
                 "<tr>"
-                + "".join(f"<{cell}>{escape(str(c))}</{cell}>" for c in row)
+                + "".join(
+                    f'<{cell} style="{style}">{escape(str(c))}</{cell}>' for c in row
+                )
                 + "</tr>"
             )
 
         body.append(
-            "<table>"
+            '<table style="border-collapse:collapse;border-top:1px solid #303030;border-bottom:1px solid #303030">'
             + tr(heads, "th")
             + "".join(tr(r, "td") for r in rows)
             + "</table>"
