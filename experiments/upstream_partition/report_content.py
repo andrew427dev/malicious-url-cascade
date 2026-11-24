@@ -657,7 +657,7 @@ def build(root):
             if identical
             else "탐지 성능은 공통 행에서 비교했다. "
         )
-        + "시간은 같은 1,000건의 5회 중앙값이고 추가 미탐은 각 표기의 GRU 단독 대비 건수다. 7개 구성 전체의 성능·시간은 결과 파일 summary/performance.csv와 summary/timing.csv에 있다."
+        + "시간은 같은 1,000건의 5회 중앙값이고 추가 미탐은 각 표기의 GRU 단독 대비 건수다. 저장소의 evidence/upstream-partition-20261124 아래 summary/performance.csv와 summary/timing.csv에 7개 구성의 전체 성능과 시간이 있다. 재학습 모델의 행별 점수와 라벨은 random-stripped와 domain-stripped 폴더의 scores.npz와 test-rows.csv.gz에 보관했다."
     )
     page(CHAPTERS[5], True)
     table(
