@@ -1,0 +1,42 @@
+[
+  {
+    "model": "author-validation",
+    "notebook_cell": 13,
+    "published_predictions": [
+      "Safe",
+      "Malicious",
+      "Safe"
+    ],
+    "new_predictions": [
+      "Safe",
+      "Malicious",
+      "Safe"
+    ]
+  },
+  {
+    "model": "author-final",
+    "notebook_cell": 16,
+    "published_predictions": [
+      "Safe",
+      "Malicious",
+      "Safe"
+    ],
+    "new_predictions": [
+      "Safe",
+      "Malicious",
+      "Safe"
+    ]
+  },
+  {
+    "model": "author-final",
+    "notebook_cell": 24,
+    "published_predictions": [
+      "Safe",
+      "Malicious"
+    ],
+    "new_predictions": [
+      "Safe",
+      "Malicious"
+    ]
+  }
+]

@@ -286,10 +286,48 @@ def main():
     write_json(out / "common-test.json", common)
     for role in ("validation", "external"):
         with np.load(ROOT / "author-validation" / (role + "-scores.npz")) as z:
-            r = metrics(z["y"], z["gru"], z["gru"] > 0.5)
-            saved = read(ROOT / "author-validation/results.json")[role]
+            from sklearn.metrics import precision_recall_fscore_support
+
+            outdir = ROOT / "author-validation"
+            manifest = pd.read_csv(outdir / (role + "-rows.csv.gz"))
+            np.testing.assert_array_equal(manifest.id, z["id"])
+            np.testing.assert_array_equal(manifest.y_mal, z["y"])
+            np.testing.assert_array_equal(
+                np.sort(z["evaluation_order"]), np.arange(len(manifest))
+            )
+            prediction = z["gru"] > 0.5
+            r = metrics(z["y"], z["gru"], prediction)
+            record = read(outdir / "results.json")
+            saved = record[role]
             for k, v in r.items():
                 close(saved[k], v)
+            weighted = precision_recall_fscore_support(
+                z["y"], prediction, average="weighted", zero_division=0
+            )[:3]
+            close(
+                weighted,
+                [
+                    saved[k]
+                    for k in ("weighted_precision", "weighted_recall", "weighted_f1")
+                ],
+            )
+            if role == "external":
+                urls = pd.read_pickle(outdir / "external.pkl").url
+                known = set(pd.read_pickle(outdir / "train.pkl").url) | set(
+                    pd.read_pickle(outdir / "validation.pkl").url
+                )
+                unseen = ~urls.isin(known).to_numpy()
+                stored = record["external_without_exact_training_or_validation_url"]
+                positive = unseen & (z["y"] == 1)
+                negative = unseen & (z["y"] == 0)
+                assert [int(mask.sum()) for mask in (unseen, positive, negative)] == [
+                    stored[k] for k in ("n", "malicious", "benign")
+                ]
+                close(prediction[positive].mean(), stored["malicious_recall"])
+                if negative.any():
+                    close(prediction[negative].mean(), stored["fpr"])
+                else:
+                    assert stored["fpr"] is None
     for k in ("author-final", "author-validation"):
         rec = read(ROOT / k / "trained.json")
         assert (

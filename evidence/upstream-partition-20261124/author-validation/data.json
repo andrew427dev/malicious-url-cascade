@@ -1,0 +1,57 @@
+{
+  "stages": {
+    "train": {
+      "before": {
+        "rows": 627434,
+        "malicious": 282604,
+        "benign": 344830
+      },
+      "after": {
+        "rows": 620190,
+        "malicious": 278791,
+        "benign": 341399
+      },
+      "removed": 7244
+    },
+    "validation": {
+      "before": {
+        "rows": 156859,
+        "malicious": 70651,
+        "benign": 86208
+      },
+      "after": {
+        "rows": 156334,
+        "malicious": 70394,
+        "benign": 85940
+      },
+      "removed": 525
+    },
+    "external": {
+      "before": {
+        "rows": 507195,
+        "malicious": 114299,
+        "benign": 392896
+      },
+      "after": {
+        "rows": 499317,
+        "malicious": 106623,
+        "benign": 392694
+      },
+      "removed": 7878
+    }
+  },
+  "overlaps": {
+    "train/validation": {
+      "url": 1,
+      "text": 3313
+    },
+    "train/external": {
+      "url": 348432,
+      "text": 351948
+    },
+    "validation/external": {
+      "url": 87383,
+      "text": 88818
+    }
+  }
+}

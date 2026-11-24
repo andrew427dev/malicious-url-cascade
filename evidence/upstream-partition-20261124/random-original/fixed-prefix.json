@@ -1,0 +1,242 @@
+{
+  "stripped": {
+    "gru": {
+      "n": 112984,
+      "tn": 56556,
+      "fp": 893,
+      "fn": 6761,
+      "tp": 48774,
+      "accuracy": 0.9322558946399491,
+      "precision": 0.9820202548976181,
+      "recall": 0.8782569550733772,
+      "f1": 0.9272447291876581,
+      "pr_auc_ap": 0.9897269537484347,
+      "roc_auc": 0.9895487419398077,
+      "fpr": 0.015544221831537537,
+      "t2_calls": 112984,
+      "t2_call_rate": 1.0,
+      "additional_misses": 0,
+      "recall_loss": 0.0
+    },
+    "logistic_basic": {
+      "tau": 0.05,
+      "rechecks": 0,
+      "n": 112984,
+      "tn": 56598,
+      "fp": 851,
+      "fn": 7350,
+      "tp": 48185,
+      "accuracy": 0.927414501168307,
+      "precision": 0.9826454033771107,
+      "recall": 0.8676510308814261,
+      "f1": 0.9215748151973301,
+      "pr_auc_ap": 0.9836463286785542,
+      "roc_auc": 0.9781687906312662,
+      "fpr": 0.014813138609897475,
+      "t2_calls": 104238,
+      "t2_call_rate": 0.9225908093181335,
+      "additional_misses": 589,
+      "recall_loss": 0.010605924191951022,
+      "recovered_malicious": 0,
+      "new_false_positives": 0
+    },
+    "logistic_random": {
+      "tau": 0.05,
+      "rechecks": 437,
+      "n": 112984,
+      "tn": 56596,
+      "fp": 853,
+      "fn": 7322,
+      "tp": 48213,
+      "accuracy": 0.9276446222473979,
+      "precision": 0.9826152529246321,
+      "recall": 0.8681552174304492,
+      "f1": 0.9218458714543838,
+      "pr_auc_ap": 0.9839178413941195,
+      "roc_auc": 0.9786318379008956,
+      "fpr": 0.014847952096642239,
+      "t2_calls": 104675,
+      "t2_call_rate": 0.9264586136090066,
+      "additional_misses": 561,
+      "recall_loss": 0.010101737642927884,
+      "recovered_malicious": 28,
+      "new_false_positives": 2
+    },
+    "logistic_boundary": {
+      "tau": 0.05,
+      "rechecks": 437,
+      "n": 112984,
+      "tn": 56592,
+      "fp": 857,
+      "fn": 7309,
+      "tp": 48226,
+      "accuracy": 0.9277242795440063,
+      "precision": 0.9825397795570768,
+      "recall": 0.8683893040424957,
+      "f1": 0.9219445984438625,
+      "pr_auc_ap": 0.9841059678574342,
+      "roc_auc": 0.9789944527904366,
+      "fpr": 0.014917579070131769,
+      "t2_calls": 104675,
+      "t2_call_rate": 0.9264586136090066,
+      "additional_misses": 548,
+      "recall_loss": 0.009867651030881426,
+      "recovered_malicious": 41,
+      "new_false_positives": 6
+    },
+    "boost_basic": {
+      "tau": 0.05,
+      "rechecks": 0,
+      "n": 112984,
+      "tn": 56748,
+      "fp": 701,
+      "fn": 8779,
+      "tp": 46756,
+      "accuracy": 0.9160943142391843,
+      "precision": 0.9852287333796911,
+      "recall": 0.841919510218781,
+      "f1": 0.907954015845891,
+      "pr_auc_ap": 0.9632468659286136,
+      "roc_auc": 0.9520585765264891,
+      "fpr": 0.012202127104040105,
+      "t2_calls": 75258,
+      "t2_call_rate": 0.6660943142391843,
+      "additional_misses": 2018,
+      "recall_loss": 0.0363374448545962,
+      "recovered_malicious": 0,
+      "new_false_positives": 0
+    },
+    "boost_random": {
+      "tau": 0.05,
+      "rechecks": 1886,
+      "n": 112984,
+      "tn": 56741,
+      "fp": 708,
+      "fn": 8688,
+      "tp": 46847,
+      "accuracy": 0.9168377823408624,
+      "precision": 0.9851119756071917,
+      "recall": 0.8435581165031062,
+      "f1": 0.9088563391211564,
+      "pr_auc_ap": 0.9643753118149044,
+      "roc_auc": 0.9527812278131902,
+      "fpr": 0.012323974307646783,
+      "t2_calls": 77144,
+      "t2_call_rate": 0.6827869432840048,
+      "additional_misses": 1927,
+      "recall_loss": 0.034698838570271,
+      "recovered_malicious": 91,
+      "new_false_positives": 7
+    },
+    "boost_boundary": {
+      "tau": 0.05,
+      "rechecks": 1886,
+      "n": 112984,
+      "tn": 56733,
+      "fp": 716,
+      "fn": 8488,
+      "tp": 47047,
+      "accuracy": 0.918537138001841,
+      "precision": 0.9850093168352072,
+      "recall": 0.8471594489961286,
+      "f1": 0.9108985653158822,
+      "pr_auc_ap": 0.9674726596108678,
+      "roc_auc": 0.957382783562937,
+      "fpr": 0.012463228254625843,
+      "t2_calls": 77144,
+      "t2_call_rate": 0.6827869432840048,
+      "additional_misses": 1727,
+      "recall_loss": 0.031097506077248583,
+      "recovered_malicious": 291,
+      "new_false_positives": 15
+    }
+  },
+  "pairs": {
+    "with_prefix": {
+      "rows": 47780,
+      "malicious": 42393,
+      "token_changes": 0,
+      "numeric_changes": 47780,
+      "flips": {
+        "gru": {
+          "changed": 5859,
+          "malicious_to_benign": 5859,
+          "benign_to_malicious": 0
+        },
+        "logistic_basic": {
+          "changed": 6264,
+          "malicious_to_benign": 6264,
+          "benign_to_malicious": 0
+        },
+        "logistic_random": {
+          "changed": 6247,
+          "malicious_to_benign": 6247,
+          "benign_to_malicious": 0
+        },
+        "logistic_boundary": {
+          "changed": 6238,
+          "malicious_to_benign": 6238,
+          "benign_to_malicious": 0
+        },
+        "boost_basic": {
+          "changed": 7362,
+          "malicious_to_benign": 7353,
+          "benign_to_malicious": 9
+        },
+        "boost_random": {
+          "changed": 7305,
+          "malicious_to_benign": 7296,
+          "benign_to_malicious": 9
+        },
+        "boost_boundary": {
+          "changed": 7142,
+          "malicious_to_benign": 7134,
+          "benign_to_malicious": 8
+        }
+      }
+    },
+    "without_prefix": {
+      "rows": 65204,
+      "malicious": 13142,
+      "token_changes": 0,
+      "numeric_changes": 0,
+      "flips": {
+        "gru": {
+          "changed": 0,
+          "malicious_to_benign": 0,
+          "benign_to_malicious": 0
+        },
+        "logistic_basic": {
+          "changed": 0,
+          "malicious_to_benign": 0,
+          "benign_to_malicious": 0
+        },
+        "logistic_random": {
+          "changed": 1,
+          "malicious_to_benign": 0,
+          "benign_to_malicious": 1
+        },
+        "logistic_boundary": {
+          "changed": 6,
+          "malicious_to_benign": 0,
+          "benign_to_malicious": 6
+        },
+        "boost_basic": {
+          "changed": 0,
+          "malicious_to_benign": 0,
+          "benign_to_malicious": 0
+        },
+        "boost_random": {
+          "changed": 0,
+          "malicious_to_benign": 0,
+          "benign_to_malicious": 0
+        },
+        "boost_boundary": {
+          "changed": 5,
+          "malicious_to_benign": 5,
+          "benign_to_malicious": 0
+        }
+      }
+    }
+  }
+}

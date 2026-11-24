@@ -1,0 +1,72 @@
+{
+  "status": "PASS",
+  "examples_by_source_id": {
+    "random-original": {
+      "logistic": [
+        "df_another_validation.csv:100625",
+        "df_another_validation.csv:101084",
+        "df_another_validation.csv:101688"
+      ],
+      "boost": [
+        "df_another_validation.csv:101012",
+        "df_another_validation.csv:102525",
+        "df_another_validation.csv:10260"
+      ]
+    },
+    "random-stripped": {
+      "logistic": [
+        "df_another_validation.csv:115273",
+        "df_another_validation.csv:117684",
+        "df_another_validation.csv:12343"
+      ],
+      "boost": [
+        "df_another_validation.csv:102525",
+        "df_another_validation.csv:105761",
+        "df_another_validation.csv:106997"
+      ]
+    },
+    "domain-original": {
+      "logistic": [
+        "df_another_validation.csv:100568",
+        "df_another_validation.csv:100625",
+        "df_another_validation.csv:100770"
+      ],
+      "boost": [
+        "df_another_validation.csv:120312",
+        "df_another_validation.csv:121122",
+        "df_another_validation.csv:125302"
+      ]
+    },
+    "domain-stripped": {
+      "logistic": [
+        "df_another_validation.csv:100568",
+        "df_another_validation.csv:100625",
+        "df_another_validation.csv:109727"
+      ],
+      "boost": [
+        "df_another_validation.csv:120312",
+        "df_another_validation.csv:120631",
+        "df_another_validation.csv:123464"
+      ]
+    }
+  },
+  "primary_rows": 28,
+  "timed_batches": 140,
+  "platform": "Windows-10-10.0.26100-SP0",
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7800X3D 8-Core Processor",
+    "operating_system": "Windows 11"
+  },
+  "python": "3.10.18",
+  "packages": {
+    "tensorflow": "2.12.0",
+    "keras": "2.12.0",
+    "numpy": "1.23.5",
+    "pandas": "1.5.3",
+    "scikit-learn": "1.2.2",
+    "tldextract": "5.4.0",
+    "h5py": "3.16.0",
+    "scipy": "1.15.3",
+    "joblib": "1.6.0"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "sources": {
+    "df_final.csv": {
+      "rows": 781332,
+      "malicious": 353255,
+      "benign": 428077
+    },
+    "all_top_domains_merged.csv": {
+      "rows": 2961,
+      "malicious": 0,
+      "benign": 2961
+    },
+    "df_another_validation.csv": {
+      "rows": 507195,
+      "malicious": 114299,
+      "benign": 392896
+    }
+  },
+  "combined": {
+    "rows": 1291488,
+    "malicious": 467554,
+    "benign": 823934
+  },
+  "nonmissing": {
+    "rows": 1291488,
+    "malicious": 467554,
+    "benign": 823934
+  },
+  "exact_conflicting_urls": 96007,
+  "conflict_rows": {
+    "rows": 192014,
+    "malicious": 96007,
+    "benign": 96007
+  },
+  "after_conflicts": {
+    "rows": 1099474,
+    "malicious": 371547,
+    "benign": 727927
+  },
+  "after_exact_duplicates": {
+    "rows": 754678,
+    "malicious": 371547,
+    "benign": 383131
+  },
+  "missing_host_group_rows": 3
+}

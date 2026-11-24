@@ -473,6 +473,15 @@ def build(root):
         para(
             f"¹ 원래 접두어가 있던 주소에서의 모델 판정 전환 건수다. ² 처음부터 접두어가 없던 {number(no['rows'])}건에서 바뀐 판정 수다. 이 집단에서 토큰 변화는 {number(no['token_changes'])}건, 수치 변화는 {number(no['numeric_changes'])}건이었다. 재검사는 전체 후보의 순위와 예산에 따라 대상을 정하므로 다른 행의 점수 변화도 영향을 줄 수 있다."
         )
+        if (
+            h["token_changes"] == 0
+            and h["numeric_changes"]
+            and h["flips"]["gru"]["changed"]
+        ):
+            flips = h["flips"]["gru"]
+            para(
+                f"GRU 단독은 접두어가 있던 주소 중 {number(flips['malicious_to_benign'])}건을 악성에서 정상으로, {number(flips['benign_to_malicious'])}건을 정상에서 악성으로 바꿨다. 이 주소들의 문자 토큰과 모델 가중치는 그대로였으므로 GRU 판정 차이는 수치 입력의 변화에서 생겼다."
+            )
         sub("접두 표기를 통일해 다시 학습한 경우")
         joint = data("summary", "common-test")[g]
         retr = joint["stripped"]

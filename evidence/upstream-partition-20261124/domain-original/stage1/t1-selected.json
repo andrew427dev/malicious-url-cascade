@@ -1,0 +1,101 @@
+{
+  "selection": {
+    "logistic": {
+      "entries": [
+        {
+          "setting": 0.1,
+          "validation_ap": 0.9486006910477466
+        },
+        {
+          "setting": 1.0,
+          "validation_ap": 0.9482348592210952
+        },
+        {
+          "setting": 10.0,
+          "validation_ap": 0.9481899998488365
+        }
+      ],
+      "winner": 0.1,
+      "validation_calibration": {
+        "before": {
+          "brier": 0.08714117724994723,
+          "logloss": 0.2941987567658496
+        },
+        "sigmoid": {
+          "brier": 0.09566391059790562,
+          "logloss": 0.3276620087438247
+        }
+      }
+    },
+    "boost": {
+      "entries": [
+        {
+          "setting": 7,
+          "validation_ap": 0.9634536949099213
+        },
+        {
+          "setting": 15,
+          "validation_ap": 0.9653670281199245
+        },
+        {
+          "setting": 31,
+          "validation_ap": 0.9668902254832836
+        }
+      ],
+      "winner": 31,
+      "validation_calibration": {
+        "before": {
+          "brier": 0.07649855306051079,
+          "logloss": 0.23962428207516057
+        },
+        "sigmoid": {
+          "brier": 0.06669396080467098,
+          "logloss": 0.22326044214733037
+        }
+      }
+    }
+  },
+  "supplemental": {
+    "logistic_omit_selection": {
+      "entries": [
+        {
+          "setting": 0.1,
+          "validation_ap": 0.8538163413198392
+        },
+        {
+          "setting": 1.0,
+          "validation_ap": 0.8538280394290193
+        },
+        {
+          "setting": 10.0,
+          "validation_ap": 0.8538285598600432
+        }
+      ],
+      "winner": 10.0
+    },
+    "boost_omit_selection": {
+      "entries": [
+        {
+          "setting": 7,
+          "validation_ap": 0.877138739570705
+        },
+        {
+          "setting": 15,
+          "validation_ap": 0.8799379845502493
+        },
+        {
+          "setting": 31,
+          "validation_ap": 0.8814568913447696
+        }
+      ],
+      "winner": 31
+    }
+  },
+  "hashes": {
+    "boost-omit": "572cfbf785cf9c152b80469355d39b26d29f1d3d03bac89478a858c69918c356",
+    "boost": "f69347322a2973a76bf8f2327bb8274cf13c913fe41a9dc4064888622092bbfc",
+    "length": "d681390f3ca9f3ab00b588c885ca9dd9656712bc41b425508248188c9a6a0665",
+    "logistic-omit": "dc1281895af74d5dfa20382892cfb9ba36f7135e065c96f27b026108815d461f",
+    "logistic": "6d96d14356de01fcfd072386cf83a021ca6c5a65d53fe1fe10304d61ef73c07f"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "pages": 21,
+  "tables": 25,
+  "figures": 1,
+  "toc": {
+    "Introduction & Motivation": 2,
+    "Original Work Summary": 3,
+    "System Setup": 5,
+    "Experiments (highlighting your extension settings)": 8,
+    "Results & Discussion (highlighting your results)": 10,
+    "Limitations & Future Work": 20,
+    "Conclusion and References": 21
+  },
+  "features": 18,
+  "example": "PASS",
+  "table_cells_match": true
+}

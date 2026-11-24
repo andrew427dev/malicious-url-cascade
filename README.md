@@ -4,7 +4,9 @@
 
 학습·검증·시험에 배정한 뒤 각 집합 안에서 전처리 문자열이 같은 첫 행을 남긴다. 무작위 분할과 등록 도메인 분할 각각에서 같은 GRU의 단독 성능과 1단계 분기를 추가한 성능을 비교한다.
 
-[실험 조건과 재실행 방법](experiments/upstream_partition/README.md)
+원래 표기의 무작위 시험에서 HGB 경계 5% 재검사는 1,000건 처리 중앙값을 42.31 ms에서 38.59 ms로 줄였고, 전체 시험 112,984건에서 악성을 451건 더 놓쳤다. 등록 도메인 분할에서 같은 구성은 7.64% 느렸고 악성을 46건 더 놓쳤다.
+
+[한국어 보고서 PDF](docs/upstream-partition-20261124/report-ko.pdf) · [Word](docs/upstream-partition-20261124/report-ko.docx) · [성능·실측 시간과 행 목록](evidence/upstream-partition-20261124/README.md) · [실험 조건과 재실행 방법](experiments/upstream_partition/README.md)
 
 ## 2026-11-16 정제 데이터 재실험
 

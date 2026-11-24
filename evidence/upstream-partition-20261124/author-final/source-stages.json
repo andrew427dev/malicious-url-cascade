@@ -1,0 +1,18 @@
+{
+  "shuffled": {
+    "rows": 1291488,
+    "malicious": 467554,
+    "benign": 823934
+  },
+  "exact_row_unique": {
+    "rows": 946692,
+    "malicious": 467554,
+    "benign": 479138
+  },
+  "nonmissing": {
+    "rows": 946692,
+    "malicious": 467554,
+    "benign": 479138
+  },
+  "conflicting_raw_urls": 96007
+}

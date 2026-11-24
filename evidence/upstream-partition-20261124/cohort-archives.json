@@ -1,0 +1,108 @@
+[
+  {
+    "file": "author-validation.zip",
+    "size": 170018002,
+    "sha256": "4057cb01fe7876e14f80d4191d3e046b4f6e76df15393ee79661fc2bdd3a1a18",
+    "roles": {
+      "train": {
+        "rows": 620190,
+        "malicious": 278791
+      },
+      "validation": {
+        "rows": 156334,
+        "malicious": 70394
+      },
+      "external": {
+        "rows": 499317,
+        "malicious": 106623
+      }
+    }
+  },
+  {
+    "file": "author-final.zip",
+    "size": 113532539,
+    "sha256": "49b0d1346eeefbce58b741915cc1c956d33f1134b3e8d3260881285275c337dc",
+    "roles": {
+      "train": {
+        "rows": 834061,
+        "malicious": 405630
+      }
+    }
+  },
+  {
+    "file": "random-original.zip",
+    "size": 102644376,
+    "sha256": "65658a35472c85bad885ed437c2081e5382890b1111db5bfe4dd190bcd1ea4eb",
+    "roles": {
+      "train": {
+        "rows": 523411,
+        "malicious": 255572
+      },
+      "validation": {
+        "rows": 112958,
+        "malicious": 55511
+      },
+      "test": {
+        "rows": 112984,
+        "malicious": 55535
+      }
+    }
+  },
+  {
+    "file": "random-stripped.zip",
+    "size": 100752226,
+    "sha256": "0389919e7f71fe90af1fe8f124be9d3d9daf7052504bef0d8ccecc1977ea5391",
+    "roles": {
+      "train": {
+        "rows": 523411,
+        "malicious": 255572
+      },
+      "validation": {
+        "rows": 112958,
+        "malicious": 55511
+      },
+      "test": {
+        "rows": 112984,
+        "malicious": 55535
+      }
+    }
+  },
+  {
+    "file": "domain-original.zip",
+    "size": 100827872,
+    "sha256": "222a41059f366d17cce6458782b08f9d0002ac2348b962e9e1c0f0026f5cd6c9",
+    "roles": {
+      "train": {
+        "rows": 529282,
+        "malicious": 256990
+      },
+      "validation": {
+        "rows": 109701,
+        "malicious": 51211
+      },
+      "test": {
+        "rows": 106156,
+        "malicious": 54507
+      }
+    }
+  },
+  {
+    "file": "domain-stripped.zip",
+    "size": 98975864,
+    "sha256": "4efaa374779f7823773a6fdb76cf108119baa82f5cc417a272ecef7cbfdc52c9",
+    "roles": {
+      "train": {
+        "rows": 529282,
+        "malicious": 256990
+      },
+      "validation": {
+        "rows": 109701,
+        "malicious": 51211
+      },
+      "test": {
+        "rows": 106156,
+        "malicious": 54507
+      }
+    }
+  }
+]

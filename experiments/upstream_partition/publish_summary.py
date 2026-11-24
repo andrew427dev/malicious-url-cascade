@@ -101,6 +101,12 @@ def build(root):
     h(CHAPTERS[4])
     for n in range(7, 18):
         original_table(f"표 {n}.")
+    for group in GROUP:
+        paired = read(root / (group + "-original") / "fixed-prefix.json")["pairs"]
+        yes, no = paired["with_prefix"], paired["without_prefix"]
+        p(
+            f"{GROUP[group]} 분할의 고정 모델에서 처음부터 접두어가 있던 {yes['rows']:,}건 중 문자 토큰은 {yes['token_changes']:,}건, 수치 입력은 {yes['numeric_changes']:,}건 바뀌었다. GRU 단독의 판정은 {yes['flips']['gru']['changed']:,}건 뒤집혔다. 처음부터 접두어가 없던 {no['rows']:,}건에서는 GRU 판정이 {no['flips']['gru']['changed']:,}건 바뀌었다."
+        )
     original_table("1단계 단독")
     original_table("표 18.")
     original_table("접두어 제거 후 학습 원문")
