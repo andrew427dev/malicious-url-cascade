@@ -1,0 +1,18 @@
+{
+  "stages": {
+    "train": {
+      "before": {
+        "rows": 946692,
+        "malicious": 467554,
+        "benign": 479138
+      },
+      "after": {
+        "rows": 834061,
+        "malicious": 405630,
+        "benign": 428431
+      },
+      "removed": 112631
+    }
+  },
+  "overlaps": {}
+}

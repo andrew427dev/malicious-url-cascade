@@ -1,0 +1,2 @@
+*.json -text whitespace=trailing-space,space-before-tab,cr-at-eol
+*.csv -text whitespace=trailing-space,space-before-tab,cr-at-eol

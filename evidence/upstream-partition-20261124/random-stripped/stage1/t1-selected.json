@@ -1,0 +1,64 @@
+{
+  "selection": {
+    "logistic": {
+      "entries": [
+        {
+          "setting": 0.1,
+          "validation_ap": 0.8615779921895383
+        },
+        {
+          "setting": 1.0,
+          "validation_ap": 0.8616495666001894
+        },
+        {
+          "setting": 10.0,
+          "validation_ap": 0.8616538612498827
+        }
+      ],
+      "winner": 10.0,
+      "validation_calibration": {
+        "before": {
+          "brier": 0.1540524731608337,
+          "logloss": 0.47564278669711263
+        },
+        "sigmoid": {
+          "brier": 0.19553513199168418,
+          "logloss": 0.5794189620956284
+        }
+      }
+    },
+    "boost": {
+      "entries": [
+        {
+          "setting": 7,
+          "validation_ap": 0.9365911738253012
+        },
+        {
+          "setting": 15,
+          "validation_ap": 0.9505375578846014
+        },
+        {
+          "setting": 31,
+          "validation_ap": 0.9587638414326858
+        }
+      ],
+      "winner": 31,
+      "validation_calibration": {
+        "before": {
+          "brier": 0.0845339663160178,
+          "logloss": 0.2755855194340712
+        },
+        "sigmoid": {
+          "brier": 0.08372473698875882,
+          "logloss": 0.270699579595396
+        }
+      }
+    }
+  },
+  "supplemental": {},
+  "hashes": {
+    "boost": "282637e8715cad7e42849f21e80c392a132fc314bd7a31fe0ef700e2336a300b",
+    "length": "b481e2498936155902da63191e0c23a94e96bff8bd862dd5b6c1448c0a5198b3",
+    "logistic": "bcc11a54eb48a24d137f70f8a0561ea3f9b88041d0742f31d55291b6940c698b"
+  }
+}

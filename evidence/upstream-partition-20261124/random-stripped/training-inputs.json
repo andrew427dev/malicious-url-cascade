@@ -1,0 +1,27 @@
+{
+  "capture": "during_fit_before_test",
+  "files": {
+    "source\\dataset\\all_top_domains_merged.csv": "da1cf85b221f618d396b135554d41df2581fb4af98bcd2c41cd7de08dfa9b501",
+    "source\\dataset\\df_another_validation.csv": "676d758897212240d71da36783f1190866c18d688f516b53202802b364503b80",
+    "source\\dataset\\df_final.csv": "303effaa48986335fb6f7af07b00b2fda193fca22d990d0a78a273d542e3bd08",
+    "source\\Utils\\DataProcessing.py": "319cb84a6a27727ce4435990ae440628dc2f639c4727643c0e5f22a7daa1659d",
+    "source\\Utils\\FeatureCreation.py": "730b9f1ec4dbbaeb89828d6d64ecdd7695e45aff177e3820be07c180a6e92af2",
+    "source\\Utils\\Model.py": "b4c28c9c36706c4d6745a29f5f669e32c8dfbc3ee33a51e5400a8c3f025200db",
+    "runner/inputs.py": "7c27d2b3fd810435cb5bf6f1ca419f19715b148fc05777b1451b41a5923c85ce",
+    "runner/train_gru.py": "0d37f1723c6d14a31f1c81b66665e112c9b658457de90fe3399da9a5e41ad1dc",
+    "runner/team_data.py": "def078590b11e1d29e4ff342516f9e8ad0413da039824dde78dc5807306ba0c9",
+    "team/urlcascade/adapters.py": "472727af5c9681e81e05a4111c4ff0ca34c188ff812ef6974dd90b27029c4ad9",
+    "team/urlcascade/features.py": "0637cffb7a307e5c7e9886a08b7fdf3b4855e50f1dd51942708c133b447a5a45",
+    "team/experiments/clean_rerun/prepare.py": "6240054054deeb775e337fbd2da7501c5b3fda301debbabeefcdfa736cb9be72",
+    "vocab.json": "bde58281a6c9f0d3ad249e7d88526b63a5623301652cac86f8db9c89c6118379",
+    "test-features.npy": "0d57913a7939e1bea0f10acdd89fd99f885161f5434c0d94f4ae5020273128ca",
+    "train-features.npy": "f39216e83d8f649f7173782e7a0a5d3285e0c3f5e3db2a54974fb9d3070f4678",
+    "validation-features.npy": "b1666a16db83d57801c3f8472164431c79f7f9e9c8885bfae644856053ddfba0",
+    "test-tokens.npy": "4ab34c40a8a970f5f0051da28ba74ace65ebce1568294646cb22d034d1ff4ce9",
+    "train-tokens.npy": "8b9014797421d47dd0207f8ee55bea4d03bffaaf1094df8ddf06ed5824861fc1",
+    "validation-tokens.npy": "bee595b48352eaeb11e916e7564fc24804a7be019788ee29d54e5b97273289fd",
+    "test-rows.csv.gz": "2c8511ca1c0015f2c2162c02ec3ca05892aaf7520e42577a290c0df1d59fc381",
+    "train-rows.csv.gz": "a8c30c18551a607790490af73ef08762c9e0f742f44e60a7016ee2a44bd45425",
+    "validation-rows.csv.gz": "dd0a0c932749b505920cb753c6b48138ecf6f69964e87f3890c243ff3e175ecb"
+  }
+}

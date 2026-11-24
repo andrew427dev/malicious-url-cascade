@@ -1,0 +1,60 @@
+{
+  "stages": {
+    "train": {
+      "before": {
+        "rows": 528274,
+        "malicious": 260083,
+        "benign": 268191
+      },
+      "after": {
+        "rows": 523411,
+        "malicious": 255572,
+        "benign": 267839
+      },
+      "removed": 4863
+    },
+    "validation": {
+      "before": {
+        "rows": 113202,
+        "malicious": 55732,
+        "benign": 57470
+      },
+      "after": {
+        "rows": 112958,
+        "malicious": 55511,
+        "benign": 57447
+      },
+      "removed": 244
+    },
+    "test": {
+      "before": {
+        "rows": 113202,
+        "malicious": 55732,
+        "benign": 57470
+      },
+      "after": {
+        "rows": 112984,
+        "malicious": 55535,
+        "benign": 57449
+      },
+      "removed": 218
+    }
+  },
+  "overlaps": {
+    "train/validation": {
+      "url": 0,
+      "text": 1932,
+      "domain": 24784
+    },
+    "train/test": {
+      "url": 0,
+      "text": 1972,
+      "domain": 25351
+    },
+    "validation/test": {
+      "url": 0,
+      "text": 441,
+      "domain": 12952
+    }
+  }
+}

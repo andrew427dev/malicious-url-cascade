@@ -1,0 +1,50 @@
+[
+  {
+    "family": "logistic",
+    "category": "early_exit_miss",
+    "population": 218,
+    "first_source_id": "df_another_validation.csv:115273"
+  },
+  {
+    "family": "logistic",
+    "category": "recovered_malicious",
+    "population": 10,
+    "first_source_id": "df_another_validation.csv:247659"
+  },
+  {
+    "family": "logistic",
+    "category": "new_false_positive",
+    "population": 1,
+    "first_source_id": "df_final.csv:400998"
+  },
+  {
+    "family": "logistic",
+    "category": "gru_false_negative",
+    "population": 1086,
+    "first_source_id": "df_another_validation.csv:102295"
+  },
+  {
+    "family": "boost",
+    "category": "early_exit_miss",
+    "population": 356,
+    "first_source_id": "df_another_validation.csv:102525"
+  },
+  {
+    "family": "boost",
+    "category": "recovered_malicious",
+    "population": 43,
+    "first_source_id": "df_another_validation.csv:113585"
+  },
+  {
+    "family": "boost",
+    "category": "new_false_positive",
+    "population": 10,
+    "first_source_id": "df_final.csv:204771"
+  },
+  {
+    "family": "boost",
+    "category": "gru_false_negative",
+    "population": 1086,
+    "first_source_id": "df_another_validation.csv:102295"
+  }
+]

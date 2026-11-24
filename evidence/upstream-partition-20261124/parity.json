@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "orders": [
+    {
+      "input": 783,
+      "kept": 771,
+      "hyphen_group_survivor": 0,
+      "token_columns": 50,
+      "numeric_columns": 18
+    },
+    {
+      "input": 783,
+      "kept": 771,
+      "hyphen_group_survivor": 2,
+      "token_columns": 50,
+      "numeric_columns": 18
+    }
+  ],
+  "real_sample_rows": 768
+}
