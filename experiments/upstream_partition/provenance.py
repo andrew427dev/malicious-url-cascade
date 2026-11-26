@@ -19,6 +19,10 @@ def seal(kind, timing="before_fit", snapshot=None):
         paths[str(p.relative_to(ROOT))] = p
     for name in ("inputs.py", "train_gru.py", "team_data.py"):
         paths["runner/" + name] = code / name
+    if not kind.startswith("author-"):
+        for name in ("assign_roles.py","cohorts.py"):
+            paths["runner/" + name] = code / name
+        paths["assignment.csv.gz"] = ROOT / "assignment.csv.gz"
     for name in (
         "urlcascade/adapters.py",
         "urlcascade/features.py",
@@ -58,7 +62,9 @@ def verify_seal(kind):
         raise ValueError("Incomplete training input manifest")
     for key, digest in files.items():
         prefix, _, tail = key.partition("/")
-        if prefix == "runner":
+        if key == "assignment.csv.gz":
+            path = ROOT / key
+        elif prefix == "runner":
             path = code / tail
         elif prefix == "team":
             path = REPO / tail

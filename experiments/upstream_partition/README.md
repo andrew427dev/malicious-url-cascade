@@ -55,3 +55,21 @@ python "$script/archive_data.py" $env:URLCASCADE_RUN_DIR (Join-Path $env:URLCASC
 ```
 
 각 조건 폴더의 `*-rows.csv.gz`는 순서가 있는 원본 CSV 행 ID와 라벨이다. `results.json`은 시험 성능, `scores.npz`는 행 단위 점수, `fixed-prefix.json`은 고정 모델 표기 비교, `routing.json`은 검증 후보와 선택 결과, `sensitivity.json`은 임계값·비율·시드별 원본이다. `timing.json`에는 1,000개 ID와 실제 실행 순서·소요 시간이 들어 있다. `data.json`에 처리 단계별 행 수와 역할 간 교집합을 기록한다.
+
+## 최종 실험 v1 전체 재실행
+
+최종 실험 보고서 v1은 위 실행을 확장한 `rerun_v1.py`로 만들었다. 정제 전에 모든 원본 URL의 역할을 배정하고(`assign_roles.py`), 같은 배정에서 두 정제 절차를 비교한다(`cohorts.py`의 `reference`는 기본 정제, `team`은 URL 정규화와 모델 입력 단위 충돌·중복 제거). 정제 2 × 분할 2(URL 무작위·등록 도메인) × 표기 2(원래·접두어 제거)로 GRU 8개를 새로 학습한다. 새 출력 폴더를 인자로 준다.
+
+```powershell
+python "$script/rerun_v1.py" 'D:\runs\final-v1'
+if ($LASTEXITCODE) { throw "v1 rerun failed" }
+```
+
+| 단계 | 스크립트 | 내용 |
+|---|---|---|
+| 준비 | `fetch`, `inputs parity`, `assign_roles` | 공개 CSV·노트북 해시 대조, 원저자 함수와 입력 동등성 검사, 정제 전 역할 배정 |
+| 원저자 재현 | `inputs`, `train_gru`, `score_v1` (`author-validation`, `author-final`) | 앞 두 파일 80/20 학습·내부 검증과 세 번째 파일 별도 평가, 세 파일 전체 학습 |
+| 조건별 학습 | `run_comparison` → `cohorts`, `train_gru`, `fit_stages`, `evaluate --freeze`, `score_v1`, `provenance example` | 조건마다 정제·GRU 학습, 1단계 선택·보정, 검증 임계값 고정, 시험 점수와 고정 모델 접두어 대조 |
+| 마무리 | `finish_v1` → `paired_time`, `aggregate`, `audit_v1`, `review_evidence_v1`, `demo_v1`, `demo_screen_v1` | 1,000건 × 30회 짝측정, 결과표·구간 집계, 독립 감사, 시연 사례 |
+
+보고서와 공유 자료는 같은 `URLCASCADE_RUN_DIR`에서 `figure_v1.py`, `report_v1.py`, `render_word.ps1`, `check_report_v1.py`, `publish_v1.py` 순으로 만든다. `archive_inputs_v1.py`와 `share_models_v1.py`는 학습 입력과 모델·행별 점수를 해시가 있는 ZIP으로 묶는다. 추가 분석과 보고서 v2는 [`../final_report_v2`](../final_report_v2/README.md)에 있다.
