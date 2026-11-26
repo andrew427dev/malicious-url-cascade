@@ -6,10 +6,19 @@
 
 | 환경 변수 | 뜻 |
 |---|---|
-| `URLCASCADE_V1_DIR` | v1 최종 실행 폴더 전체(조건별 `*.pkl`·점수·모델·기록 포함). 지정하지 않으면 `URLCASCADE_V2_DIR` 옆의 `final-v1`. Drive 보관 묶음만으로는 부족하다([보관 위치](../upstream_partition/README.md#실행-자료-보관-위치)) |
-| `URLCASCADE_V2_DIR` | v2 결과(`results/`, `report/`)를 쓸 폴더. 저장소에서 실행할 때 필수 |
+| `URLCASCADE_V1_DIR` | v1 최종 실행 폴더 전체(조건별 `*.pkl`·점수·모델·기록 포함, 루트에 `source-manifest.json`과 `results/verification.json`이 모두 있어야 함). 최초 v1 실행 폴더나 저장소판 `rerun_v1.py`로 만든 폴더를 쓴다. 저장소판 `rerun_v1.py`로 만든 새 폴더는 저장소 배치에서 분석한다. 원래 `final-v2/code` 배치에서 분석하려면 입력 v1 폴더에 `code/` 사본이 있어야 한다(그 배치는 v1 모듈을 `<v1>/code`에서 가져온다). Drive 보관 묶음만으로는 부족하다([보관 위치](../upstream_partition/README.md#실행-자료-보관-위치)) |
+| `URLCASCADE_V2_DIR` | v2 결과(`results/`, `report/`)를 쓸 폴더 |
 
-`v2common.py`는 `URLCASCADE_RUN_DIR`를 v1 폴더로 두고 v1 모듈(`evaluate`, `inputs`, `experiment`, `aggregate`, `cohorts`)을 가져온다. 파일을 쓰는 v1 함수(`evaluate.team`·`freeze`, `paired_time.main`, `aggregate.main`, 보고서 생성 함수)는 호출하지 않는다. `load_test`는 `test.pkl`·`scores.npz`·`test-rows.csv.gz`의 행 순서와 라벨이 같은지 단언한다.
+저장소에서 실행할 때는 두 변수를 모두 지정한다. 저장소 밖의 원래 출력 배치(`final-v1`과 `final-v2/code`가 나란히 있는 폴더)에서 두 변수를 모두 지정하지 않았을 때만 `final-v2/code`의 위치로 두 폴더를 정한다. 폴더 해석과 보호 검사는 `v2paths.py`가 맡는다.
+
+`v2common.py`는 `URLCASCADE_RUN_DIR`를 v1 폴더로 두고 v1 코드 경로를 `sys.path`에 넣는다. 각 실험 스크립트가 v1 모듈(`evaluate`, `inputs`, `experiment`, `aggregate`, `cohorts`)을 가져온다. 파일을 쓰는 v1 함수(`evaluate.team`·`freeze`, `paired_time.main`, `aggregate.main`, 보고서 생성 함수)는 호출하지 않는다. `load_test`는 `test.pkl`·`scores.npz`·`test-rows.csv.gz`의 행 순서와 라벨이 같은지 단언한다.
+
+**v1 보호:** 이 README의 명령이 쓰는 폴더가 루트에 `source-manifest.json`이 있는 폴더(v1 실행 폴더와 그 사본) 안이면, 그 폴더에 아무것도 만들거나 지우지 않고 `refused[v1_protected]`로 멈춘다. 대상 폴더는 `results/`, `report/`, `e6_rate_timing.py dryrun`의 출력 폴더, `render_pages.py`의 `layout-qa`다. 다음 경우는 이 검사가 막지 않는다.
+
+- 표지가 없는 v1 폴더: `assign_roles.py` 전에 멈춘 새 실행 폴더, `source-manifest.json`이 빠진 부분 사본. 이런 폴더를 출력 폴더로 쓰지 않는다.
+
+- 경로를 인자로 받는 함수를 직접 호출하는 경우: `diagram_v2.draw`, `report_base.figure_thresholds`·`figure_rates`, `e6_rate_timing.measure`·`summarize`, `write_json`. 이때는 호출자가 경로를 책임진다.
+- 이미 있는 출력 파일이 v1 파일을 가리키는 링크인 경우. v1 실행 폴더나 그 사본(하드링크 사본 포함)을 v2 출력 폴더로 쓰지 않는다.
 
 ## 실행 환경
 
@@ -33,16 +42,19 @@ python -B e6_rate_timing.py measure;   if ($LASTEXITCODE) { throw 'e6 measure' }
 python -B e6_rate_timing.py summarize; if ($LASTEXITCODE) { throw 'e6 summarize' }
 ```
 
-보고서는 문서용 환경에서 만든다.
+보고서는 문서용 환경에서 만든다. 아래 Word 변환은 `V2_DRAFT`·`V2_E6_DIR`를 지정하지 않은 정식 생성이 성공한 뒤에만 한다.
 
 ```powershell
 python -B report_v2.py
+if ($LASTEXITCODE) { throw 'report_v2' }
 & ..\upstream_partition\render_word.ps1 -Docx (Join-Path $env:URLCASCADE_V2_DIR 'report\악성 URL 탐지 최종 실험 보고서 v2.docx')
 python -B render_pages.py (Join-Path $env:URLCASCADE_V2_DIR 'report\악성 URL 탐지 최종 실험 보고서 v2.pdf')
+if ($LASTEXITCODE) { throw 'render_pages' }
 python -B notion_v2.py
+if ($LASTEXITCODE) { throw 'notion_v2' }
 ```
 
-`render_pages.py`는 PDF 각 쪽을 `report/layout-qa/page-NN.png`로 저장한다. `notion_v2.py`는 Notion 게시용 요약을 `report/notion-v2.md`·`notion-v2.html`로 쓴다. `e6_rate_timing.py dryrun <폴더>`는 측정기를 2회만 돌려 지정 폴더에 쓰는 점검용이다.
+`render_pages.py`는 PDF를 먼저 연 뒤 `report/layout-qa`의 기존 `page-*.png`를 지우고 각 쪽을 `page-NN.png`로 저장한다. 환경 변수가 필요 없다. `notion_v2.py`는 Notion 게시용 요약을 `report/notion-v2.md`·`notion-v2.html`로 쓴다. `e6_rate_timing.py dryrun <폴더>`는 측정기를 2회만 돌려 지정 폴더에 쓰는 점검용이다.
 
 ## 실험과 결과 파일
 
@@ -71,3 +83,15 @@ python -B notion_v2.py
 - **실험 6 재검사 예산:** 1,000건 배치 안의 종료 후보로 예산을 다시 계산하므로, 1%에서는 실제 재검사 건수가 0일 수 있다.
 - **실험 6과 v1의 비교:** v1과 다른 측정 회차이므로 0%·5%는 호출 수만 완전 일치를 단언하고, 시간은 구간 겹침과 부호를 기록한다.
 - **실험 6 스레드:** v1 `inputs.py`가 TensorFlow를 가져오기 전에 TF·OMP·OPENBLAS·MKL 스레드 환경 변수를 1로 두고, 측정 함수는 threadpoolctl로 BLAS·OpenMP를 1로 제한한다.
+
+## 실행 당시 코드와 다른 점
+
+v2 결과와 보고서를 만든 코드와 비교하면 다음만 다르다. 계산과 문서 내용은 바뀌지 않는다.
+
+- `v2paths.py`(새 파일)와 `v2common.py`: 폴더를 환경 변수로 지정하고 v1 폴더를 보호한다. 실행 당시에는 `final-v2/code`의 위치로 폴더를 정했다.
+- `report_base.py`: 폴더를 `v2common`에서 가져온다.
+- `report_v2.py`: 설명문의 실행 명령.
+- `render_pages.py`: v1 보호 검사를 더하고, PDF를 연 뒤에 기존 쪽 이미지를 지운다.
+- `e6_rate_timing.py`: `dryrun` 출력 폴더의 v1 보호 검사.
+- Word 변환은 저장소 공용 `../upstream_partition/render_word.ps1`을 쓴다. 실행 당시 `final-v2/code/render_word.ps1`과 같은 내용이다.
+- 실행 당시의 실행 메모(`RUN-NOTES.md`)는 개인 경로가 있어 올리지 않고 이 README로 대신했다.

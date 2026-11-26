@@ -214,6 +214,8 @@ if __name__ == "__main__":
         from pathlib import Path
         out = Path(sys.argv[2])
         assert out.resolve() != RESULTS.resolve()
+        from v2paths import refuse_protected
+        out = refuse_protected(out)
         out.mkdir(parents=True, exist_ok=True)
         measure(2, out)
         summarize(out, out, 2)

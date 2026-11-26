@@ -10,25 +10,11 @@ import os
 import sys
 from pathlib import Path
 
-HERE = Path(__file__).resolve().parent
-# In the repository the v1 modules live in experiments/upstream_partition. In the original output
-# layout (final-v1/code next to final-v2/code) they are the code snapshot inside the v1 run folder.
-IN_REPO = (HERE.parents[1] / "urlcascade").is_dir()
+from v2paths import IN_REPO, folders, refuse_protected  # noqa: F401  (IN_REPO stays a public name)
 
-
-def _folder(variable, default):
-    value = os.environ.get(variable)
-    if value:
-        return Path(value).resolve()
-    if default is None:
-        raise SystemExit(f"Set {variable} to the output folder (see README.md).")
-    return default
-
-
-V2 = _folder("URLCASCADE_V2_DIR", None if IN_REPO else HERE.parent)
-V1 = _folder("URLCASCADE_V1_DIR", V2.parent / "final-v1")
-CODE = HERE.parents[1] if IN_REPO else V1 / "code"
-RESULTS = V2 / "results"
+V1, V2, CODE = folders()
+RESULTS = refuse_protected(V2 / "results")
+refuse_protected(V2 / "report")
 RESULTS.mkdir(parents=True, exist_ok=True)
 
 # The v1 modules resolve their run directory from this variable; point it at v1 (read-only use).
