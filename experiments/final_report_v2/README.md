@@ -6,7 +6,7 @@
 
 | 환경 변수 | 뜻 |
 |---|---|
-| `URLCASCADE_V1_DIR` | v1 최종 실행 폴더. 지정하지 않으면 `URLCASCADE_V2_DIR` 옆의 `final-v1` |
+| `URLCASCADE_V1_DIR` | v1 최종 실행 폴더 전체(조건별 `*.pkl`·점수·모델·기록 포함). 지정하지 않으면 `URLCASCADE_V2_DIR` 옆의 `final-v1`. Drive 보관 묶음만으로는 부족하다([보관 위치](../upstream_partition/README.md#실행-자료-보관-위치)) |
 | `URLCASCADE_V2_DIR` | v2 결과(`results/`, `report/`)를 쓸 폴더. 저장소에서 실행할 때 필수 |
 
 `v2common.py`는 `URLCASCADE_RUN_DIR`를 v1 폴더로 두고 v1 모듈(`evaluate`, `inputs`, `experiment`, `aggregate`, `cohorts`)을 가져온다. 파일을 쓰는 v1 함수(`evaluate.team`·`freeze`, `paired_time.main`, `aggregate.main`, 보고서 생성 함수)는 호출하지 않는다. `load_test`는 `test.pkl`·`scores.npz`·`test-rows.csv.gz`의 행 순서와 라벨이 같은지 단언한다.

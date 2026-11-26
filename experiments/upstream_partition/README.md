@@ -73,3 +73,16 @@ if ($LASTEXITCODE) { throw "v1 rerun failed" }
 | 마무리 | `finish_v1` → `paired_time`, `aggregate`, `audit_v1`, `review_evidence_v1`, `demo_v1`, `demo_screen_v1` | 1,000건 × 30회 짝측정, 결과표·구간 집계, 독립 감사, 시연 사례 |
 
 보고서와 공유 자료는 같은 `URLCASCADE_RUN_DIR`에서 `figure_v1.py`, `report_v1.py`, `render_word.ps1`, `check_report_v1.py`, `publish_v1.py` 순으로 만든다. `archive_inputs_v1.py`와 `share_models_v1.py`는 학습 입력과 모델·행별 점수를 해시가 있는 ZIP으로 묶는다. 추가 분석과 보고서 v2는 [`../final_report_v2`](../final_report_v2/README.md)에 있다.
+
+### 실행 자료 보관 위치
+
+이번 실행의 자료는 팀 Google Drive [최종 재실험 v1](https://drive.google.com/drive/folders/1wJPuz8wW4e-0zG4a63XO_8qBExOsnd76) 폴더에 SHA-256 목록과 함께 보관했다. 링크 공개가 아니라 공유받은 계정만 열 수 있다.
+
+| 하위 폴더 | 내용 |
+|---|---|
+| 01 보고서와 시연 | 보고서 Word·PDF, 시연 기록 |
+| 02 결과표와 측정 원본 | 결과표 CSV, 30회 시간 측정 원본, 시험 URL별 정답·예측 점수 |
+| 03 데이터와 학습 모델 | 공개 원본과 정제·분할 기록, 조건별 학습·평가 입력(토큰·수치 배열, 행 ID·라벨, 어휘), 학습한 GRU·1단계 모델·보정기·분기 기록 |
+| 04 재실행 코드 | v1 실행 당시의 코드 묶음과 실행 안내 |
+
+이 묶음에는 pickle 파일(`*.pkl`)과 일부 조건별 기록(`controls-final.json`, `sensitivity.json`, `fixed-prefix.json` 등)이 없어 풀기만 해서는 실행 폴더가 완성되지 않는다. 실행 폴더가 필요하면 `rerun_v1.py`로 새로 만든다. 다시 학습한 모델의 수치가 보고서와 같다는 보장은 없다.
