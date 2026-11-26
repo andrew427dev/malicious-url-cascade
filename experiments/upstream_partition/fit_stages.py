@@ -72,7 +72,7 @@ def fit(kind):
             reduced, grid = fit_family(family, x[:, COLUMNS], y, tr, va)
             joblib.dump(reduced, dest / (family + "-omit.joblib"))
             other[family + "_omit_selection"] = grid
-        if kind == "random-original":
+        if kind.endswith("original"):
             other[family + "_curve"] = learning_curve(base, x, y, tr, va)
     length = make_pipeline(
         StandardScaler(), LogisticRegression(max_iter=2000, random_state=42)
