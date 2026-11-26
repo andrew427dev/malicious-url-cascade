@@ -136,6 +136,10 @@ class V2ProtectionTests(unittest.TestCase):
         self.addCleanup(self._tmp.cleanup)
         self.tmp = Path(self._tmp.name).resolve()
 
+    def assert_kept(self, path, data):
+        self.assertTrue(path.is_file(), f"{path} was deleted")
+        self.assertEqual(path.read_bytes(), data)
+
     def assert_refused(self, result, code):
         self.assertNotEqual(result.returncode, 0, result.stdout)
         self.assertIn(f"refused[{code}]", result.stderr)
@@ -255,13 +259,13 @@ class V2ProtectionTests(unittest.TestCase):
         keep = _touch(v1 / "report" / "layout-qa" / "page-01.png", b"old image")
         result = _run(["render_pages.py", v1 / "report" / "x.pdf"], V2CODE)
         self.assert_refused(result, "v1_protected")
-        self.assertEqual(keep.read_bytes(), b"old image")
+        self.assert_kept(keep, b"old image")
 
     def test_b9_render_pages_refuses_a_missing_pdf_and_keeps_images(self):
         keep = _touch(self.tmp / "layout-qa" / "page-01.png", b"old image")
         result = _run(["render_pages.py", self.tmp / "missing.pdf"], V2CODE)
         self.assert_refused(result, "missing_pdf")
-        self.assertEqual(keep.read_bytes(), b"old image")
+        self.assert_kept(keep, b"old image")
 
     @unittest.skipUnless(find_spec("pymupdf") is not None, "PyMuPDF 필요")
     def test_b10_unreadable_pdf_keeps_existing_images(self):
@@ -273,7 +277,7 @@ class V2ProtectionTests(unittest.TestCase):
         keep = _touch(self.tmp / "layout-qa" / "page-07.png", b"old image")
         result = _run(["render_pages.py", bad], V2CODE)
         self.assertNotEqual(result.returncode, 0)
-        self.assertEqual(keep.read_bytes(), b"old image")
+        self.assert_kept(keep, b"old image")
 
     def test_b11_dryrun_output_inside_v1_is_refused(self):
         v1 = _fake_v1(self.tmp / "v1")
