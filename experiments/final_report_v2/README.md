@@ -2,6 +2,20 @@
 
 이 폴더의 실험 0~6은 v1 최종 실행 폴더(`experiments/upstream_partition/rerun_v1.py` 출력)의 고정 모델·점수·입력을 **읽기만** 하는 추가 분석이다. 재학습은 없다. 실험 5만 고정 GRU로 검증 집합 점수를 새로 계산한다. 결과는 v2 폴더의 `results/`에, 보고서는 `report/`에 쓴다.
 
+최신 보고서는 [Notion의 v3](https://app.notion.com/p/424aebb23ee0809a8cbac7a4fa43839c)다. 이 폴더는 **v2 분석과 v2 문서 생성** 범위이며, v3 생성기는 포함하지 않는다.
+
+## 재실행 범위
+
+| 작업 | 실행 의미 |
+|---|---|
+| 실험 0~4 | 저장된 v1 입력·점수·기록에서 추가 통계와 판정 차이를 다시 계산한다. |
+| 실험 5 | 고정 GRU로 검증 점수를 다시 계산하고 검증 집합에서 정한 비교 기준을 시험 집합에 적용한다. 모델 재학습은 없다. |
+| 실험 6 `measure` | 저장된 모델과 같은 표본으로 시간을 새로 측정한다. 기존 시간 원본의 단순 재집계와 구분한다. |
+| 실험 6 `summarize` | 이미 측정한 v2 시간 원본을 집계한다. |
+| 보고서 생성 | 준비된 v1·v2 결과를 읽어 v2 문서를 만든다. |
+
+게시된 결과를 다시 계산하려면 최초 v1 실행 폴더 전체가 필요하다. [Drive 보관 묶음](../upstream_partition/README.md#실행-자료-보관-위치)에는 일부 파일이 없어 압축을 푸는 것만으로는 부족하다. `rerun_v1.py`의 새 학습 결과를 분석할 때는 별도 실행으로 기록하며, 게시된 결과와 같은 수치를 보장하지 않는다.
+
 ## 폴더 지정
 
 | 환경 변수 | 뜻 |
@@ -31,10 +45,16 @@
 
 저장소의 이 폴더에서 PowerShell로 실행한다.
 
+먼저 `check_inputs.py --check-packages`로 실험 0~6에 필요한 v1 파일의 존재, JSON의 기본 형식, 로더가 대조하는 SHA-256 기록을 확인한다. 누락이나 불일치는 JSON으로 출력하고 실패로 종료한다. `--check-packages`는 분석용 모듈을 찾을 수 있는지 추가로 확인하며, 실제 import·버전·바이너리 호환은 검사하지 않는다. 파일과 기록만 확인하려면 이 옵션을 생략한다.
+
+이 명령은 입력·출력 파일을 쓰지 않고, 배열·pickle·모델을 불러오거나 학습·추론·측정을 하지 않는다. 성공은 정적 검사 통과를 뜻하며 행 정렬이나 게시된 수치의 재현을 확인한 것은 아니다. 보고서 생성용 입력·패키지와 이후 생성되는 v2 시간 원본은 검사 범위에서 제외한다. `e6_rate_timing.py summarize`를 실행하려면 먼저 `measure`가 만든 v2 시간 원본이 있어야 한다.
+
 ```powershell
 $env:URLCASCADE_V1_DIR = 'D:\runs\final-v1'
 $env:URLCASCADE_V2_DIR = 'D:\runs\final-v2'
 $env:PYTHONUTF8 = '1'; $env:PYTHONDONTWRITEBYTECODE = '1'
+python -B check_inputs.py --check-packages
+if ($LASTEXITCODE) { throw 'check_inputs' }
 foreach ($s in 'e0_invalid_reasons','e1_baselines','e2_failures','e3_cleaning','e4_prefix','e5_equal_fpr') {
     python -B "$s.py"; if ($LASTEXITCODE) { throw $s }
 }
@@ -88,6 +108,7 @@ if ($LASTEXITCODE) { throw 'notion_v2' }
 
 v2 결과와 보고서를 만든 코드와 비교하면 다음만 다르다. 계산과 문서 내용은 바뀌지 않는다.
 
+- `check_inputs.py`(새 파일): 분석 전 필수 입력·JSON·기록된 SHA와 선택적 패키지 탐지. 파일을 쓰거나 모델을 불러오지 않는다.
 - `v2paths.py`(새 파일)와 `v2common.py`: 폴더를 환경 변수로 지정하고 v1 폴더를 보호한다. 실행 당시에는 `final-v2/code`의 위치로 폴더를 정했다.
 - `report_base.py`: 폴더를 `v2common`에서 가져온다.
 - `report_v2.py`: 설명문의 실행 명령.

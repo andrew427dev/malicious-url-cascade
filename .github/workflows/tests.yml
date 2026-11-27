@@ -18,3 +18,19 @@ jobs:
       - run: python -m unittest discover -s tests -v
       - run: python scripts/fetch_reference.py
       - run: python -m unittest discover -s tests -p test_reference_parity.py -v
+  final-report-guards:
+    name: Final report guards (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      # Exercise the real PDF guards too; this does not install the training stack.
+      - run: python -m pip install PyMuPDF==1.26.6
+      - run: python -m unittest discover -s tests -p "test_final_report_*.py" -v

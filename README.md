@@ -1,6 +1,19 @@
 # Malicious URL Cascade
 
-## 원저자 전처리 기준 재실험
+## 현재 보고서와 실행 코드
+
+최신 보고서는 Notion의 [2026-11-27 · 악성 URL 탐지 최종 실험 보고서 v3](https://app.notion.com/p/424aebb23ee0809a8cbac7a4fa43839c)에서 확인한다. 저장소의 `main`에는 최종 실험 **v1 실행 코드와 v2 추가 분석 코드**가 반영되어 있다. **v3 보고서 생성기는 현재 저장소에 포함되어 있지 않다.**
+
+| 필요한 작업 | 자료와 실행 범위 |
+|---|---|
+| 최신 보고서와 첨부 자료 확인 | [보고서 v3](https://app.notion.com/p/424aebb23ee0809a8cbac7a4fa43839c) |
+| 저장된 v1 결과를 바탕으로 추가 분석 | [v2 분석 안내](experiments/final_report_v2/README.md). 완전한 v1 실행 폴더가 필요하며, 기존 점수 재검산·검증 점수 재계산·새 시간 측정을 구분한다. |
+| 데이터 준비부터 새 학습·평가 | [v1 전체 재실행](experiments/upstream_partition/README.md#최종-실험-v1-전체-재실행)의 `rerun_v1.py`. 새 실행 결과를 만들며 게시된 보고서와 수치가 같다는 보장은 없다. |
+| 최초 실행의 모델·입력·측정 자료 찾기 | [보관 자료 안내](experiments/upstream_partition/README.md#실행-자료-보관-위치). 팀 Drive 보관 묶음에는 일부 실행 입력·기록이 빠져 있으므로 압축을 푸는 것만으로 전체 실행 폴더가 완성되지 않는다. |
+
+아래의 11월 24일·11월 16일 실험과 Experiment A/B는 보존 기록이다. 최신 보고서와 각 기록의 데이터·모델·측정 조건을 구분해서 사용한다.
+
+## 참고 · 2026-11-24 원저자 전처리 기준 재실험
 
 학습·검증·시험에 배정한 뒤 각 집합 안에서 전처리 문자열이 같은 첫 행을 남긴다. 무작위 분할과 등록 도메인 분할 각각에서 같은 GRU의 단독 성능과 1단계 분기를 추가한 성능을 비교한다.
 
@@ -8,7 +21,9 @@
 
 [한국어 보고서 PDF](docs/upstream-partition-20261124/report-ko.pdf) · [Word](docs/upstream-partition-20261124/report-ko.docx) · [성능·실측 시간과 행 목록](evidence/upstream-partition-20261124/README.md) · [실험 조건과 재실행 방법](experiments/upstream_partition/README.md)
 
-## 2026-11-16 정제 데이터 재실험
+당시 코드와 기록은 [11월 24일 병합본](https://github.com/andrew427dev/malicious-url-cascade/tree/5fc1b2d67f2a99292ba3b4fb4c4f59bfa577166a)에 보관되어 있다.
+
+## 참고 · 2026-11-16 정제 데이터 재실험
 
 11월 16일 보고서는 세 원자료의 라벨 충돌·중복을 정제한 **717,793행**을 사용한다. 학습 70% / 검증 15% / 시험 15%를 기준으로 하고, **같은 검증 15% 전체**를 모델 선택·sigmoid 보정·분기 기준 선택에 사용한다. 로지스틱 회귀와 트리 부스팅을 대안적인 1단계 모델로 비교하며 도메인 그룹 분할도 별도로 재학습한다.
 

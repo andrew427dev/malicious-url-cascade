@@ -1,8 +1,19 @@
-# 원저자 전처리 기준 악성 URL 탐지 재실험
+# 최종 실험 v1과 이전 실험 실행 안내
+
+최종 실험 v1을 새로 학습·평가하려면 아래 [최종 실험 v1 전체 재실행](#최종-실험-v1-전체-재실행)의 `rerun_v1.py`를 사용한다. 저장된 최초 실행 결과를 추가 분석하는 방법은 [v2 분석 안내](../final_report_v2/README.md)에 있다. 최신 보고서는 [Notion의 v3](https://app.notion.com/p/424aebb23ee0809a8cbac7a4fa43839c)이며, v3 생성기는 이 저장소에 포함되어 있지 않다.
+
+| 목적 | 필요한 자료와 진입점 |
+|---|---|
+| 최초 결과 재검산·추가 분석 | 완전한 최초 v1 실행 폴더와 v2 분석 코드. [보관 묶음의 범위](#실행-자료-보관-위치)를 먼저 확인한다. |
+| 새 학습·평가 | 아직 없는 새 폴더에 `rerun_v1.py` 실행. 결과는 새 실행의 `results/`와 검증 기록으로 확인한다. |
+| 최초 v1 보고서·공유 자료 재생성 | [최초 실행의 문서와 공유 자료](#최초-실행의-문서와-공유-자료). 최초 실행의 과정 설명이 고정된 문서 생성 코드는 새 실행용으로 쓰지 않는다. |
+| 11월 24일 기존 실험 확인 | 아래 `run_study.py` 설명과 [당시 병합본](https://github.com/andrew427dev/malicious-url-cascade/tree/5fc1b2d67f2a99292ba3b4fb4c4f59bfa577166a). 최종 v1의 정제 비교·30회 짝측정과 구분한다. |
+
+## 2026-11-24 기존 실험 조건
 
 원저자의 입력·중복 규칙으로 만든 동일한 시험 집합에서 1단계 분기가 악성 미탐 수와 실제 처리 시간에 미치는 영향을 측정한다. 공개 CSV 세 파일과 원저자 코드는 고정 커밋에서 시작한다. CSV는 같은 Git blob의 공개 다운로드 주소와 SHA-256으로 검증한다. URL은 오프라인 문자열로 처리한다.
 
-## 재실행할 조건
+다음 조건과 `run_study.py` 실행 안내는 11월 24일 기존 실험의 보존 기록이다.
 
 | 실험 | 조건과 평가 단위 |
 |---|---|
@@ -20,7 +31,7 @@
 
 기존 `experiments/clean_rerun/prepare.py`, `refine_inputs.py`, `finalize_data.py`와 `experiments/scheme_ablation/canonical.py`는 서로 다른 URL의 표현·인코딩 충돌을 기준으로 삭제하거나 분할을 다시 만든다. 기존 `experiment.train`에도 최종 입력 충돌 시 중단하는 검사가 있다. 이번 실행에서는 기존의 분할 함수, 1단계 적합 함수, 지표와 분기 함수만 불러온다. 실제 입력의 충돌 수와 분할 간 겹침은 평가 대상의 특성으로 다룬다.
 
-## 실행
+## 2026-11-24 기존 실험 실행
 
 Python 3.10과 [실험 환경 버전](../clean_rerun/requirements-experiment.txt)을 사용한다. 아래 명령은 저장소 루트의 PowerShell에서 실행한다. 새 실행 디렉터리를 지정한다. 시간 측정은 모든 학습과 평가가 종료된 뒤 독립적으로 실행한다.
 
@@ -68,8 +79,10 @@ python "$script/archive_data.py" $env:URLCASCADE_RUN_DIR (Join-Path $env:URLCASC
 - 학습 직전 기록(`training-inputs.json`)에는 배정표와 `assign_roles.py`·`cohorts.py`의 해시를 넣지 않는다.
 - 마무리 단계의 `review_evidence_v1.py`가 세 파일의 해시를 다시 계산해 `results/review-evidence.json`에 남기고, 배정표 해시가 `source-manifest.json`의 기록과 같은지 확인한다.
 
+저장소 루트에서 다음 명령을 실행한다.
+
 ```powershell
-python "$script/rerun_v1.py" 'D:\runs\final-v1-rerun'
+python experiments/upstream_partition/rerun_v1.py 'D:\runs\final-v1-rerun'
 if ($LASTEXITCODE) { throw "v1 rerun failed" }
 ```
 
